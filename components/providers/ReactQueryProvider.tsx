@@ -6,17 +6,14 @@ import {
   MutationCache,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { isAxiosError } from "axios";
-import { usePathname } from "next/navigation";
+import { isAxiosError } from "axios"; 
 import { useRef } from "react";
 
 type RQProviderProps = {
   children: React.ReactNode;
 };
 export default function ReactQueryProvider({ children }: RQProviderProps) {
-  const pathname = usePathname();
-  const isDashboardRoutes = pathname.includes("/dashboard");
-
+ 
   const queryClientRef = useRef<QueryClient | null>(null);
   if (!queryClientRef.current) {
     queryClientRef.current = new QueryClient({
@@ -62,8 +59,7 @@ export default function ReactQueryProvider({ children }: RQProviderProps) {
     <QueryClientProvider client={queryClientRef.current}>
       {children}
       <ReactQueryDevtools
-        initialIsOpen={false}
-        buttonPosition={isDashboardRoutes ? "bottom-right" : "bottom-left"}
+        initialIsOpen={false} 
       />
     </QueryClientProvider>
   );

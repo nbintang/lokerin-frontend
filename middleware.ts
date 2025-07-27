@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtDecode, JwtUserPayload } from "./lib/jwtDecode";
+import { jwtDecode, JwtUserPayload } from "./shared-api/helpers/jwtDecode";
+import { isExpiredToken } from "./shared-api/helpers/isExpiredToken";
 
 export async function middleware(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken")?.value;
+  const refreshToken = req.cookies.get("refreshToken")?.value; 
   const pathname = req.nextUrl.pathname;
   const tokenQueryConfirmation = req.nextUrl.searchParams.get("token");
 
   const isProtected =
     pathname.startsWith("/admin/dashboard") ||
-    pathname.startsWith("/reporter/dashboard");
-  const isPublicRequireVerified = pathname.startsWith("/articles");
-
-  // Allow access to /auth/verify even without ?token as long as user has accessToken
+    pathname.startsWith("/recruiter/dashboard");
+  const isPublicRequireVerified = pathname.startsWith("/jobs");
   if (pathname === "/auth/verify") {
-    // allow access if token in query OR already logged in
     if (tokenQueryConfirmation || accessToken) {
       return NextResponse.next();
     } else {
@@ -22,8 +21,8 @@ export async function middleware(req: NextRequest) {
   }
 
   // jika token gada, dan coba akses protected, redirect ke sign in
-  if (!accessToken) {
-    if (isProtected) {
+  if (!accessToken || isExpiredToken(accessToken)) {
+    if (refreshToken && isProtected) {
       return NextResponse.redirect(new URL("/auth/signin", req.url));
     }
     return NextResponse.next();
@@ -61,7 +60,7 @@ export async function middleware(req: NextRequest) {
     if (
       pathname.startsWith("/admin/dashboard") ||
       pathname.startsWith("/recruiter/dashboard") ||
-      (pathname.startsWith("/auth") && pathname !== "/auth/update-profile")
+      pathname.startsWith("/auth")
     )
       return NextResponse.redirect(new URL("/", req.url));
   }

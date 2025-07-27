@@ -16,19 +16,26 @@ import Link from "next/link";
 import { LoaderCircleIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { jwtDecode } from "@/lib/jwtDecode";
+import { jwtDecode } from "@/shared-api/helpers/jwtDecode";
 import { useProgress } from "@bprogress/next";
 import z from "zod";
-import { lokerinApi } from "@/lib/axiosConfig";
-import { isAxiosError } from "axios";
+import { lokerinAPI } from "@/shared-api/config/api";
+import axios, { isAxiosError } from "axios";
 import { useAuthStore } from "@/shared-api/stores/useAuthStore";
+import { BASE_URL } from "@/shared-api/constants";
 const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 type SignInForm = z.infer<typeof signInSchema>;
 const postSignin = async (values: SignInForm) =>
-  await lokerinApi.post<{ accessToken: string }>(`/auth/signin`, values);
+  await axios.post<{ accessToken: string }>(
+    `${BASE_URL}/api/auth/signin`,
+    values,
+    {
+      withCredentials: true,
+    }
+  );
 
 export default function SignInForm() {
   const form = useForm<SignInForm>({
@@ -39,7 +46,7 @@ export default function SignInForm() {
     },
   });
   const router = useRouter();
-  const loader = useProgress();
+  const progress = useProgress();
   const onSubmit = async (values: SignInForm) =>
     toast.promise(postSignin(values), {
       loading: "Signing in...",
@@ -47,18 +54,28 @@ export default function SignInForm() {
         useAuthStore.getState().setToken(res.data.accessToken);
         const tokenInfo = jwtDecode(res.data.accessToken);
         const role = tokenInfo.role;
-        loader.start();
+        progress.start();
         if (role === "ADMINISTRATOR" || role === "RECRUITER") {
           router.push(`/${role.toLowerCase()}/dashboard`);
         } else router.push("/");
         return "Signed in successfully";
       },
       error: (err) => {
-        if (isAxiosError(err) && err.response?.status === 401)
-          return "Invalid email or password";
+        if (isAxiosError(err)) {
+          if (err.response?.status === 401) {
+            return "Invalid email or password";
+          } else if (err.response?.status === 500) {
+            return "Server error. Please try again later.";
+          } else if (err.response?.status === 400) {
+            return "Invalid request. Please check your input.";
+          } else {
+            return `Error: ${err.response?.data?.message || err.message}`;
+          }
+        }
+        return "Something went wrong. Please try again.";
       },
       finally: () => {
-        loader.stop();
+        progress.stop();
         form.reset();
       },
       richColors: true,

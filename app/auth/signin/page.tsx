@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import SignInForm from "@/features/auth/signin/page";
+import SignInForm from "@/app/auth/signin/_components";
 
 export default function SignIn() {
   return (

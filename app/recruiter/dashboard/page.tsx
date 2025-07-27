@@ -1,41 +1,50 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
-import { SectionCards } from "@/components/section-cards"
-import { SiteHeader } from "@/components/site-header"
+"use client";
 import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
+  TableMain,
+  TableSkeleton,
+  TablePagination,
+  useTable,
+  TableFilters,
+} from "@/components/dashboard/data-table";
+import { SectionCards } from "@/components/dashboard/section-cards";
+import {
+  Applyer,
+  useJobApplicants,
+} from "@/shared-api/hooks/job-applicants/useJobApplicants";
+import { columns } from "@/components/recruiter/jobAppColumns";
+import { useSearchParams } from "next/navigation";
 
+export default function RecruiterDashboardPage() {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page") ?? 1);
+  const limit = Number(searchParams.get("limit") ?? 10);
+  const jobApplicant = useJobApplicants(page, limit);
+  const { table } = useTable<Applyer>({
+    columns,
+    data: jobApplicant.data?.applyers ?? [],
+  });
 
-import data from "@/dummy/data.json"
-
-export default function Page() {
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="inset" />
-      <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <SectionCards />
-              <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
-              </div>
-              <DataTable data={data} />
-            </div>
-          </div>
+    <div className="flex flex-1 flex-col mx-3 md:mx-5 gap-2 py-4  md:gap-4 md:py-6">
+      <SectionCards query={jobApplicant} />
+      {jobApplicant.isLoading && <TableSkeleton />}
+      {jobApplicant.isError && (
+        <div className="flex items-center justify-center gap-2">
+          <span className="text-destructive">Error</span>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
-  )
+      )}
+      {jobApplicant.isSuccess && jobApplicant.data && (
+        <>
+          <TableFilters<Applyer> table={table} />
+          <TableMain<Applyer> table={table} />
+          <TablePagination<Applyer>
+            limit={limit}
+            page={page}
+            table={table}
+            total={jobApplicant.data?.total}
+          />
+        </>
+      )}
+    </div>
+  );
 }

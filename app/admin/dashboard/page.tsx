@@ -1,8 +1,8 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
-import { SectionCards } from "@/components/section-cards"
-import { SiteHeader } from "@/components/site-header"
+import { AppSidebar } from "@/components/dashboard/app-sidebar"
+import { ChartAreaInteractive } from "@/components/dashboard/chart-area-interactive"
+import { TableMain } from "@/components/dashboard/data-table"
+import { SectionCards } from "@/components/dashboard/section-cards"
+import { SiteHeader } from "@/components/dashboard/site-header"
 import {
   SidebarInset,
   SidebarProvider,
@@ -31,7 +31,7 @@ export default function Page() {
               <div className="px-4 lg:px-6">
                 <ChartAreaInteractive />
               </div>
-              <DataTable data={data} />
+              <TableMain data={data} />
             </div>
           </div>
         </div>
