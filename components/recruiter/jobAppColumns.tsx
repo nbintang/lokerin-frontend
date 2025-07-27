@@ -21,7 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CircleAlertIcon, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const columns: ColumnDef<Applyer>[] = [
+export const jobAppColumns: ColumnDef<Applyer>[] = [
   {
     accessorKey: "user",
     header: "Applyer Name",

@@ -6,14 +6,13 @@ import {
   MutationCache,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { isAxiosError } from "axios"; 
+import { isAxiosError } from "axios";
 import { useRef } from "react";
 
 type RQProviderProps = {
   children: React.ReactNode;
 };
 export default function ReactQueryProvider({ children }: RQProviderProps) {
- 
   const queryClientRef = useRef<QueryClient | null>(null);
   if (!queryClientRef.current) {
     queryClientRef.current = new QueryClient({
@@ -47,7 +46,8 @@ export default function ReactQueryProvider({ children }: RQProviderProps) {
       }),
       defaultOptions: {
         queries: {
-          staleTime: 1000 * 60,
+          staleTime: 1000 * 60, 
+          gcTime: 1000 * 60 * 5, 
           refetchOnWindowFocus: false,
           retry: 1,
         },
@@ -58,9 +58,7 @@ export default function ReactQueryProvider({ children }: RQProviderProps) {
   return (
     <QueryClientProvider client={queryClientRef.current}>
       {children}
-      <ReactQueryDevtools
-        initialIsOpen={false} 
-      />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

@@ -1,43 +1,56 @@
 import { lokerinAPI } from "@/shared-api/config/api";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-
+import {
+  QueryOptions,
+  useQuery,
+  UseQueryOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
+type JobQueryOptions = {
+  page?: number;
+  limit?: number;
+  name?: string;
+  companyId?: string;
+  postedBy?: string;
+};
 export const useJobs = (
-  page: number = 1,
-  limit: number = 10
-) => {
-  return useQuery({
+  params: JobQueryOptions,
+  options?: Omit<UseQueryOptions<JobsResponse, Error> , "queryFn" | "queryKey">
+): UseQueryResult<JobsResponse, Error> =>
+  useQuery<JobsResponse, Error>({
     queryKey: ["jobs"],
     queryFn: async () => {
-      const response = await lokerinAPI.get<{ jobs: JobsResponse[] }>("/jobs", {
-        params: { page, limit },
+      const response = await lokerinAPI.get<JobsResponse>("/jobs", {
+        params
       });
-      return response.data.jobs;
+      return response.data;
     },
+    ...options,
   });
-};
-
 export interface JobsResponse {
-  id: string
-  title: string
-  description: string
-  location: string
-  salaryRange: string
-  postedBy: string
-  createdAt: string
-  updatedAt: string
-  company: Company
-  role: Role
+  jobs: Array<Jobs>;
+  page: number;
+  limit: number;
+  total: number;
 }
 
-export interface Company {
-  id: string
-  name: string
-  logoUrl: string
-}
-
-export interface Role {
-  id: string
-  name: string
-  createdAt: string
-  updatedAt: string
+export interface Jobs {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  salaryRange: string;
+  postedBy: string;
+  createdAt: string;
+  updatedAt: string;
+  company: {
+    id: string;
+    name: string;
+    logoUrl: string;
+  };
+  role: {
+    id: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }

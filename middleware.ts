@@ -3,14 +3,12 @@ import { jwtDecode, JwtUserPayload } from "./shared-api/helpers/jwtDecode";
 import { isExpiredToken } from "./shared-api/helpers/isExpiredToken";
 
 export async function middleware(req: NextRequest) {
-  const accessToken = req.cookies.get("accessToken")?.value;
-  const refreshToken = req.cookies.get("refreshToken")?.value; 
+  const accessToken = req.cookies.get("accessToken")?.value; 
   const pathname = req.nextUrl.pathname;
   const tokenQueryConfirmation = req.nextUrl.searchParams.get("token");
 
   const isProtected =
-    pathname.startsWith("/admin/dashboard") ||
-    pathname.startsWith("/recruiter/dashboard");
+    pathname.startsWith("/admin") || pathname.startsWith("/recruiter");
   const isPublicRequireVerified = pathname.startsWith("/jobs");
   if (pathname === "/auth/verify") {
     if (tokenQueryConfirmation || accessToken) {
@@ -21,8 +19,8 @@ export async function middleware(req: NextRequest) {
   }
 
   // jika token gada, dan coba akses protected, redirect ke sign in
-  if (!accessToken || isExpiredToken(accessToken)) {
-    if (refreshToken && isProtected) {
+  if (!accessToken ) {
+    if ( isProtected) {
       return NextResponse.redirect(new URL("/auth/signin", req.url));
     }
     return NextResponse.next();
@@ -43,25 +41,21 @@ export async function middleware(req: NextRequest) {
   }
   // jik admin coba akses selain admin dashboard, redirect ke admin dashboard
   if (role === "ADMINISTRATOR") {
-    if (!pathname.startsWith("/admin/dashboard")) {
+    if (!pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/admin/dashboard", req.url));
     }
   }
 
   // jika reporter coba akses selain reporter dashboard, redirect ke reporter dashboard
   if (role === "RECRUITER") {
-    if (!pathname.startsWith("/recruiter/dashboard")) {
+    if (!pathname.startsWith("/recruiter")) {
       return NextResponse.redirect(new URL("/recruiter/dashboard", req.url));
     }
   }
 
   // jika reader coba akses dashboard dan auth, redirect ke main
   if (role === "MEMBER") {
-    if (
-      pathname.startsWith("/admin/dashboard") ||
-      pathname.startsWith("/recruiter/dashboard") ||
-      pathname.startsWith("/auth")
-    )
+    if (isProtected)
       return NextResponse.redirect(new URL("/", req.url));
   }
   return NextResponse.next();

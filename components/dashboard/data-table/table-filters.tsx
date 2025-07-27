@@ -17,26 +17,15 @@ export function TableFilters<TData>({
   filterSearch,
 }: DataTableProps<TData>) {
   return (
-    <div className="flex items-start justify-start rounded-b-md  ">
-      {/* Added justify-between */}
-      {/* <Input
-        placeholder={`Filter ${filterSearch}s...`}
-        value={
-          (table.getColumn(filterSearch)?.getFilterValue() as string) ?? ""
-        }
-        onChange={(event) =>
-          table.getColumn(filterSearch)?.setFilterValue(event.target.value)
-        }
-        className="md:w-1/4 w-1/2 focus-visible:ring-0 focus-visible:ring-offset-0"
-      /> */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" >
+ 
+     <DropdownMenu>
+        <DropdownMenuTrigger  className="focus-visible:ring-0 w-1/4 md:w-auto"  asChild>
+          <Button variant="outline" className="cursor-pointer" >
             Filter <ChevronDown className="ml-2 h-4 w-4" />{" "}
             {/* Added margin to icon */}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="start">
           {table
             .getAllColumns()
             .filter((column) => column.getCanHide())
@@ -56,7 +45,6 @@ export function TableFilters<TData>({
             })}
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
   );
 }
  

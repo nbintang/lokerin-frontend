@@ -4,6 +4,7 @@ import { isExpiredToken } from "../helpers/isExpiredToken";
 import axios from "axios";
 import { BASE_URL } from "../constants";
 import { lokerinAPI } from "../config/api";
+import { jwtDecode, JwtUserPayload } from "../helpers/jwtDecode";
 
 interface AuthState {
   token: string | null;
@@ -12,6 +13,7 @@ interface AuthState {
   setToken: (token: string) => void;
   clear: () => void;
   logout: () => void;
+  decodedToken:() => JwtUserPayload | null
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -44,7 +46,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
   logout: async () => {
     Cookies.remove("refreshToken");
-    get().clear();
     await lokerinAPI.delete(`/auth/signout`);
+    get().clear();
   },
+  decodedToken: () => {
+    if (get().token) {
+      return jwtDecode(get().token || "");
+    }
+    return null;
+  }
 }));
