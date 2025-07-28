@@ -7,6 +7,7 @@ import axios, {
 import { BASE_URL } from "@/shared-api/constants";
 import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import { isExpiredToken } from "../helpers/isExpiredToken";
+import Cookies from "js-cookie";
 
 export const lokerinAPI = setupInterceptorsTo(
   axios.create({
@@ -14,46 +15,75 @@ export const lokerinAPI = setupInterceptorsTo(
     withCredentials: true,
   })
 );
+const getRefreshToken = async () => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/auth/refresh-token`,
+      null,
+      {
+        withCredentials: true,
+      }
+    );
+    const accessToken = response.data.accessToken;
+    Cookies.set("accessToken", accessToken);
+    return accessToken;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 async function onRequest(
   config: InternalAxiosRequestConfig
 ): Promise<InternalAxiosRequestConfig> {
-  let token = useAuthStore.getState().token;
-  if (!token || isExpiredToken(token)) {
-    token = await useAuthStore.getState().initialize();
-  }
+  const token = Cookies.get("accessToken");
   if (token) {
-    config.headers = config.headers ?? {};
-    config.headers.Authorization = `Bearer ${token}`;
+    if (isExpiredToken(token)) {
+      await getRefreshToken();
+      const newToken = Cookies.get("accessToken");
+      if (newToken) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${newToken}`;
+      }
+    } else {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 }
 
 async function onResponseError(error: AxiosError) {
-  const resp = error.response;
-  if (resp?.status === 401) {
-    const original = resp.config as InternalAxiosRequestConfig & {
-      _retry?: boolean;
-    };
-    if (!original._retry) {
-      original._retry = true;
-      const newToken = await useAuthStore.getState().initialize();
-      if (newToken) {
-        original.headers = original.headers ?? {};
-        original.headers.Authorization = `Bearer ${newToken}`;
-        return lokerinAPI(original);
-      } else useAuthStore.getState().clear();
+  if (error.response) {
+    const { status, data, config } = error.response;
+
+    if (status === 401) {
+      const originalRequest = config as InternalAxiosRequestConfig & {
+        _retry?: boolean;
+      };
+      if (!originalRequest._retry) {
+        originalRequest._retry = true;
+        const newAccessToken = await getRefreshToken();
+        if (newAccessToken) {
+          originalRequest.headers = originalRequest.headers || {};
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axios(originalRequest);
+        }
+      }
     }
+    return Promise.reject(error);
   }
   return Promise.reject(error);
 }
+
 function onRequestError(error: AxiosError) {
+  console.error("Request error:", error);
   return Promise.reject(error);
 }
 
 function onResponse(response: AxiosResponse) {
   return response;
 }
+
 function setupInterceptorsTo(axiosInstance: AxiosInstance) {
   axiosInstance.interceptors.request.use(onRequest, onRequestError);
   axiosInstance.interceptors.response.use(onResponse, onResponseError);

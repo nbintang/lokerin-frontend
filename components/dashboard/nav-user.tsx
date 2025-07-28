@@ -38,12 +38,12 @@ export function NavUser({
   const { isMobile } = useSidebar();
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
-  const pregress = useProgress();
+  const progress = useProgress();
   const handleLogout = async () => {
-    pregress.start();
+    progress.start();
     await logout();
     router.push("/auth/signin");
-    pregress.stop();
+    progress.stop();
   };
   return (
     <SidebarMenu>
@@ -88,7 +88,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push("/recruiter/account")} >
+            <DropdownMenuItem onClick={() => (progress.start(), router.push("/recruiter/account"))} >
             <IconUserCircle />
                 Account
             </DropdownMenuItem>

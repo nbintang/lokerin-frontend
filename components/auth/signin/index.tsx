@@ -38,6 +38,7 @@ const postSignin = async (values: SignInForm) =>
   );
 
 export default function SignInForm() {
+  const setToken  = useAuthStore(state => state.setToken);
   const form = useForm<SignInForm>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -51,7 +52,7 @@ export default function SignInForm() {
     toast.promise(postSignin(values), {
       loading: "Signing in...",
       success: (res) => {
-        useAuthStore.getState().setToken(res.data.accessToken);
+      setToken(res.data.accessToken);
         const tokenInfo = jwtDecode(res.data.accessToken);
         const role = tokenInfo.role;
         progress.start();

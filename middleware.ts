@@ -10,7 +10,9 @@ export async function middleware(req: NextRequest) {
   const isProtected =
     pathname.startsWith("/admin") || pathname.startsWith("/recruiter");
   const isPublicRequireVerified = pathname.startsWith("/jobs");
+  // Allow access to /auth/verify even without ?token as long as user has accessToken
   if (pathname === "/auth/verify") {
+    // allow access if token in query OR already logged in
     if (tokenQueryConfirmation || accessToken) {
       return NextResponse.next();
     } else {
@@ -19,12 +21,13 @@ export async function middleware(req: NextRequest) {
   }
 
   // jika token gada, dan coba akses protected, redirect ke sign in
-  if (!accessToken ) {
-    if ( isProtected) {
+  if (!accessToken) {
+    if (isProtected) {
       return NextResponse.redirect(new URL("/auth/signin", req.url));
     }
     return NextResponse.next();
   }
+
 
   let tokenPayload: JwtUserPayload;
   try {

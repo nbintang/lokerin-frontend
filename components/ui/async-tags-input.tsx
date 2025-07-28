@@ -18,21 +18,8 @@ import {
   PopoverContent,
   PopoverAnchor,
 } from "@/components/ui/popover"; // Import Popover components
-export function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
+import useDebounce from "@/hooks/use-debounce";
+ 
 interface AsyncTagInputProps<T> {
   value: T[];
   onChange: (value: T[]) => void;

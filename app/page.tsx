@@ -2,10 +2,13 @@
 import { useJobs } from "@/shared-api/hooks/jobs/useJobs";
 import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import Image from "next/image";
-
+import { useShallow } from "zustand/shallow";
 export default function Home() {
   const  { data, isError, isLoading } = useJobs();
-  const{ token, isAuthenticated} = useAuthStore()
+  const{ token, isAuthenticated} = useAuthStore(useShallow(state => ({
+    token: state.token,
+    isAuthenticated: state.isAuthenticated
+  })))
   console.log(token)
 console.log(isAuthenticated)
   return (

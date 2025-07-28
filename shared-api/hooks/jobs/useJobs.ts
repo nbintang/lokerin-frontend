@@ -12,8 +12,10 @@ type JobQueryOptions = {
   companyId?: string;
   postedBy?: string;
 };
+
+
 export const useJobs = (
-  params: JobQueryOptions,
+  params?: JobQueryOptions,
   options?: Omit<UseQueryOptions<JobsResponse, Error> , "queryFn" | "queryKey">
 ): UseQueryResult<JobsResponse, Error> =>
   useQuery<JobsResponse, Error>({
@@ -25,32 +27,31 @@ export const useJobs = (
       return response.data;
     },
     ...options,
-  });
-export interface JobsResponse {
-  jobs: Array<Jobs>;
-  page: number;
-  limit: number;
-  total: number;
-}
+    });
+  export interface JobsResponse {
+    jobs: Array<Jobs>;
+    page: number;
+    limit: number;
+    total: number;
+  }
 
-export interface Jobs {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  salaryRange: string;
-  postedBy: string;
-  createdAt: string;
-  updatedAt: string;
-  company: {
+  export interface Jobs {
     id: string;
-    name: string;
-    logoUrl: string;
-  };
-  role: {
-    id: string;
-    name: string;
+    description: string;
+    location: string;
+    salaryRange: string;
+    postedBy: string;
     createdAt: string;
     updatedAt: string;
-  };
-}
+    company: {
+      id: string;
+      name: string;
+      logoUrl: string;
+    };
+    role: {
+      id: string;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+  }

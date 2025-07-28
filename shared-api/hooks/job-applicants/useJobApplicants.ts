@@ -33,7 +33,8 @@ export interface Applyer {
     name: string;
   };
   job: {
-    id: string;
-    title: string;
+    role: {
+      name: string;
+    };
   };
 }

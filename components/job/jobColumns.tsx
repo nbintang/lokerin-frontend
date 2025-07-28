@@ -20,14 +20,16 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { IconDotsVertical } from "@tabler/icons-react";
+import { Marquee } from "../magicui/marquee";
+import Link from "next/link";
+import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
+import { useDeleteJob } from "@/shared-api/hooks/jobs/useDeleteJob";
 
 export const jobColumns: ColumnDef<Jobs>[] = [
   {
-    accessorKey: "title",
-    header: "Title",
-    cell: ({ row }) => (
-      <span className="font-medium">{row.original.title}</span>
-    ),
+    accessorKey: "role.name", // boleh pakai ini juga untuk sorting, tapi tergantung lib
+    header: "Role",
+    cell: ({ row }) => <span>{row.original.role?.name ?? "-"}</span>,
   },
   {
     accessorKey: "company",
@@ -51,7 +53,7 @@ export const jobColumns: ColumnDef<Jobs>[] = [
     cell: ({ row }) => (
       <div className="flex items-center text-sm text-muted-foreground">
         <MapPin className="mr-1 h-4 w-4" />
-        {row.original.location}
+        <Marquee className="p-0">{row.original.location}</Marquee>
       </div>
     ),
   },
@@ -78,29 +80,48 @@ export const jobColumns: ColumnDef<Jobs>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem className="cursor-pointer">
-            <Pen />
-            Edit Job
-          </DropdownMenuItem>
-          <DropdownMenuItem variant="destructive" className="cursor-pointer  ">
-            <Trash2 />
-            Delete Job
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    cell: ({ row }) => {
+      const setOpenDialog = useHandleWarningDialog(
+        (state) => state.setOpenDialog
+      );
+      const { mutate } = useDeleteJob(row.original.id);
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              size="icon"
+            >
+              <IconDotsVertical />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32">
+            <DropdownMenuItem className="cursor-pointer" asChild>
+              <Link href={`/recruiter/dashboard/jobs/${row.original.id}`}>
+                <Pen />
+                Edit Job
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                setOpenDialog({
+                  isOpen: true,
+                  title: "Delete Job",
+                  description: "Are you sure you want to delete this job?",
+                  onConfirm: () => mutate(),
+                })
+              }
+              variant="destructive"
+              className="cursor-pointer  "
+            >
+              <Trash2 />
+              Delete Job
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];

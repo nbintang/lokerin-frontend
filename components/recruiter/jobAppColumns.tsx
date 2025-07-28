@@ -39,12 +39,12 @@ export const jobAppColumns: ColumnDef<Applyer>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "job",
+    accessorKey: "job.role.name",
     header: "Applied Job",
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.job.title}
+          {row.original.job.role.name }
         </Badge>
       </div>
     ),
@@ -103,8 +103,7 @@ export const jobAppColumns: ColumnDef<Applyer>[] = [
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
           <DropdownMenuItem >View {row.original.user.name.split(" ")[0]}</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem> 
+          <DropdownMenuItem>Make a copy</DropdownMenuItem> 
         </DropdownMenuContent>
       </DropdownMenu>
     ),

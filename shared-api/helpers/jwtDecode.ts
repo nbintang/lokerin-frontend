@@ -12,4 +12,4 @@ export interface JwtUserPayload extends JwtPayload {
 }
 
 export const jwtDecode = (token: string) =>
-  jose.decodeJwt<JwtUserPayload>(token);
+  jose.decodeJwt<JwtUserPayload>(token,);

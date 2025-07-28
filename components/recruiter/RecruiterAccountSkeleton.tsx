@@ -4,7 +4,7 @@ export default function RecruiterAccountSkeleton() {
   return (
     <div>
       {/* Banner Placeholder */}
-      <Skeleton className="h-24 md:h-36 rounded-t-lg" />
+      <Skeleton className="h-24 md:h-36 " />
 
       <div className="container mx-auto">
         <div className="bg-background rounded-none border-0">

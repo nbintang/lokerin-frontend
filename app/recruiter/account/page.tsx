@@ -31,7 +31,7 @@ export default function RecruiterAccount() {
     <>
       <div className="relative z-0">
         <div
-          className="h-24 md:h-36 bg-white  mx-0.5 overflow-hidden"
+          className="h-24 md:h-36   mx-0.5 overflow-hidden"
           style={{
             backgroundImage: user.avatarUrl
               ? `url(${user.avatarUrl})`
@@ -40,14 +40,15 @@ export default function RecruiterAccount() {
             backgroundPosition: "center",
           }}
         />
+        <div className="absolute inset-0 bg-white/40 dark:bg-black/80" />
       </div>
       <div className=" container mx-auto">
-        <Card className="  bg-background rounded-none border-0">
+        <Card className="  bg-background rounded-none border-0 border-none shadow-none">
           <CardContent className="p-0">
             <div className="px-4 sm:px-6 pb-4">
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between sm:space-x-4 -mt-16 sm:-mt-20">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:space-x-4">
-                  <Avatar className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-background shadow-xl">
+                  <Avatar className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-background ">
                     <AvatarImage
                       src={user.avatarUrl || "/placeholder.svg"}
                       alt={user.name}
