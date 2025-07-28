@@ -78,7 +78,7 @@ const DynamicBreadcrumb = ({
   let pathSegments = path.split("/").filter(Boolean);
   if (pathSegments.length === 0) {
     pathSegments = ["home"];
-  }
+  } 
 
   if (excludeSegments.length > 0) {
     pathSegments = pathSegments.filter(

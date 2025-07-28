@@ -1,20 +1,61 @@
 "use client";
-import RecruiterAccountSkeleton from "@/components/ProfileSkeleton";
+import {
+  ApplicantResponse,
+  useApplicant,
+} from "@/shared-api/hooks/job-applicants/useApplicant";
+import { use } from "react";
+import Link from "next/link";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Briefcase,
+  Globe,
+  User,
+  Pen,
+  CalendarDays,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { useRecruiterProfile } from "@/shared-api/hooks/recruiter-profile/useRecruiterProfile";
-import { CalendarDays, Globe, Mail, Pen, Phone, Verified } from "lucide-react";
-import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import RecruiterAccountSkeleton from "@/components/ProfileSkeleton";
+import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
+export default function Applicant({
+  params,
+}: {
+  params: Promise<{ applicantId: string }>;
+}) {
+  const { applicantId } = use(params);
+  const { data: applicant, isLoading, error } = useApplicant(applicantId);
+  const setOpenDialog = useHandleSelectStatusDialog((state) => state.setOpen);
+  const getStatusVariant = (status: ApplicantResponse["status"]) => {
+    switch (status) {
+      case "REJECTED":
+        return "destructive";
+      case "ACCEPTED":
+        return "default"; // Or a custom success variant
+      case "APPLIED":
+        return "secondary";
+      case "REVIEWED":
+        return "outline";
+      default:
+        return "secondary";
+    }
+  };
 
-export default function RecruiterAccount() {
-  const { data: profile, isLoading, error } = useRecruiterProfile();
   if (isLoading) {
     return <RecruiterAccountSkeleton />;
   }
 
-  if (error || !profile) {
+  if (error || !applicant) {
     return (
       <Card>
         <CardContent className="p-6 text-center">
@@ -26,8 +67,7 @@ export default function RecruiterAccount() {
     );
   }
 
-  const { user, company, position, about, createdAt } = profile;
-
+  const { user, job, status } = applicant;
   return (
     <>
       <div className="relative z-0">
@@ -69,10 +109,10 @@ export default function RecruiterAccount() {
                       </h1>
                     </div>
                     <p className="text-lg text-muted-foreground mb-2">
-                      {position.name}
+                      {job.role.name}
                     </p>
-                    <Badge variant="secondary" className="mb-2">
-                      {company.name}
+                    <Badge variant={getStatusVariant(status)} className="mb-2">
+                      {status.charAt(0) + status.slice(1).toLowerCase()}
                     </Badge>
                   </div>
                 </div>
@@ -81,24 +121,26 @@ export default function RecruiterAccount() {
                   <Button
                     variant="outline"
                     size="sm"
+                    onClick={() =>
+                      setOpenDialog({
+                        isOpen: true,
+                        applicant :{
+                          jobId: job.id,
+                          status,
+                          id: applicant.id
+                        }
+                      })
+                    }
                     className="cursor-pointer"
                   >
                     <Pen className="w-4 h-4 mr-2" />
-                    Edit
+                    Change Status
                   </Button>
                 </div>
               </div>
             </div>
 
             <div className="p-4 sm:p-6 space-y-6">
-              {about && (
-                <div>
-                  <h2 className="text-lg font-semibold mb-2">About</h2>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {about}
-                  </p>
-                </div>
-              )}
               <div>
                 <h2 className="text-lg font-semibold mb-3">
                   Contact Information
@@ -118,7 +160,7 @@ export default function RecruiterAccount() {
                     <CalendarDays className="w-4 h-4 text-muted-foreground" />
                     <span>
                       Joined{" "}
-                      {new Date(createdAt).toLocaleDateString("en-US", {
+                      {new Date(user.createdAt).toLocaleDateString("en-US", {
                         month: "long",
                         year: "numeric",
                       })}
@@ -128,18 +170,18 @@ export default function RecruiterAccount() {
               </div>
 
               <div>
-                <h2 className="text-lg font-semibold mb-3">Company</h2>
+                <h2 className="text-lg font-semibold mb-3">Company Applied</h2>
                 <Card className="bg-background  ">
                   <CardContent className="p-4">
                     <div className="flex items-start space-x-4">
-                      {company.logoUrl && (
+                      {job.company.logoUrl && (
                         <Avatar className="w-12 h-12">
                           <AvatarImage
-                            src={company.logoUrl || "/placeholder.svg"}
-                            alt={company.name}
+                            src={job.company.logoUrl || "/placeholder.svg"}
+                            alt={job.company.name}
                           />
                           <AvatarFallback>
-                            {company.name
+                            {job.company.name
                               .split(" ")
                               .map((n) => n[0])
                               .join("")}
@@ -148,26 +190,37 @@ export default function RecruiterAccount() {
                       )}
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-lg mb-1">
-                          {company.name}
+                          {job.company.name}
                         </h3>
-                        {company.description && (
+                        {job.company.description && (
                           <p className="text-muted-foreground text-sm mb-2 leading-relaxed">
-                            {company.description}
+                            {job.company.description}
                           </p>
                         )}
-                        {company.website && (
-                          <div className="flex items-center space-x-2 text-sm">
-                            <Globe className="w-4 h-4 text-muted-foreground" />
-                            <Link
-                              href={company.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-primary hover:underline"
-                            >
-                              {company.website.replace(/^https?:\/\//, "")}
-                            </Link>
-                          </div>
-                        )}
+                        <div className="flex items-center gap-x-2">
+                          {job.location && (
+                            <div className="flex items-center space-x-2 text-sm">
+                              <MapPin className="w-4 h-4 text-muted-foreground" />
+                              <span>{job.location}</span>
+                            </div>
+                          )}
+                          {job.company.website && (
+                            <div className="flex items-center space-x-2 text-sm">
+                              <Globe className="w-4 h-4 text-muted-foreground" />
+                              <Link
+                                href={job.company.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary hover:underline"
+                              >
+                                {job.company.website.replace(
+                                  /^https?:\/\//,
+                                  ""
+                                )}
+                              </Link>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </CardContent>
