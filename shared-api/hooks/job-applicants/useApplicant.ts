@@ -1,7 +1,7 @@
 import { lokerinAPI } from "@/shared-api/config/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const  useApplicant = (id: string) =>
+export const useApplicant = (id: string) =>
   useQuery({
     queryKey: ["applicants", id],
     queryFn: async () => {
@@ -24,6 +24,7 @@ export type ApplicantResponse = {
     name: string;
     phone: string;
     avatarUrl: string;
+    cvUrl: string;
     createdAt: string;
     updatedAt: string;
   };

@@ -3,12 +3,13 @@ import { jwtDecode, JwtUserPayload } from "./shared-api/helpers/jwtDecode";
 import { isExpiredToken } from "./shared-api/helpers/isExpiredToken";
 
 export async function middleware(req: NextRequest) {
-  const accessToken = req.cookies.get("accessToken")?.value; 
+  const accessToken = req.cookies.get("accessToken")?.value;
   const pathname = req.nextUrl.pathname;
   const tokenQueryConfirmation = req.nextUrl.searchParams.get("token");
-
   const isProtected =
-    pathname.startsWith("/admin") || pathname.startsWith("/recruiter");
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/recruiter") ||
+    pathname.startsWith("/applyer");
   const isPublicRequireVerified = pathname.startsWith("/jobs");
   // Allow access to /auth/verify even without ?token as long as user has accessToken
   if (pathname === "/auth/verify") {
@@ -27,7 +28,6 @@ export async function middleware(req: NextRequest) {
     }
     return NextResponse.next();
   }
-
 
   let tokenPayload: JwtUserPayload;
   try {
@@ -58,8 +58,8 @@ export async function middleware(req: NextRequest) {
 
   // jika reader coba akses dashboard dan auth, redirect ke main
   if (role === "MEMBER") {
-    if (isProtected)
-      return NextResponse.redirect(new URL("/", req.url));
+    if (!pathname.startsWith("/applyer"))
+      return NextResponse.redirect(new URL("/applyer/dashboard", req.url));
   }
   return NextResponse.next();
 }

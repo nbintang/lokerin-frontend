@@ -23,6 +23,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  salaryRangeOptions,
+  salaryRanges,
+} from "@/helpers/concurrency-converter";
 import { cn } from "@/lib/utils";
 import { lokerinAPI } from "@/shared-api/config/api";
 import { useCreateJob } from "@/shared-api/hooks/jobs/useCreateJob";
@@ -31,47 +35,6 @@ import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-
-export const salaryRanges = [
-  "0-100000",
-  "100000-200000",
-  "200000-300000",
-  "300000-400000",
-  "400000-500000",
-  "500000-600000",
-  "600000-700000",
-  "700000-800000",
-  "800000-900000",
-  "900000-1000000",
-  "1000000-1100000",
-  "1100000-1200000",
-  "1200000-1300000",
-  "1300000-1400000",
-  "1400000-1500000",
-  "1500000-1600000",
-  "1600000-1700000",
-  "1700000-1800000",
-  "1800000-1900000",
-  "1900000-2000000",
-  "2000000-2100000",
-  "2100000-2200000",
-  "2200000-2300000",
-  "2300000-2400000",
-  "2400000-2500000",
-  "2500000-999999999", // More than 2500000
-];
-const salaryRangeOptions = salaryRanges.map((range) => {
-  const [min, max] = range.split("-").map(Number);
-
-  if (range === "2500000-999999999") {
-    return { label: "More than 2.500.000", value: range };
-  }
-
-  return {
-    label: `${min.toLocaleString("id-ID")} - ${max.toLocaleString("id-ID")}`,
-    value: range,
-  };
-});
 
 type NominatimResponse = {
   place_id: number;
@@ -111,7 +74,7 @@ const newJobSchema = z.object({
     .min(10, "Description must be at least 10 characters")
     .max(1000, "Description must be at most 230 characters"),
   location: z.string(),
-  salaryRange: z.enum(salaryRangeOptions.map((option) => option.value)),
+  salaryRange: z.enum(salaryRanges),
 });
 
 type NewJob = z.infer<typeof newJobSchema>;
@@ -121,7 +84,7 @@ export default function NewJob() {
     defaultValues: {
       description: "",
       location: "",
-      salaryRange: "Less than 100000",
+      salaryRange: salaryRanges[0],
       role: "",
     },
   });
@@ -198,6 +161,7 @@ export default function NewJob() {
                   placeholder="Search roles..."
                   pageSize={10}
                   queryKey="roles"
+                  disabled={form.formState.isSubmitting || isPending}
                   {...field}
                 />
               </FormControl>
@@ -219,6 +183,7 @@ export default function NewJob() {
                 <Textarea
                   placeholder="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque eius quisquam quidem!"
                   className="resize-none min-h-[200px]"
+                  disabled={form.formState.isSubmitting || isPending}
                   {...field}
                 />
               </FormControl>
@@ -257,7 +222,9 @@ export default function NewJob() {
                         <p className="truncate">{option.display_name}</p>
                       </div>
                     )}
-                    getOptionValue={(option) => `${option.display_name} ${option.name} ${option.place_id}`}
+                    getOptionValue={(option) =>
+                      `${option.display_name} ${option.name} ${option.place_id}`
+                    }
                     renderOption={(option) => (
                       <div className="flex items-center gap-3">
                         <Marquee className="p-0">
@@ -268,6 +235,7 @@ export default function NewJob() {
                       </div>
                     )}
                     label="Location"
+                    disabled={form.formState.isSubmitting || isPending}
                     {...field}
                   />
                 </FormControl>
@@ -288,9 +256,10 @@ export default function NewJob() {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled={form.formState.isSubmitting || isPending}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue   >
+                      <SelectValue>
                         {field.value
                           ? salaryRangeOptions.find(
                               (option) => option.value === field.value
@@ -302,7 +271,9 @@ export default function NewJob() {
                       <SelectGroup>
                         {salaryRangeOptions.map((range, index) => (
                           <SelectItem key={index} value={range.value}>
-                            {range.label}
+                            {range.label.includes("More than")
+                              ? range.label
+                              : `Rp${range.label}`}
                           </SelectItem>
                         ))}
                       </SelectGroup>

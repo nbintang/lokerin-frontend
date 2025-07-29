@@ -23,9 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { convertApiSalaryToRange, salaryRangeOptions, salaryRanges } from "@/helpers/concurrency-converter";
 import { cn } from "@/lib/utils";
 import { lokerinAPI } from "@/shared-api/config/api";
-import { useCreateJob } from "@/shared-api/hooks/jobs/useCreateJob";
 import { useJob } from "@/shared-api/hooks/jobs/useJob";
 import { useUpdateJob } from "@/shared-api/hooks/jobs/useUpdateJob";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,47 +34,6 @@ import { Loader2 } from "lucide-react";
 import { use, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-
-export const salaryRanges = [
-  "0-100000",
-  "100000-200000",
-  "200000-300000",
-  "300000-400000",
-  "400000-500000",
-  "500000-600000",
-  "600000-700000",
-  "700000-800000",
-  "800000-900000",
-  "900000-1000000",
-  "1000000-1100000",
-  "1100000-1200000",
-  "1200000-1300000",
-  "1300000-1400000",
-  "1400000-1500000",
-  "1500000-1600000",
-  "1600000-1700000",
-  "1700000-1800000",
-  "1800000-1900000",
-  "1900000-2000000",
-  "2000000-2100000",
-  "2100000-2200000",
-  "2200000-2300000",
-  "2300000-2400000",
-  "2400000-2500000",
-  "2500000-999999999", // More than 2500000
-];
-const salaryRangeOptions = salaryRanges.map((range) => {
-  const [min, max] = range.split("-").map(Number);
-
-  if (range === "2500000-999999999") {
-    return { label: "More than 2.500.000", value: range };
-  }
-
-  return {
-    label: `${min.toLocaleString("id-ID")} - ${max.toLocaleString("id-ID")}`,
-    value: range,
-  };
-});
 
 type NominatimResponse = {
   place_id: number;
@@ -107,43 +66,50 @@ type NominatimResponse = {
   boundingbox: Array<string>;
 };
 
+
+// Fix the schema - use the salaryRanges directly
 const newJobSchema = z.object({
   role: z.string().min(3, "Role must be at least 3 characters").max(50),
   description: z
     .string()
     .min(10, "Description must be at least 10 characters")
-    .max(1000, "Description must be at most 230 characters"),
-  location: z.string(),
-  salaryRange: z.enum(salaryRangeOptions.map((option) => option.value)),
+    .max(1000, "Description must be at most 1000 characters"),
+  location: z.string().min(1, "Location is required"),
+  salaryRange: z.enum(salaryRanges), // Use the const array directly
 });
 
 type NewJob = z.infer<typeof newJobSchema>;
+
+
 export default function NewJob({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { data: job } = useJob(id);
+  const { data: job, isLoading } = useJob(id);
   const form = useForm<NewJob>({
     resolver: zodResolver(newJobSchema),
     defaultValues: {
       description: "Loading...",
       location: "Loading...",
-      salaryRange: "Loading...",
+      salaryRange: salaryRanges[0], // Use a valid default
       role: "Loading...",
     },
   });
+
   useEffect(() => {
     if (job) {
+      const convertedSalary = convertApiSalaryToRange(job.salaryRange);
       form.reset({
         role: job.role.name,
         description: job.description,
         location: job.location,
-        salaryRange: job.salaryRange,
+        salaryRange: convertedSalary as (typeof salaryRanges)[number],
       });
     }
-  }, [job]);
+  }, [job, form]);
+
   const { mutate, isPending } = useUpdateJob(id);
   const onSubmit = async (data: NewJob) => {
     console.log(data);
@@ -217,6 +183,7 @@ export default function NewJob({
                   placeholder="Search roles..."
                   pageSize={10}
                   queryKey="roles"
+                  disabled={isLoading || isPending}
                   {...field}
                 />
               </FormControl>
@@ -238,6 +205,7 @@ export default function NewJob({
                 <Textarea
                   placeholder="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque eius quisquam quidem!"
                   className="resize-none min-h-[200px]"
+                  disabled={isLoading || isPending}
                   {...field}
                 />
               </FormControl>
@@ -293,6 +261,7 @@ export default function NewJob({
                       </div>
                     )}
                     placeholder="Search location..."
+                    disabled={isLoading || isPending}
                     label="Location"
                     {...field}
                   />
@@ -313,10 +282,11 @@ export default function NewJob({
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
+                    disabled={isLoading || isPending}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue>
+                      <SelectValue placeholder="Select a salary range">
                         {field.value
                           ? salaryRangeOptions.find(
                               (option) => option.value === field.value
@@ -328,7 +298,9 @@ export default function NewJob({
                       <SelectGroup>
                         {salaryRangeOptions.map((range, index) => (
                           <SelectItem key={index} value={range.value}>
-                            {range.label}
+                            {range.label.includes("More than")
+                              ? range.label
+                              : `Rp${range.label}`}
                           </SelectItem>
                         ))}
                       </SelectGroup>

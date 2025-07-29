@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRecruiterProfile } from "@/shared-api/hooks/recruiter-profile/useRecruiterProfile";
-import { CalendarDays, Globe, Mail, Pen, Phone, Verified } from "lucide-react";
+import { CalendarDays, Globe, Mail, Pen, Phone } from "lucide-react";
 import Link from "next/link";
 
 export default function RecruiterAccount() {

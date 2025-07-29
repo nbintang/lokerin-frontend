@@ -14,6 +14,7 @@ import {
   User,
   Pen,
   CalendarDays,
+  FileUser,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -124,11 +125,11 @@ export default function Applicant({
                     onClick={() =>
                       setOpenDialog({
                         isOpen: true,
-                        applicant :{
+                        applicant: {
                           jobId: job.id,
                           status,
-                          id: applicant.id
-                        }
+                          id: applicant.id,
+                        },
                       })
                     }
                     className="cursor-pointer"
@@ -156,6 +157,7 @@ export default function Applicant({
                       <span>{user.phone}</span>
                     </div>
                   )}
+
                   <div className="flex items-center space-x-3 text-sm">
                     <CalendarDays className="w-4 h-4 text-muted-foreground" />
                     <span>
@@ -166,6 +168,17 @@ export default function Applicant({
                       })}
                     </span>
                   </div>
+                  {user.phone && (
+                    <Link
+                      href={user.cvUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center space-x-3 max-w-sm text-sm "
+                    >
+                      <FileUser className="w-4 h-4 text-muted-foreground" />
+                      <span className="underline underline-offset-4 hover:text-primary">{user.name}</span>
+                    </Link>
+                  )}
                 </div>
               </div>
 

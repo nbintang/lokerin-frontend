@@ -1,4 +1,5 @@
 import { lokerinAPI } from "@/shared-api/config/api";
+import { useProgress } from "@bprogress/next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -8,6 +9,7 @@ import z from "zod";
 export const useCreateJob = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const progress = useProgress();
   return useMutation({
     mutationKey: ["create-job"],
     mutationFn: async (body: {
@@ -19,6 +21,7 @@ export const useCreateJob = () => {
     onMutate: () => {
       const toastId = toast.loading("Creating job...");
       console.log(toastId);
+      progress.start();
       return { toastId };
     },
     onSuccess: (_, _variables, context) => {
@@ -38,6 +41,9 @@ export const useCreateJob = () => {
       } else {
         toast.error("An unexpected error occurred");
       }
+    },
+    onSettled: () => {
+      progress.stop();
     },
   });
 };

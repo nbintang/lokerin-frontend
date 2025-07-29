@@ -24,6 +24,7 @@ import { Marquee } from "../magicui/marquee";
 import Link from "next/link";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
 import { useDeleteJob } from "@/shared-api/hooks/jobs/useDeleteJob";
+import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
 
 export const jobColumns: ColumnDef<Jobs>[] = [
   {
@@ -61,7 +62,9 @@ export const jobColumns: ColumnDef<Jobs>[] = [
     accessorKey: "salaryRange",
     header: "Salary",
     cell: ({ row }) => (
-      <Badge variant="outline">{row.original.salaryRange}</Badge>
+      <Badge variant="outline">
+        {formatSalaryRangePublic(row.original.salaryRange)}
+      </Badge>
     ),
   },
   {

@@ -4,6 +4,7 @@ import { Applyer } from "../../shared-api/hooks/job-applicants/useJobApplicants"
 import {
   IconCircleCheckFilled,
   IconDotsVertical,
+  IconFileCv,
   IconLoader,
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -18,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CircleAlertIcon, XIcon } from "lucide-react";
+import { CircleAlertIcon, FileUser, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
@@ -98,6 +99,21 @@ export const jobAppColumns: ColumnDef<Applyer>[] = [
     },
   },
 
+  {
+    accessorKey: "user.cvUrl",
+    header: "CV",
+    cell: ({ row }) => {
+      return (
+        <Link
+          href={row.original.user.cvUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <IconFileCv />
+        </Link>
+      );
+    },
+  },
   {
     accessorKey: "createdAt",
     header: "Applied At",

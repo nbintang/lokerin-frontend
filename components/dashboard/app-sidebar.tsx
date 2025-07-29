@@ -1,26 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Icon,
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react";
-
-import { NavDocuments } from "@/components/dashboard/nav-documents";
+import { Icon, IconInnerShadowTop } from "@tabler/icons-react";
 import { NavMain } from "@/components/dashboard/nav-main";
 import { NavSecondary } from "@/components/dashboard/nav-secondary";
 import { NavUser } from "@/components/dashboard/nav-user";
@@ -36,116 +17,29 @@ import {
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
-
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
-    },
-    {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
-};
+import { LucideIcon } from "lucide-react";
+import { NavCollapsible } from "./nav-collapsible";
 
 export function AppSidebar({
   navMain,
   navSecondary,
+  navCollapsible,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   navMain: {
     title: string;
     url: string;
-    icon: Icon;
+    icon: Icon | LucideIcon;
+  }[];
+  navCollapsible?: {
+    title: string;
+    url: string;
+    icon?: Icon | LucideIcon;
+    isActive?: boolean;
+    items?: {
+      title: string;
+      url: string;
+    }[];
   }[];
   navSecondary: {
     title: string;
@@ -173,15 +67,13 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMain} />
+        {navCollapsible && <NavCollapsible items={navCollapsible} />}
         <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         {isLoading && (
           <div
-            className={cn(
-              "flex items-center gap-2  py-1.5 text-left text-sm",
-        
-            )}
+            className={cn("flex items-center gap-2  py-1.5 text-left text-sm")}
           >
             <Skeleton className="size-9 bg-muted-foreground rounded-lg grayscale" />
             <div className="flex flex-col h-6 gap-1 justify-between text-black">

@@ -14,7 +14,6 @@ export const TableSkeleton = ({ className }: { className?: string }) => (
     <CardHeader className="flex flex-row   items-center justify-start mb-2 gap-4 px-2">
       <Skeleton className="h-7 w-1/3 md:w-1/12  " />
     </CardHeader>
-    {/* --- PERUBAHAN 2: Hapus tinggi tetap (h-[700px]) agar fleksibel --- */}
     <CardContent className={cn("flex-1 px-2", className)}>
       <Skeleton className="h-full w-full " />
     </CardContent>

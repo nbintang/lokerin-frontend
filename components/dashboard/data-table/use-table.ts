@@ -27,17 +27,18 @@ type DataTableProps<TData> = Omit<
   | "getFilteredRowModel"
   | "state"
 >;
-export const useTable = <TData>({
-  columns,
-  data,
-  ...tableOptions
-}: DataTableProps<TData>): {
+type TableHookResponse<TData> = {
   table: Table<TData>;
   sorting: SortingState;
   columnFilters: ColumnFiltersState;
   columnVisibility: VisibilityState;
   rowSelection: RowSelectionState;
-} => {
+};
+export const useTable = <TData>({
+  columns,
+  data,
+  ...tableOptions
+}: DataTableProps<TData>): TableHookResponse<TData> => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -70,4 +71,3 @@ export const useTable = <TData>({
     rowSelection,
   };
 };
- 

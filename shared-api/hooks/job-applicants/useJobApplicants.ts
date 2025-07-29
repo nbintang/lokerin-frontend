@@ -31,9 +31,10 @@ export interface Applyer {
     email: string;
     avatarUrl: string;
     name: string;
+    cvUrl: string;
   };
   job: {
-    id:string
+    id: string;
     role: {
       name: string;
     };
