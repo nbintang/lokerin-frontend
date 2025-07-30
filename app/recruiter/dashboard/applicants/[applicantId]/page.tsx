@@ -27,7 +27,7 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
-import RecruiterAccountSkeleton from "@/components/ProfileSkeleton";
+import ProfileSkeleton from "@/components/ProfileSkeleton";
 import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
 export default function Applicant({
   params,
@@ -53,7 +53,7 @@ export default function Applicant({
   };
 
   if (isLoading) {
-    return <RecruiterAccountSkeleton />;
+    return <ProfileSkeleton />;
   }
 
   if (error || !applicant) {

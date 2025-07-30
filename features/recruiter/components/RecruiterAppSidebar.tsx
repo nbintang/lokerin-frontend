@@ -9,7 +9,7 @@ import {
 import {
   Sidebar
 } from "@/components/ui/sidebar";
-import { AppSidebar } from "../dashboard/app-sidebar";
+import { AppSidebar } from "../../../components/dashboard/app-sidebar";
 
 const data = {
   user: {
@@ -46,12 +46,13 @@ const data = {
       icon: IconSearch,
     },
   ],
+  accountPath: "/recruiter/account",
 };
 
 export function RecruiterAppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>  ) {
   return (
-    <AppSidebar navMain={data.navMain} navSecondary={data.navSecondary} {...props} />
+    <AppSidebar navMain={data.navMain} navSecondary={data.navSecondary} accountPath={data.accountPath}{...props} />
   )
 }

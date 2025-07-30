@@ -3,33 +3,25 @@ import { Jobs } from "@/shared-api/hooks/jobs/useJobs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import {
-  MapPin,
-  DollarSign,
-  User,
-  Calendar,
-  Eye,
-  Pen,
-  Trash2,
-} from "lucide-react";
+import { MapPin, Calendar, Pen, Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { IconDotsVertical } from "@tabler/icons-react";
-import { Marquee } from "../magicui/marquee";
+import { Marquee } from "@/components/magicui/marquee";
 import Link from "next/link";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
 import { useDeleteJob } from "@/shared-api/hooks/jobs/useDeleteJob";
 import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
 
-export const jobColumns: ColumnDef<Jobs>[] = [
+export const recruiterJobColumns: ColumnDef<Jobs>[] = [
   {
-    accessorKey: "role.name", // boleh pakai ini juga untuk sorting, tapi tergantung lib
-    header: "Role",
+    accessorKey: "role.name",
+    header: "Position",
     cell: ({ row }) => <span>{row.original.role?.name ?? "-"}</span>,
   },
   {
@@ -82,7 +74,7 @@ export const jobColumns: ColumnDef<Jobs>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: () => null,
     cell: ({ row }) => {
       const setOpenDialog = useHandleWarningDialog(
         (state) => state.setOpenDialog

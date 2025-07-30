@@ -13,7 +13,7 @@ export const useJob = (
     queryKey: ["jobs", id],
     queryFn: async () => {
       const response = await lokerinAPI.get<JobResponse>(`/jobs/${id}`);
-      return response.data;
+      return response.data; 
     },
     ...options,
   });

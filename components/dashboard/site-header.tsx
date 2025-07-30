@@ -9,7 +9,7 @@ import { useApplicant } from "@/shared-api/hooks/job-applicants/useApplicant";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const { applicantId } = useParams();
+  const { applicantId, id } = useParams();
   const { data: applicant, isSuccess } = useApplicant(
     String(applicantId) ?? ""
   );
@@ -23,7 +23,7 @@ export function SiteHeader() {
         />
         <DynamicBreadcrumb
           path={pathname}
-          excludeSegments={["recruiter", "admin", String(applicantId)]}
+          excludeSegments={["recruiter", "admin", "applier", String(applicantId), String(id)]}
           appendSegments={isSuccess ? [applicant?.user.name] : []}
         />
         <div className="ml-auto flex items-center gap-2">

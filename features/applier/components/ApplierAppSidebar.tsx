@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  IconDashboard,
   IconHelp,
   IconListDetails,
   IconSearch,
@@ -10,15 +9,14 @@ import {
 } from "@tabler/icons-react";
 
 import { Sidebar } from "@/components/ui/sidebar";
-import { AppSidebar } from "../dashboard/app-sidebar";
 import {
   FileCheck2,
   FileClock,
-  FilePlus2,
   FileSearch,
   FileSymlink,
   FileX2,
 } from "lucide-react";
+import { AppSidebar } from "@/components/dashboard/app-sidebar";
 
 const data = {
   user: {
@@ -28,8 +26,8 @@ const data = {
   },
   navMain: [
     {
-      title: "Jobs",
-      url: "/applyer/dashboard/jobs",
+      title: "Find Jobs",
+      url: "/applier/dashboard/jobs",
       icon: FileSearch,
     },
   ],
@@ -41,22 +39,22 @@ const data = {
       items: [
         {
           title: "Applied Jobs",
-          url: "/applyer/dashboard/applications/applied",
+          url: "/applier/dashboard/applied-jobs/applied",
           icon: FileSymlink,
         },
         {
           title: "Reviewed Jobs",
-          url: "/applyer/dashboard/applications/reviewed",
+          url: "/applier/dashboard/applied-jobs/reviewed",
           icon: FileClock,
         },
         {
           title: "Accepted Jobs",
-          url: "/applyer/dashboard/applications/accepted",
+          url: "/applier/dashboard/applied-jobs/accepted",
           icon: FileCheck2,
         },
         {
           title: "Rejected Jobs",
-          url: "/applyer/dashboard/applications/rejected",
+          url: "/applier/dashboard/applied-jobs/rejected",
           icon: FileX2,
         },
       ],
@@ -79,9 +77,10 @@ const data = {
       icon: IconSearch,
     },
   ],
+  accountPath: '/applier/account',
 };
 
-export function ApplyerAppSidebar({
+export function ApplierAppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -89,6 +88,7 @@ export function ApplyerAppSidebar({
       navMain={data.navMain}
       navSecondary={data.navSecondary}
       navCollapsible={data.navCollapsible}
+      accountPath={data.accountPath}
       {...props}
     />
   );

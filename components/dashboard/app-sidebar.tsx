@@ -24,6 +24,7 @@ export function AppSidebar({
   navMain,
   navSecondary,
   navCollapsible,
+  accountPath,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   navMain: {
@@ -46,10 +47,11 @@ export function AppSidebar({
     url: string;
     icon: Icon;
   }[];
+  accountPath: string;
 }) {
   const { data: userProfile, isLoading, isSuccess } = useProfile();
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -82,7 +84,7 @@ export function AppSidebar({
             </div>
           </div>
         )}
-        {isSuccess && <NavUser user={userProfile} />}
+        {isSuccess && <NavUser user={userProfile} accountPath={accountPath} />}
       </SidebarFooter>
     </Sidebar>
   );

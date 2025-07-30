@@ -1,5 +1,5 @@
 "use client";
-import { Applyer } from "../../shared-api/hooks/job-applicants/useJobApplicants";
+import { Applier } from "../../../shared-api/hooks/job-applicants/useJobApplicants";
 
 import {
   IconCircleCheckFilled,
@@ -15,19 +15,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CircleAlertIcon, FileUser, XIcon } from "lucide-react";
+import { CircleAlertIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
 
-export const jobAppColumns: ColumnDef<Applyer>[] = [
+export const jobAppColumns: ColumnDef<Applier>[] = [
   {
     accessorKey: "user",
-    header: "Applyer Name",
+    header: "Applier Name",
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-x-5">
@@ -123,6 +122,7 @@ export const jobAppColumns: ColumnDef<Applyer>[] = [
   },
   {
     id: "actions",
+    header: () => null,
     cell: ({ row }) => {
       return (
         <DropdownMenu>

@@ -1,5 +1,5 @@
 "use client";
-import RecruiterAccountSkeleton from "@/components/ProfileSkeleton";
+import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import Link from "next/link";
 export default function RecruiterAccount() {
   const { data: profile, isLoading, error } = useRecruiterProfile();
   if (isLoading) {
-    return <RecruiterAccountSkeleton />;
+    return <ProfileSkeleton />;
   }
 
   if (error || !profile) {

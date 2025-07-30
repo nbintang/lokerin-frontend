@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { SiteHeader } from "@/components/dashboard/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { RecruiterAppSidebar } from "@/components/recruiter/RecruiterAppSidebar";
+import { RecruiterAppSidebar } from "@/features/recruiter/components/RecruiterAppSidebar";
 import SelectStatusDialog from "@/components/SelectStatusDialog";
 export default async function RecruiterLayout({
   children,

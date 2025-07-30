@@ -15,13 +15,13 @@ export const useJobApplicants = (page: number = 1, limit: number = 10) =>
   });
 
 export interface JobApplicantResponse {
-  applyers: Applyer[];
+  appliers: Applier[];
   page: number;
   limit: number;
   total: number;
 }
 
-export interface Applyer {
+export interface Applier {
   id: string;
   status: "APPLIED" | "REVIEWED" | "REJECTED" | "ACCEPTED";
   createdAt: Date;

@@ -1,10 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function RecruiterAccountSkeleton() {
+export default function ProfileSkeleton() {
   return (
     <div>
       {/* Banner Placeholder */}
-      <Skeleton className="h-24 md:h-36 " />
+      <Skeleton className="h-24 md:h-36 rounded-none " />
 
       <div className="container mx-auto">
         <div className="bg-background rounded-none border-0">

@@ -1,8 +1,9 @@
 import { cookies } from "next/headers";
 import { SiteHeader } from "@/components/dashboard/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import SelectStatusDialog from "@/components/SelectStatusDialog";
-import { ApplyerAppSidebar } from "@/components/applyer/ApplyerAppSidebar";
+import { ApplierAppSidebar } from "@/features/applier/components/ApplierAppSidebar";
+import AiFeaturesDialog from "@/components/AiFeaturesDialog";
+ 
 export default async function RecruiterLayout({
   children,
 }: {
@@ -20,13 +21,13 @@ export default async function RecruiterLayout({
       }
       defaultOpen={sidebarState}
     >
-      <ApplyerAppSidebar variant="inset" />
+      <ApplierAppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            {children}
-            <SelectStatusDialog />
+            {children} 
+            <AiFeaturesDialog/>
           </div>
         </div>
       </SidebarInset>

@@ -6,12 +6,12 @@ import {
   useTable,
   TableFilters,
 } from "@/components/dashboard/data-table";
-import { RecruiterSectionsCards } from "@/components/recruiter/RecruiterSectionsCards";
+import { RecruiterSectionsCards } from "@/features/recruiter/components/RecruiterSectionsCards";
 import {
-  Applyer,
+  Applier,
   useJobApplicants,
 } from "@/shared-api/hooks/job-applicants/useJobApplicants";
-import { jobAppColumns } from "@/components/recruiter/jobAppColumns";
+import { jobAppColumns } from "@/features/recruiter/job-applications/columns";
 import { useSearchParams } from "next/navigation";
 
 export default function RecruiterDashboardPage() {
@@ -19,9 +19,9 @@ export default function RecruiterDashboardPage() {
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
   const jobApplicant = useJobApplicants(page, limit);
-  const { table } = useTable<Applyer>({
+  const { table } = useTable<Applier>({
     columns: jobAppColumns,
-    data: jobApplicant.data?.applyers ?? [],
+    data: jobApplicant.data?.appliers ?? [],
   });
 
   return (
@@ -36,11 +36,11 @@ export default function RecruiterDashboardPage() {
       {jobApplicant.isSuccess && jobApplicant.data && (
         <>
           <div className="flex items-start gap-x-3 justify-start rounded-b-md  ">
-            <TableFilters<Applyer> table={table} />
+            <TableFilters<Applier> table={table} />
           </div>
 
-          <TableMain<Applyer> table={table} />
-          <TablePagination<Applyer>
+          <TableMain<Applier> table={table} />
+          <TablePagination<Applier>
             limit={limit}
             page={page}
             table={table}

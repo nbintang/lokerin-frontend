@@ -9,7 +9,7 @@ export async function middleware(req: NextRequest) {
   const isProtected =
     pathname.startsWith("/admin") ||
     pathname.startsWith("/recruiter") ||
-    pathname.startsWith("/applyer");
+    pathname.startsWith("/applier");
   const isPublicRequireVerified = pathname.startsWith("/jobs");
   // Allow access to /auth/verify even without ?token as long as user has accessToken
   if (pathname === "/auth/verify") {
@@ -58,8 +58,8 @@ export async function middleware(req: NextRequest) {
 
   // jika reader coba akses dashboard dan auth, redirect ke main
   if (role === "MEMBER") {
-    if (!pathname.startsWith("/applyer"))
-      return NextResponse.redirect(new URL("/applyer/dashboard", req.url));
+    if (!pathname.startsWith("/applier"))
+      return NextResponse.redirect(new URL("/applier/dashboard", req.url));
   }
   return NextResponse.next();
 }

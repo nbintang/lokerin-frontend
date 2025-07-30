@@ -6,7 +6,7 @@ import {
   TableSkeleton,
   useTable,
 } from "@/components/dashboard/data-table";
-import { jobColumns } from "@/components/job/jobColumns";
+import { recruiterJobColumns } from "@/features/recruiter/job/columns";
 import { Button } from "@/components/ui/button";
 import { Jobs, useJobs } from "@/shared-api/hooks/jobs/useJobs";
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
@@ -31,7 +31,7 @@ export default function JobDashboard() {
     }
   );
   const { table } = useTable<Jobs>({
-    columns: jobColumns,
+    columns: recruiterJobColumns,
     data: jobApplicant.data?.jobs ?? [],
   });
   if (isProfileLoading || jobApplicant.isLoading) {
