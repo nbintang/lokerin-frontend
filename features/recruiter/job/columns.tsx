@@ -14,13 +14,9 @@ import { IconDotsVertical } from "@tabler/icons-react";
 import { Marquee } from "@/components/magicui/marquee";
 import Link from "next/link";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
-import { useDeleteJob } from "@/shared-api/hooks/jobs/useDeleteJob";
-<<<<<<< HEAD:components/job/jobColumns.tsx
-import { Jobs } from "@/shared-api/hooks/jobs/useJobs";
-=======
-import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
->>>>>>> 999acd9f6616279b8c1065125201edd3eba0abc5:features/recruiter/job/columns.tsx
-
+import { useDeleteJob } from "@/shared-api/hooks/jobs/useDeleteJob"; 
+import { Jobs } from "@/shared-api/hooks/jobs/useJobs"; 
+import { formatSalaryRangePublic } from "@/helpers/concurrency-converter"; 
 export const recruiterJobColumns: ColumnDef<Jobs>[] = [
   {
     accessorKey: "role.name",
@@ -47,10 +43,10 @@ export const recruiterJobColumns: ColumnDef<Jobs>[] = [
     accessorKey: "location",
     header: "Location",
     cell: ({ row }) => (
-      <div className="flex items-center text-sm text-muted-foreground">
-        <MapPin className="mr-1 h-4 w-4" />
-        <Marquee className="p-0">{row.original.location}</Marquee>
-      </div>
+      <Badge       className="max-w-[150px] flex items-center space-x-1">
+        <MapPin className="mr-1 h-4 w-4 flex-shrink-0" />
+        <Marquee className="p-0 truncate">{row.original.location}</Marquee>
+      </Badge>
     ),
   },
   {

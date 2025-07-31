@@ -123,7 +123,7 @@ export default function NewJob({
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Role</FormLabel>
+              <FormLabel>Position</FormLabel>
               <FormDescription>
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                 Eligendi quod consectetur ut.
@@ -179,8 +179,8 @@ export default function NewJob({
                       </CommandItem>
                     </div>
                   )}
-                  label="Role"
-                  placeholder="Search roles..."
+                  label="Position"
+                  placeholder="Search position..."
                   pageSize={10}
                   queryKey="roles"
                   disabled={isLoading || isPending}
@@ -315,7 +315,7 @@ export default function NewJob({
         <Button
           type="submit"
           className="w-full sm:max-w-sm"
-          disabled={form.formState.isSubmitting || isPending}
+          disabled={form.formState.isSubmitting || isPending || isLoading}
         >
           {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
           Save

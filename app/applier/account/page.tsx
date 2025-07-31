@@ -1,13 +1,11 @@
 "use client";
 import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
-import { useRecruiterProfile } from "@/shared-api/hooks/recruiter-profile/useRecruiterProfile";
 import { format } from "date-fns";
-import { CalendarDays, Globe, Mail, Pen, Phone } from "lucide-react";
+import { CalendarDays, Mail, Pen, Phone } from "lucide-react";
 import Link from "next/link";
 
 export default function RecruiterAccount() {
@@ -76,9 +74,12 @@ export default function RecruiterAccount() {
                     variant="outline"
                     size="sm"
                     className="cursor-pointer"
+                    asChild
                   >
-                    <Pen className="w-4 h-4 mr-2" />
-                    Edit
+                    <Link href={"/applier/account/settings"}>
+                      <Pen className="w-4 h-4 mr-2" />
+                      Edit
+                    </Link>
                   </Button>
                 </div>
               </div>

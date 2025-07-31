@@ -32,7 +32,7 @@ const data = {
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/recruiter/account/settings",
       icon: IconSettings,
     },
     {

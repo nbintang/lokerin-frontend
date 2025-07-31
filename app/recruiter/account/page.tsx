@@ -82,9 +82,12 @@ export default function RecruiterAccount() {
                     variant="outline"
                     size="sm"
                     className="cursor-pointer"
+                    asChild
                   >
-                    <Pen className="w-4 h-4 mr-2" />
-                    Edit
+                    <Link href="/recruiter/account/settings">
+                      <Pen className="w-4 h-4 mr-2" />
+                      Edit
+                    </Link>
                   </Button>
                 </div>
               </div>

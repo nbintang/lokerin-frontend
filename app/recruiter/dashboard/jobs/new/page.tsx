@@ -101,7 +101,7 @@ export default function NewJob() {
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Role</FormLabel>
+              <FormLabel>Position</FormLabel>
               <FormDescription>
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                 Eligendi quod consectetur ut.
@@ -157,8 +157,8 @@ export default function NewJob() {
                       </CommandItem>
                     </div>
                   )}
-                  label="Role"
-                  placeholder="Search roles..."
+                  label="Position"
+                  placeholder="Search position..."
                   pageSize={10}
                   queryKey="roles"
                   disabled={form.formState.isSubmitting || isPending}

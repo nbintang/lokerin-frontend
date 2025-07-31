@@ -53,7 +53,7 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
-const AiFeaturesDialog = () => {
+const AIFeaturesDialog = () => {
   const { isOpen, setOpen } = useHandleAiFeaturesDialog(
     useShallow((state) => ({
       isOpen: state.isOpen,
@@ -70,14 +70,12 @@ const AiFeaturesDialog = () => {
     },
   });
   const { data: profile, isPending, isError } = useProfile();
-  const { mutateAsync } = useRecommendJobs();
-
+  const { mutateAsync } = useRecommendJobs(); 
+  const isOperationInProgress = isPending || isClicking || form.formState.isSubmitting;
+  
   const handleClickOwnResume = async () => {
     setIsClicking(true);
-    const resumeUrl = profile?.cvUrl;
-    console.log(profile?.cvUrl);
-
-    const dataRes = await mutateAsync({
+    await mutateAsync({
       resumeUrl: profile?.cvUrl,
       minScore: 0.43,
     });
@@ -88,9 +86,8 @@ const AiFeaturesDialog = () => {
   const onSubmit = React.useCallback(
     async (data: FormValues) => {
       const resumeFile = data.files[0];
-
       const minScore = data.minScore;
-      const dataRes = await mutateAsync({ resumeFile, minScore });
+      await mutateAsync({ resumeFile, minScore });
       setOpen(false);
     },
     [mutateAsync]
@@ -98,7 +95,20 @@ const AiFeaturesDialog = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
-      <DialogContent className="w-full max-w-6xl h-[50vh] flex flex-col">
+      <DialogContent
+        className="w-full max-w-6xl h-[50vh] flex flex-col"
+        onInteractOutside={(e) => {
+          if (isOperationInProgress) {
+            e.preventDefault();
+          }
+        }}
+        showCloseButton={isOperationInProgress ? false : true}
+        onEscapeKeyDown={(e) => {
+          if (isOperationInProgress) {
+            e.preventDefault();
+          }
+        }}
+      >
         <DialogHeader>
           <DialogTitle className="sr-only hidden" />
           <div
@@ -167,7 +177,10 @@ const AiFeaturesDialog = () => {
                             <CloudUpload className="size-4" />
                             Drag and drop or
                             <FileUploadTrigger asChild>
-                              <Button variant="link" size="sm" className="p-0">
+                              <Button
+                                size="sm"
+                                className="p-0 bg-gradient-to-br from-sky-400 to-indigo-600 bg-clip-text text-transparent hover:bg-gradient-to-br hover:from-sky-500 hover:to-indigo-700 duration-500 ease-in-out"
+                              >
                                 choose resume files
                               </Button>
                             </FileUploadTrigger>
@@ -206,9 +219,9 @@ const AiFeaturesDialog = () => {
               type="submit"
               variant={"special"}
               className="mt-2"
-              disabled={form.formState.isSubmitting || isClicking || isPending}
+              disabled={isOperationInProgress}
             >
-              {form.formState.isSubmitting || isClicking || isPending ? (
+              {form.formState.isSubmitting || isPending ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" /> Submitting
                 </>
@@ -228,13 +241,11 @@ const AiFeaturesDialog = () => {
               variant="outline"
               onClick={handleClickOwnResume}
               disabled={
-                isPending ||
-                form.formState.isSubmitting ||
-                isClicking ||
+         isOperationInProgress ||
                 form.formState.isValid
               }
             >
-              {form.formState.isSubmitting || isPending || isClicking ? (
+              {form.formState.isSubmitting || isClicking ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" /> Analyzing
                 </>
@@ -258,4 +269,4 @@ const AiFeaturesDialog = () => {
   );
 };
 
-export default AiFeaturesDialog;
+export default AIFeaturesDialog;

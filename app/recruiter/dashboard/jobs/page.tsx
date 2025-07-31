@@ -14,6 +14,7 @@ import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { FilePlus2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { IconBriefcase2 } from "@tabler/icons-react";
 
 export default function JobDashboard() {
   const searchParams = useSearchParams();
@@ -52,8 +53,8 @@ export default function JobDashboard() {
             <TableFilters<Jobs> table={table} />
             <Button asChild>
               <Link href="/recruiter/dashboard/jobs/new">
-                <FilePlus2 />
-                Add Job
+                <IconBriefcase2 />
+                Add New Job
               </Link>
             </Button>
           </div>

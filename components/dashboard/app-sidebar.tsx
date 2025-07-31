@@ -50,6 +50,7 @@ export function AppSidebar({
   accountPath: string;
 }) {
   const { data: userProfile, isLoading, isSuccess } = useProfile();
+  
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

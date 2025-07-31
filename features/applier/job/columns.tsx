@@ -15,6 +15,8 @@ import { IconDotsVertical } from "@tabler/icons-react";
 import { Marquee } from "@/components/magicui/marquee";
 import Link from "next/link";
 import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
+import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
+import { useApplyJob } from "@/shared-api/hooks/applied-job/useApplyJob";
 
 export const applierJobColumns: ColumnDef<Jobs>[] = [
   {
@@ -64,6 +66,16 @@ export const applierJobColumns: ColumnDef<Jobs>[] = [
     id: "actions",
     header: () => null,
     cell: ({ row }) => {
+      const setOpenDialog = useHandleWarningDialog((s) => s.setOpenDialog);
+      const { mutate } = useApplyJob(row.original.id);
+      const handleApplyJob = async () =>
+        setOpenDialog({
+          title: "Apply Job",
+          description: "Are you sure you want to apply for this job?",
+          onConfirm: () => mutate(),
+          isOpen: true,
+          buttonVariants: "default",
+        });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -83,7 +95,7 @@ export const applierJobColumns: ColumnDef<Jobs>[] = [
                 Job detail
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem className="cursor-pointer" onClick={handleApplyJob}>
               <Briefcase />
               Apply job
             </DropdownMenuItem>

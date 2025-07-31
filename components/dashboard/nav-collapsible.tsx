@@ -27,6 +27,8 @@ import {
 } from "../ui/tooltip";
 import { useAppearApplySuccess } from "@/hooks/useAppearApplySuccess";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function NavCollapsible({
   items,
@@ -51,21 +53,20 @@ export function NavCollapsible({
   const appearApplySuccess = useAppearApplySuccess(
     (state) => state.appearApplySuccess
   );
-
+  const pathname = usePathname();
   useEffect(() => {
     if (!appearApplySuccess || !currentStatus) return;
-
     setOpenMap((prev) => ({
       ...prev,
-      [currentStatus]: true, // buka collapsible berdasarkan status
+      [currentStatus]: true,
     }));
-
     const timer = setTimeout(() => {
       setAppearApplySuccess(false, "");
     }, 4000);
-
     return () => clearTimeout(timer);
   }, [appearApplySuccess, currentStatus, setAppearApplySuccess]);
+
+
   return (
     <TooltipProvider>
       <SidebarGroup>
@@ -114,9 +115,15 @@ export function NavCollapsible({
                           >
                             <TooltipTrigger asChild>
                               <SidebarMenuSubItem>
-                                <SidebarMenuSubButton asChild>
+                                <SidebarMenuSubButton
+                         isActive = {subItem.url === pathname}
+                                  asChild
+                                >
                                   <Link href={subItem.url}>
-                                    {subItem.icon && <subItem.icon />}
+                                    {subItem.icon && <subItem.icon className={cn(
+                                      pathname ===subItem.url && 
+                                      "text-black dark:text-white"
+                                    )} />}
                                     <span>{subItem.title}</span>
                                   </Link>
                                 </SidebarMenuSubButton>
