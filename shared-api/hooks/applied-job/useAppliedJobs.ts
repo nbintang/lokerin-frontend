@@ -1,12 +1,18 @@
 import { lokerinAPI } from "@/shared-api/config/api";
 import { useQuery } from "@tanstack/react-query";
 import { AppliedJobResponse } from "./useAppliedJob";
-
-export const useAppliedJobs = (
-  page: number = 1,
-  limit: number = 10,
-  status:string
-) =>
+type AppliedJobOptions = {
+  page: number;
+  limit: number;
+  status?: string;
+  jobId?: string;
+};
+export const useAppliedJobs = ({
+  page,
+  limit,
+  status,
+  jobId,
+}: AppliedJobOptions) =>
   useQuery({
     queryKey: ["applied-jobs", status],
     queryFn: async () => {
@@ -18,7 +24,6 @@ export const useAppliedJobs = (
     },
     placeholderData: (prev) => prev,
   });
-
 
 export type AppliedJobsResponse = {
   appliedJobs: Array<AppliedJobResponse>;

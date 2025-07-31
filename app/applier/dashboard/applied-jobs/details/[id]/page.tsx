@@ -34,7 +34,7 @@ import { useAppliedJob } from "@/shared-api/hooks/applied-job/useAppliedJob";
 
 export default function AppliedDetailPages({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { data: appliedJob, isLoading, error } = useAppliedJob(id);
+  const { data: appliedJob, isLoading, error } = useAppliedJob({ id });
 
   if (isLoading) {
     return <ProfileSkeleton />;

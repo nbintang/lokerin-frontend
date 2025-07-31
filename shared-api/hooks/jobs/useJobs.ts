@@ -11,14 +11,16 @@ type JobQueryOptions = {
   name?: string;
   companyId?: string;
   postedBy?: string;
+  isPublic?: boolean 
 };
 
 export const useJobs = (
-  { isPublic = true }: { isPublic?: boolean },
   params?: JobQueryOptions,
-  options?: Omit<UseQueryOptions<JobsResponse, Error>, "queryFn" | "queryKey">
-): UseQueryResult<JobsResponse, Error> =>
-  useQuery<JobsResponse, Error>({
+  options?: Omit<UseQueryOptions<JobsResponse, Error>, "queryFn" | "queryKey">,
+ 
+): UseQueryResult<JobsResponse, Error> => {
+  const { isPublic = true } = params || {};
+  return useQuery<JobsResponse, Error>({
     queryKey: ["jobs", isPublic],
     queryFn: async () => {
       const response = await lokerinAPI.get<JobsResponse>(
@@ -31,6 +33,7 @@ export const useJobs = (
     },
     ...options,
   });
+}
 export interface JobsResponse {
   jobs: Array<Jobs>;
   page: number;

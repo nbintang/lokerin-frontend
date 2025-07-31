@@ -54,4 +54,5 @@ export type JobResponse = {
     phone: string;
     avatarUrl: string;
   };
+  applications: { id: string; jobId: string; status: string; userId: string }[]
 };

@@ -1,6 +1,6 @@
 "use client";
 import { useHandleAiFeaturesDialog } from "@/hooks/useHandleCvUploadDialog";
-import React from "react";
+import React, { useState } from "react";
 import { useShallow } from "zustand/shallow";
 import {
   Dialog,
@@ -30,9 +30,14 @@ import {
   FileUploadList,
   FileUploadTrigger,
 } from "./ui/file-upload";
-import { CloudUpload, X } from "lucide-react";
+import { CloudUpload, Loader2, LoaderCircleIcon, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { IconSparkles } from "@tabler/icons-react";
+import { cn } from "@/lib/utils";
+import { useRecommendJobs } from "@/shared-api/hooks/jobs/useRecommendJobs";
+import { useProfile } from "@/shared-api/hooks/profile/useProfile";
+import { useRecommendationJobStore } from "@/shared-api/stores/useRecommendationJobStore";
+import { useRouter } from "next/navigation";
 
 const FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const formSchema = z.object({
@@ -44,6 +49,7 @@ const formSchema = z.object({
       message: "File size must be less than 5MB",
       path: ["files"],
     }),
+  minScore: z.number().min(0).max(1).default(0.43).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -54,25 +60,60 @@ const AiFeaturesDialog = () => {
       setOpen: state.setOpen,
     }))
   );
+  const router = useRouter();
+  const setJobRes = useRecommendationJobStore((s) => s.setJobRes);
+  const [isClicking, setIsClicking] = useState<boolean>(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       files: [],
     },
   });
+  const { data: profile, isPending, isError } = useProfile();
+  const { mutateAsync } = useRecommendJobs();
 
-  const onSubmit = React.useCallback((data: FormValues) => {
-    console.log(data);
-    console.log(data.files);
-  }, []);
+  const handleClickOwnResume = async () => {
+    setIsClicking(true);
+    const resumeUrl = profile?.cvUrl;
+    console.log(profile?.cvUrl);
+
+    const dataRes = await mutateAsync({
+      resumeUrl: profile?.cvUrl,
+      minScore: 0.43,
+    });
+    router.push("/applier/dashboard/jobs/recommendation-results");
+    setIsClicking(false);
+    setOpen(false);
+  };
+  const onSubmit = React.useCallback(
+    async (data: FormValues) => {
+      const resumeFile = data.files[0];
+
+      const minScore = data.minScore;
+      const dataRes = await mutateAsync({ resumeFile, minScore });
+      setOpen(false);
+    },
+    [mutateAsync]
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent className="w-full max-w-6xl h-[50vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="sr-only hidden" />
-          <div className="flex items-center justify-center md:justify-start md:text-left gap-2">
-            <IconSparkles />
-            <h2>AI Features</h2>
+          <div
+            className={cn(
+              "flex items-center justify-center md:justify-start md:text-left gap-2"
+            )}
+          >
+            <IconSparkles className="text-sky-400" />
+            <h2
+              className={cn(
+                "bg-gradient-to-br from-sky-400 to-indigo-600 bg-clip-text text-transparent"
+              )}
+            >
+              AI Recommendation
+            </h2>
           </div>
           <DialogDescription>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -89,68 +130,126 @@ const AiFeaturesDialog = () => {
               name="files"
               render={({ field }) => (
                 <FormItem className="flex-1 flex flex-col">
-                  <FormControl className="flex-1">
-                    <FileUpload
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      accept="application/pdf"
-                      maxFiles={1}
-                      maxSize={5 * 1024 * 1024}
-                      onFileReject={(_, message) => {
-                        form.setError("files", {
-                          message,
-                        });
-                      }}
-                      className="cursor-pointer w-full"
-                      multiple
-                    >
-                      <FileUploadDropzone className="flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center">
-                        <CloudUpload className="size-4" />
-                        Drag and drop or
-                        <FileUploadTrigger asChild>
-                          <Button variant="link" size="sm" className="p-0">
-                            choose resume files
-                          </Button>
-                        </FileUploadTrigger>
-                        to upload
-                      </FileUploadDropzone>
-                      <FileUploadList>
-                        {field.value.map((file, index) => (
-                          <FileUploadItem key={index} value={file}>
-                            <FileUploadItemPreview />
-                            <FileUploadItemMetadata />
-                            <FileUploadItemDelete asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="size-7"
-                              >
-                                <X />
-                                <span className="sr-only">Delete</span>
+                  {isPending ||
+                  isClicking ||
+                  isError ||
+                  form.formState.isSubmitting ? (
+                    <div className="grid place-items-center h-full w-full">
+                      <LoaderCircleIcon className="size-12 animate-spin text-sky-400" />
+                    </div>
+                  ) : (
+                    <>
+                      <FormControl className="flex-1">
+                        <FileUpload
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          accept="application/pdf"
+                          maxFiles={1}
+                          maxSize={5 * 1024 * 1024}
+                          onFileReject={(_, message) => {
+                            form.setError("files", {
+                              message,
+                            });
+                          }}
+                          className={cn(
+                            " w-full",
+                            form.formState.isValid
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          )}
+                          multiple
+                          disabled={
+                            form.formState.isDirty ||
+                            form.formState.isSubmitting
+                          }
+                        >
+                          <FileUploadDropzone className="flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center">
+                            <CloudUpload className="size-4" />
+                            Drag and drop or
+                            <FileUploadTrigger asChild>
+                              <Button variant="link" size="sm" className="p-0">
+                                choose resume files
                               </Button>
-                            </FileUploadItemDelete>
-                          </FileUploadItem>
-                        ))}
-                      </FileUploadList>
-                    </FileUpload>
-                  </FormControl>
-                  {/* <FormDescription>
+                            </FileUploadTrigger>
+                            to upload
+                          </FileUploadDropzone>
+                          <FileUploadList>
+                            {field.value.map((file, index) => (
+                              <FileUploadItem key={index} value={file}>
+                                <FileUploadItemPreview />
+                                <FileUploadItemMetadata />
+                                <FileUploadItemDelete asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="size-7"
+                                  >
+                                    <X />
+                                    <span className="sr-only">Delete</span>
+                                  </Button>
+                                </FileUploadItemDelete>
+                              </FileUploadItem>
+                            ))}
+                          </FileUploadList>
+                        </FileUpload>
+                      </FormControl>
+                      {/* <FormDescription>
                     Upload up to 2 images up to 5MB each.
                   </FormDescription> */}
-                  {form.formState.errors.files && <FormMessage />}
+                      <FormMessage />
+                    </>
+                  )}
                 </FormItem>
               )}
             />
-            <Button type="submit" className="mt-2">
-              <IconSparkles /> Find Reccomended Jobs
+            <Button
+              type="submit"
+              variant={"special"}
+              className="mt-2"
+              disabled={form.formState.isSubmitting || isClicking || isPending}
+            >
+              {form.formState.isSubmitting || isClicking || isPending ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" /> Submitting
+                </>
+              ) : (
+                <>
+                  <IconSparkles /> Find Reccomended Jobs
+                </>
+              )}
             </Button>
             <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
               <span className="bg-background text-muted-foreground relative z-10 px-2">
                 Or
               </span>
             </div>
-            <Button type="button"  variant="outline">
-              <IconSparkles /> Try Use Resume From Your Profile
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClickOwnResume}
+              disabled={
+                isPending ||
+                form.formState.isSubmitting ||
+                isClicking ||
+                form.formState.isValid
+              }
+            >
+              {form.formState.isSubmitting || isPending || isClicking ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" /> Analyzing
+                </>
+              ) : (
+                <>
+                  <IconSparkles className="text-sky-400" />{" "}
+                  <p
+                    className={cn(
+                      "bg-gradient-to-br from-sky-400 to-indigo-600 bg-clip-text text-transparent"
+                    )}
+                  >
+                    Try Use Resume From Your Profile
+                  </p>
+                </>
+              )}
             </Button>
           </form>
         </Form>

@@ -9,7 +9,7 @@ import {
 import { recruiterJobColumns } from "@/features/recruiter/job/columns";
 import { Button } from "@/components/ui/button";
 import { Jobs, useJobs } from "@/shared-api/hooks/jobs/useJobs";
- 
+
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { FilePlus2 } from "lucide-react";
 import Link from "next/link";
@@ -21,7 +21,6 @@ export default function JobDashboard() {
   const limit = Number(searchParams.get("limit") ?? 10);
   const { data: user, isLoading: isProfileLoading } = useProfile();
   const jobApplicant = useJobs(
-    { isPublic: true },
     {
       page,
       limit,
@@ -53,8 +52,9 @@ export default function JobDashboard() {
             <TableFilters<Jobs> table={table} />
             <Button asChild>
               <Link href="/recruiter/dashboard/jobs/new">
-              <FilePlus2/>
-              Add Job</Link>
+                <FilePlus2 />
+                Add Job
+              </Link>
             </Button>
           </div>
           <TableMain<Jobs> table={table} />

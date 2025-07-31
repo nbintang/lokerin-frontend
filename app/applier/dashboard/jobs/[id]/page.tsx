@@ -2,7 +2,7 @@
 import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { useJob } from "@/shared-api/hooks/jobs/useJob";
-import { use } from "react";
+import { use, useEffect } from "react";
 import CompanyImageExample from "@/public/placeholder/company-example.jpeg";
 import { isValidImageUrl } from "@/helpers/validate-image-url";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -32,11 +32,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
+import { useApplyJob } from "@/shared-api/hooks/applied-job/useApplyJob";
+import { useAppliedJob } from "@/shared-api/hooks/applied-job/useAppliedJob";
+import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { data: job, isLoading, error } = useJob(id);
- 
+  const setOpenDialog = useHandleWarningDialog((s) => s.setOpenDialog);
+  const { mutate } = useApplyJob(id);
   if (isLoading) {
     return <ProfileSkeleton />;
   }
@@ -53,6 +57,14 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     );
   }
 
+  const handleApplyJob = async () =>
+    setOpenDialog({
+      title: "Apply Job",
+      description: "Are you sure you want to apply for this job?",
+      onConfirm: () => mutate(),
+      isOpen: true,
+      buttonVariants: "default",
+    });
   // Tentukan gambar yang akan digunakan
   const companyImage = isValidImageUrl(job.company.logoUrl)
     ? job.company.logoUrl
@@ -125,6 +137,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                       variant="outline"
                       size="sm"
                       className="cursor-pointer"
+                      onClick={handleApplyJob}
                     >
                       <Briefcase className="w-4 h-4 mr-2" />
                       Apply

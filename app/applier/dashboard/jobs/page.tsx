@@ -31,7 +31,7 @@ export default function Jobs() {
   const [aiTipOpen, setAiTipOpen] = useState<boolean>(false);
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
-  const jobs = useJobs({ page, limit });
+  const jobs = useJobs({ page, limit, isPublic: false });
   const { table } = useTable<Jobs>({
     columns: applierJobColumns,
     data: jobs.data?.jobs ?? [],
@@ -65,7 +65,6 @@ export default function Jobs() {
           <TooltipProvider delayDuration={0}>
             <div className="flex items-start gap-x-3 justify-between sm:justify-start mb-2 sm:mb-0  rounded-b-md">
               <TableFilters<Jobs> table={table} />
-
               <Tooltip open={aiTipOpen} onOpenChange={setAiTipOpen}>
                 <TooltipTrigger asChild>
                   <Button
@@ -76,7 +75,6 @@ export default function Jobs() {
                     AI Recommendation
                   </Button>
                 </TooltipTrigger>
-
                 <TooltipContent
                   side={isMobile ? "bottom" : "right"}
                   sideOffset={8}

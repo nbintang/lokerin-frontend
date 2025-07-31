@@ -18,6 +18,7 @@ export interface UserProfileResponse     {
   phone: string;
   role: string;
   avatarUrl: string;
+  cvUrl: string
   isVerified: boolean;
   createdAt: string;
   updatedAt: string;

@@ -4,7 +4,7 @@ import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import Image from "next/image";
 import { useShallow } from "zustand/shallow";
 export default function Home() {
-  const { data, isError, isLoading } = useJobs({ isPublic: true });
+  const { data, isError, isLoading } = useJobs( );
   const { token, isAuthenticated } = useAuthStore(
     useShallow((state) => ({
       token: state.token,

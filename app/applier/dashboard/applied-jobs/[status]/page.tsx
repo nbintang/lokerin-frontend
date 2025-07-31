@@ -30,7 +30,7 @@ export default function StatusPages({
     isError,
     error,
     isSuccess,
-  } = useAppliedJobs(page, limit, status);
+  } = useAppliedJobs({page, limit, status});
   const { table } = useTable<AppliedJobResponse>({
     columns: appliedJobColumns,
     data: appliedJobs?.appliedJobs ?? [],
