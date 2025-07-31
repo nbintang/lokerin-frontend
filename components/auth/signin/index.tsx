@@ -58,7 +58,7 @@ export default function SignInForm() {
         progress.start();
         if (role === "ADMINISTRATOR" || role === "RECRUITER") {
           router.push(`/${role.toLowerCase()}/dashboard`);
-        } else router.push("/");
+        } else router.push("/applier/dashboard");
         return "Signed in successfully";
       },
       error: (err) => {

@@ -31,8 +31,10 @@ import Link from "next/link";
 import { UserProfileResponse } from "@/shared-api/hooks/profile/useProfile";
 
 export function NavUser({
+  accountPath,
   user,
 }: {
+  accountPath: string;
   user: UserProfileResponse;
 }) {
   const { isMobile } = useSidebar();
@@ -88,9 +90,11 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => (progress.start(), router.push("/recruiter/account"))} >
-            <IconUserCircle />
-                Account
+            <DropdownMenuItem
+              onClick={() => (progress.start(), router.push(accountPath))}
+            >
+              <IconUserCircle />
+              Account
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />

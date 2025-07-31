@@ -83,7 +83,7 @@ export   function TableMain<TData>({
                     colSpan={table.getAllColumns().length}
                     className="h-24 text-center text-muted-foreground"
                   >
-                    No applicants found.
+                    No data found.
                   </TableCell>
                 </TableRow>
               )}

@@ -9,12 +9,11 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-export const TableSkeleton = ({ className }: { className?: string }) => (
-  <div className="flex flex-1 flex-col">
+export const TableSkeleton = ({ className, wrapperClassName }: { className?: string; wrapperClassName?:string; }) => (
+  <div className={cn("flex flex-1 flex-col", wrapperClassName)}>
     <CardHeader className="flex flex-row   items-center justify-start mb-2 gap-4 px-2">
       <Skeleton className="h-7 w-1/3 md:w-1/12  " />
     </CardHeader>
-    {/* --- PERUBAHAN 2: Hapus tinggi tetap (h-[700px]) agar fleksibel --- */}
     <CardContent className={cn("flex-1 px-2", className)}>
       <Skeleton className="h-full w-full " />
     </CardContent>

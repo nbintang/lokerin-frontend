@@ -1,16 +1,17 @@
 "use client";
-import RecruiterAccountSkeleton from "@/components/recruiter/RecruiterAccountSkeleton";
+import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRecruiterProfile } from "@/shared-api/hooks/recruiter-profile/useRecruiterProfile";
-import { CalendarDays, Globe, Mail, Pen, Phone, Verified } from "lucide-react";
+import { CalendarDays, Globe, Mail, Pen, Phone } from "lucide-react";
+import Link from "next/link";
 
 export default function RecruiterAccount() {
   const { data: profile, isLoading, error } = useRecruiterProfile();
   if (isLoading) {
-    return <RecruiterAccountSkeleton />;
+    return <ProfileSkeleton />;
   }
 
   if (error || !profile) {
@@ -157,14 +158,14 @@ export default function RecruiterAccount() {
                         {company.website && (
                           <div className="flex items-center space-x-2 text-sm">
                             <Globe className="w-4 h-4 text-muted-foreground" />
-                            <a
+                            <Link
                               href={company.website}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-primary hover:underline"
                             >
                               {company.website.replace(/^https?:\/\//, "")}
-                            </a>
+                            </Link>
                           </div>
                         )}
                       </div>

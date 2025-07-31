@@ -15,7 +15,7 @@ import {
 } from "@/shared-api/hooks/job-applicants/useJobApplicants";
 import { LoaderCircleIcon } from "lucide-react";
 import { UseQueryResult } from "@tanstack/react-query";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../../components/ui/skeleton";
 
 export function RecruiterSectionsCards({
   query,

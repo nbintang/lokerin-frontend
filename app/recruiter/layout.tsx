@@ -1,7 +1,8 @@
 import { cookies } from "next/headers";
 import { SiteHeader } from "@/components/dashboard/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { RecruiterAppSidebar } from "@/components/recruiter/RecruiterAppSidebar";
+import { RecruiterAppSidebar } from "@/features/recruiter/components/RecruiterAppSidebar";
+import SelectStatusDialog from "@/components/SelectStatusDialog";
 export default async function RecruiterLayout({
   children,
 }: {
@@ -24,8 +25,8 @@ export default async function RecruiterLayout({
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-   
-                  {children}
+            {children}
+            <SelectStatusDialog />
           </div>
         </div>
       </SidebarInset>
