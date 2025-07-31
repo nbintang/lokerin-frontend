@@ -13,45 +13,46 @@ type JobQueryOptions = {
   postedBy?: string;
 };
 
-
 export const useJobs = (
+  { isPublic = true }: { isPublic?: boolean },
   params?: JobQueryOptions,
-  options?: Omit<UseQueryOptions<JobsResponse, Error> , "queryFn" | "queryKey">
+  options?: Omit<UseQueryOptions<JobsResponse, Error>, "queryFn" | "queryKey">
 ): UseQueryResult<JobsResponse, Error> =>
   useQuery<JobsResponse, Error>({
-    queryKey: ["jobs"],
+    queryKey: ["jobs", isPublic],
     queryFn: async () => {
-      const response = await lokerinAPI.get<JobsResponse>("/jobs", {
-        params
-      });
+      const response = await lokerinAPI.get<JobsResponse>(
+        `/jobs/${isPublic ? "public" : ""}`,
+        {
+          params,
+        }
+      );
       return response.data;
     },
     ...options,
-    });
-  export interface JobsResponse {
-    jobs: Array<Jobs>;
-    page: number;
-    limit: number;
-    total: number;
-  }
+  });
+export interface JobsResponse {
+  jobs: Array<Jobs>;
+  page: number;
+  limit: number;
+  total: number;
+}
 
-  export interface Jobs {
+export interface Jobs {
+  id: string;
+  description: string;
+  location: string;
+  salaryRange: string;
+  postedBy: string;
+  createdAt: string;
+  updatedAt: string;
+  company: {
     id: string;
-    description: string;
-    location: string;
-    salaryRange: string;
-    postedBy: string;
-    createdAt: string;
-    updatedAt: string;
-    company: {
-      id: string;
-      name: string;
-      logoUrl: string;
-    };
-    role: {
-      id: string;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    };
-  }
+    name: string;
+    logoUrl: string;
+  };
+  role: {
+    id: string;
+    name: string;
+  };
+}

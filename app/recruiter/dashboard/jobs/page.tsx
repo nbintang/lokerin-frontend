@@ -9,6 +9,7 @@ import {
 import { jobColumns } from "@/components/job/jobColumns";
 import { Button } from "@/components/ui/button";
 import { Jobs, useJobs } from "@/shared-api/hooks/jobs/useJobs";
+ 
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { FilePlus2 } from "lucide-react";
 import Link from "next/link";
@@ -20,6 +21,7 @@ export default function JobDashboard() {
   const limit = Number(searchParams.get("limit") ?? 10);
   const { data: user, isLoading: isProfileLoading } = useProfile();
   const jobApplicant = useJobs(
+    { isPublic: true },
     {
       page,
       limit,

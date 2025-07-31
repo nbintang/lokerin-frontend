@@ -1,5 +1,4 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { Jobs } from "@/shared-api/hooks/jobs/useJobs";
+import { ColumnDef } from "@tanstack/react-table"; 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -24,6 +23,7 @@ import { Marquee } from "../magicui/marquee";
 import Link from "next/link";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
 import { useDeleteJob } from "@/shared-api/hooks/jobs/useDeleteJob";
+import { Jobs } from "@/shared-api/hooks/jobs/useJobs";
 
 export const jobColumns: ColumnDef<Jobs>[] = [
   {
