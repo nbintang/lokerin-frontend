@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
 import { defineStepper } from "@stepperize/react";
 import { mediaSchema, recruiterSchema, userSchema } from "./schema";
 import UserForm from "./components/UserForm";
@@ -18,7 +17,10 @@ import AvatarForm from "./components/AvatarForm";
 import ResumeForm from "./components/ResumeForm";
 import RoleForm from "./components/RoleForm";
 import { cn } from "@/lib/utils";
-import useUploadImage from "@/shared-api/hooks/media/useUploadImages";
+import useUploadImage from "@/shared-api/hooks/media/useUploadImage";
+import useUploadDocument from "@/shared-api/hooks/media/useUploadDocument";
+import useSignUpUser from "./hooks/useSignUpUser";
+import useSignUpRecruiter from "./hooks/useSignUpRecruiter";
 
 export const signUpStepper = defineStepper(
   { id: "user", label: "User", schema: userSchema },
@@ -32,6 +34,10 @@ export const signUpStepper = defineStepper(
 
 export default function SignUpForm() {
   const stepper = signUpStepper.useStepper();
+  const uploadImage = useUploadImage({});
+  const uploadDocument = useUploadDocument({});
+  const signUpUser = useSignUpUser();
+  const signUpRecruiter = useSignUpRecruiter();
   const form = useForm({
     resolver: zodResolver(stepper.current.schema),
     mode: "onTouched",
@@ -50,33 +56,37 @@ export default function SignUpForm() {
       role: "MEMBER" as "MEMBER" | "RECRUITER",
     },
   });
-  const { mutate } = useUploadImage({
-    folder: "lokerin_cv",
-  });
   const userRole = form.watch("role");
-  const onSubmit = (values: z.infer<typeof stepper.current.schema>) => {
-    const allFormData = form.getValues();
+  const onSubmit = async () => {
     if (stepper.isLast) {
+      const isRoles = form.getValues("role");
+      const { secureUrl: avatarUrl } = await uploadImage.mutateAsync(
+        form.getValues("avatar") ?? ""
+      );
       const userInput = {
         email: form.getValues("email"),
         password: form.getValues("password"),
-        firstName: form.getValues("firstName"),
-        lastName: form.getValues("lastName"),
-        role: form.getValues("role"),
+        name: `${form.getValues("firstName")} ${form.getValues("lastName")}`,
         phone: form.getValues("phone"),
+        avatarUrl,
       };
-
       const recruiterInput = {
-        email: form.getValues("email"),
-        password: form.getValues("password"),
-        firstName: form.getValues("firstName"),
-        lastName: form.getValues("lastName"),
-        role: form.getValues("role"),
-        phone: form.getValues("phone"),
+        ...userInput,
         about: form.getValues("about"),
         companyId: form.getValues("companyId"),
         position: form.getValues("position"),
       };
+      if (isRoles === "MEMBER") {
+        const { secureUrl: cvUrl } = await uploadDocument.mutateAsync(
+          form.getValues("cv")?.[0] ?? ""
+        );
+        signUpUser.mutate({
+          ...userInput,
+          cvUrl,
+        });
+      } else if (isRoles === "RECRUITER") {
+        signUpRecruiter.mutate(recruiterInput);
+      }
     } else {
       if (stepper.current.id === "user" && userRole === "MEMBER") {
         stepper.goTo("media");
@@ -88,10 +98,6 @@ export default function SignUpForm() {
   const handleNext = async () => {
     const isValid = await form.trigger();
     if (!isValid) return;
-    console.log(
-      `Leaving step ${stepper.current.id}, current data:`,
-      form.getValues()
-    );
     if (stepper.current.id === "user" && userRole === "MEMBER") {
       stepper.goTo("media");
     } else {
@@ -105,6 +111,10 @@ export default function SignUpForm() {
       stepper.prev();
     }
   };
+  const isSubmitting =
+    form.formState.isSubmitting ||
+    signUpUser.isPending ||
+    signUpRecruiter.isPending;
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
@@ -130,6 +140,7 @@ export default function SignUpForm() {
               variant="outline"
               className={cn("w-full sm:w-auto")}
               onClick={handlePrev}
+              disabled={isSubmitting}
             >
               <ChevronsLeft className="mr-2 h-4 w-4" />
               Back
@@ -141,6 +152,7 @@ export default function SignUpForm() {
               variant={"default"}
               className={cn(stepper.isFirst ? "w-full " : "w-auto")}
               onClick={handleNext}
+              disabled={isSubmitting}
             >
               Next
               <ChevronsRight className="ml-2 h-4 w-4" />
@@ -150,9 +162,9 @@ export default function SignUpForm() {
             <Button
               type="submit"
               className={cn("w-full sm:w-auto")}
-              disabled={form.formState.isSubmitting}
+              disabled={isSubmitting}
             >
-              {!form.formState.isSubmitting ? (
+              {!isSubmitting ? (
                 <>
                   <LogInIcon className="mr-2 h-4 w-4" /> Sign up
                 </>

@@ -70,9 +70,6 @@ export default function RecommendedJobsPages() {
       fireWorks()
     }
   }, [ jobRecommendationData.recommendedJobs]);
-
-
-
   if(jobRecommendationData.recommendedJobs === 0){
     return notFound();
   }
@@ -81,7 +78,7 @@ export default function RecommendedJobsPages() {
        <Confetti
         ref={confettiRef}
         manualstart
-        className="absolute left-0 top-0 z-0 size-full"/> 
+        className="absolute left-0 top-0 z-0 size-full pointer-events-none"/> 
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

@@ -16,7 +16,6 @@ import { AlertTriangleIcon, Loader2, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import useTimerCountDown from "@/hooks/useTImerCountDown";
-import { useRouter } from "next/navigation";
 import useHandleLoadingDialog from "@/hooks/useHandleVerifyDialog";
 import { useMutation } from "@tanstack/react-query";
 import { lokerinAPI } from "@/shared-api/config/api";
@@ -26,8 +25,8 @@ import { toast } from "sonner";
 const resendEmailSchema = z.object({
   email: z.email({ message: "Invalid email" }),
 });
-type ResendEmailForm = z.infer<typeof resendEmailSchema>;
-const resendEmail = async (email: ResendEmailForm) => {
+type ResendEmail = z.infer<typeof resendEmailSchema>;
+const resendEmail = async (email: ResendEmail) => {
   return await lokerinAPI.post<{ message: string }>(
     "/auth/resend-verification",
     { email }
@@ -41,11 +40,10 @@ export default function ResendEmailForm({
   isSuccessVerifying?: boolean;
 }) {
   const { startTimer, timer, isTimerStarted } = useTimerCountDown();
-  const router = useRouter();
   const setOpenDialog = useHandleLoadingDialog((state) => state.setOpenDialog);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
 
-  const form = useForm<ResendEmailForm>({
+  const form = useForm<ResendEmail>({
     resolver: zodResolver(resendEmailSchema),
     defaultValues: {
       email: "",

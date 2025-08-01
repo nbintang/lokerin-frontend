@@ -52,7 +52,7 @@ const AvatarForm = () => {
       </div>
       <div className="grid place-items-center">
         {selectedFile ? (
-          <ImageCropper
+          <ImageCropper 
             size="32"
             croppedImage={croppedImage}
             setCroppedImage={handleImageUpdate}

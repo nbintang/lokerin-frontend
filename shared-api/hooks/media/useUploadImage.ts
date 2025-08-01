@@ -1,16 +1,15 @@
- 
 import { lokerinAPI } from "@/shared-api/config/api";
 import { base64ToFile } from "@/shared-api/helpers/base64ToFile";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { toast } from "sonner";
 export type UploadImageApiResponse = {
+  message: string;
   secureUrl: string;
   publicId: string;
   createdAt: Date | null;
 };
 type PostImageProps = {
-  folder: "lokerin_cv" | "lokerin_image";
   existedUrl?: string | null;
 } & Omit<
   UseMutationOptions<
@@ -22,15 +21,20 @@ type PostImageProps = {
   "mutationFn" | "mutationKey" | "onError"
 >;
 
-const useUploadImage = ({ folder, existedUrl, ...options }: PostImageProps) => {
+const useUploadImage = ({ existedUrl, ...options }: PostImageProps) => {
   return useMutation({
-    mutationKey: [folder],
+    mutationKey: ["upload-image"],
     mutationFn: async (
       file: File | string | null
     ): Promise<UploadImageApiResponse> => {
       const formData = new FormData();
       if (!file)
-        return { secureUrl: existedUrl ?? "", publicId: "", createdAt: null };
+        return {
+          message: "",
+          secureUrl: existedUrl ?? "",
+          publicId: "",
+          createdAt: null,
+        };
       let convertedFile: File;
       const isBase64String =
         typeof file === "string" && file.startsWith("data:image/");
@@ -40,24 +44,24 @@ const useUploadImage = ({ folder, existedUrl, ...options }: PostImageProps) => {
         convertedFile = file;
       } else {
         return {
+          message: "",
           secureUrl: file,
           publicId: "",
           createdAt: null,
         };
       }
-      formData.append("file", convertedFile);
-      const profileResponse = await lokerinAPI.post(
-        "/upload",
+      formData.append("image", convertedFile);
+      const res = await lokerinAPI.post<UploadImageApiResponse>(
+        "/upload/image",
         formData,
         {
           params: {
-            folder,
+            folder: "lokerin_image",
             existedUrl: existedUrl ?? null,
           },
         }
       );
-      const data = profileResponse.data.data;
-      return data as UploadImageApiResponse;
+      return res.data;
     },
     onError: async (err) => {
       if (isAxiosError(err)) {

@@ -32,7 +32,7 @@ const RoleForm = () => {
             excepturi blanditiis quasi.
           </FormDescription>
           <FormControl>
-            <Select onValueChange={field.onChange} value={field.value}>
+            <Select onValueChange={field.onChange} value={field.value} disabled={form.formState.isSubmitting}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="What's your role?" />
               </SelectTrigger>

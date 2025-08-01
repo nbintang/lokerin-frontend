@@ -7,11 +7,11 @@ export const userSchema = z
     firstName: z
       .string()
       .min(3, "First name must be at least 3 characters")
-      .max(50),
+      .max(50).trim(),
     lastName: z
       .string()
       .min(3, "Last name must be at least 3 characters")
-      .max(50),
+      .max(50).trim(),
     email: z.email().min(3, "Email must be at least 3 characters").max(50),
     phone: z.coerce
       .number()
@@ -19,9 +19,9 @@ export const userSchema = z
       .refine((value) => value.toString().length === 10, {
         message: "Phone must be 10 digits",
       }),
-    password: z.string().regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+    password: z.string().regex(/^(?=.*[A-Z])(?=.*\d).+$/, {
       message:
-        "Password must be at least 8 characters long and contain at least one letter and one number",
+        "Password must contain at least one uppercase letter and one number",
     }),
     confirmPassword: z.string(),
     role: z.enum(["MEMBER", "RECRUITER"]),

@@ -31,7 +31,7 @@ const ResumeForm = () => {
       name="cv"
       render={({ field }) => (
         <FormItem className="flex-1 flex flex-col">
-          <FormLabel> Upload your Cv  </FormLabel>
+          <FormLabel className="after:content-['*'] after:ml-1 after:text-red-500"> Upload your Cv  </FormLabel>
           <FormDescription>
             If you are Job Seeker, Please upload your CV{" "}
           </FormDescription>

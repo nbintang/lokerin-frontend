@@ -40,6 +40,7 @@ const RecruiterForm = () => {
                 id="about"
                 placeholder="Enter about yourself"
                 className="resize-none"
+                disabled={form.formState.isSubmitting}
                 {...field}
               />
             </FormControl>
@@ -91,6 +92,7 @@ const RecruiterForm = () => {
                 placeholder="Search company..."
                 pageSize={10}
                 queryKey="companies"
+                disabled={form.formState.isSubmitting}
                 {...field}
               />
             </FormControl>

@@ -26,6 +26,7 @@ const UserForm = () => {
                   id="firstName"
                   placeholder="Enter your First Name"
                   type="text"
+                  disabled={form.formState.isSubmitting}
                   {...field}
                 />
               </FormControl>
@@ -45,6 +46,7 @@ const UserForm = () => {
                   id="lastName"
                   placeholder="Enter your Last Name "
                   type="text"
+                  disabled={form.formState.isSubmitting}
                   {...field}
                 />
               </FormControl>
@@ -66,6 +68,7 @@ const UserForm = () => {
                 id="email"
                 placeholder="Enter your email"
                 type="email"
+                disabled={form.formState.isSubmitting}
                 {...field}
               />
             </FormControl>
@@ -85,6 +88,7 @@ const UserForm = () => {
                 id="phone"
                 placeholder="08xxxxxxxx"
                 type="number"
+                disabled={form.formState.isSubmitting}
                 {...field}
               />
             </FormControl>
@@ -106,6 +110,7 @@ const UserForm = () => {
                 id="password"
                 placeholder="Enter your password"
                 type="password"
+                disabled={form.formState.isSubmitting}
                 {...field}
               />
             </FormControl>
@@ -125,6 +130,7 @@ const UserForm = () => {
                 id="password"
                 placeholder="********"
                 type="password"
+                disabled={form.formState.isSubmitting}
                 {...field}
               />
             </FormControl>

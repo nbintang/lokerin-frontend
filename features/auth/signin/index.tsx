@@ -28,8 +28,8 @@ const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
-type SignInForm = z.infer<typeof signInSchema>;
-const postSignin = async (values: SignInForm) =>
+type SignIn = z.infer<typeof signInSchema>;
+const postSignin = async (values: SignIn) =>
   await axios.post<{ accessToken: string }>(
     `${BASE_URL}/api/auth/signin`,
     values,
@@ -40,7 +40,7 @@ const postSignin = async (values: SignInForm) =>
 
 export default function SignInForm() {
   const setToken = useAuthStore((state) => state.setToken);
-  const form = useForm<SignInForm>({
+  const form = useForm<SignIn>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
@@ -49,7 +49,7 @@ export default function SignInForm() {
   });
   const router = useRouter();
   const progress = useProgress();
-  const onSubmit = async (values: SignInForm) =>
+  const onSubmit = async (values: SignIn) =>
     toast.promise(postSignin(values), {
       loading: "Signing in...",
       success: (res) => {

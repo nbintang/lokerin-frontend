@@ -11,15 +11,6 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/recruiter") ||
     pathname.startsWith("/applier");
   const isPublicRequireVerified = pathname.startsWith("/jobs");
-  // Allow access to /auth/verify even without ?token as long as user has accessToken
-  if (pathname === "/auth/verify") {
-    // allow access if token in query OR already logged in
-    if (tokenQueryConfirmation || accessToken) {
-      return NextResponse.next();
-    } else {
-      return NextResponse.redirect(new URL("/auth/signin", req.url));
-    }
-  }
 
   // jika token gada, dan coba akses protected, redirect ke sign in
   if (!accessToken) {
