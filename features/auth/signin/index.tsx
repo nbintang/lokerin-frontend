@@ -23,6 +23,7 @@ import { lokerinAPI } from "@/shared-api/config/api";
 import axios, { isAxiosError } from "axios";
 import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import { BASE_URL } from "@/shared-api/constants";
+import Cookies from "js-cookie";
 const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
@@ -38,7 +39,7 @@ const postSignin = async (values: SignInForm) =>
   );
 
 export default function SignInForm() {
-  const setToken  = useAuthStore(state => state.setToken);
+  const setToken = useAuthStore((state) => state.setToken);
   const form = useForm<SignInForm>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -52,7 +53,7 @@ export default function SignInForm() {
     toast.promise(postSignin(values), {
       loading: "Signing in...",
       success: (res) => {
-      setToken(res.data.accessToken);
+        Cookies.set("accessToken", res.data.accessToken);
         const tokenInfo = jwtDecode(res.data.accessToken);
         const role = tokenInfo.role;
         progress.start();
