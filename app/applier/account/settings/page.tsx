@@ -23,10 +23,9 @@ import { CameraIcon, FileSymlink } from "lucide-react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { FileWithPreview, ImageCropper } from "@/components/ui/image-croppper";
 
-const accept = {
-  "image/*": [],
+const accept: Record<string, string[]> = {
+  "image/*": [".png", ".jpg", ".jpeg"],
 };
-
 const profileSchema = z.object({
   name: z
     .string()
@@ -42,13 +41,14 @@ const profileSchema = z.object({
   cvUrl: z.url({ message: "Invalid URL" }).optional(),
 });
 
+
 export default function Settings() {
   const { data: profile, isLoading, error } = useProfile();
-  const [selectedFile, setSelectedFile] = useState<FileWithPreview | null>(
-    null
-  );
-  const [croppedImage, setCroppedImage] = useState<string | null>(null);
-  const [isDialogOpen, setDialogOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<FileWithPreview | null>(
+      null
+    );
+    const [croppedImage, setCroppedImage] = useState<string | null>(null);
+    const [isDialogOpen, setDialogOpen] = useState(false);
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -75,7 +75,14 @@ export default function Settings() {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept,
-  });
+  });  const handleImageUpdate = useCallback(
+    (base64: string | null) => {
+      setCroppedImage(base64);
+      form.setValue("avatarUrl", base64 || "No File Selected");
+      form.trigger("avatarUrl");
+    },
+    [form]
+  );
   useEffect(() => {
     if (profile) {
       form.reset({
@@ -87,14 +94,7 @@ export default function Settings() {
       });
     }
   }, [profile, form]);
-  const handleImageUpdate = useCallback(
-    (base64: string | null) => {
-      setCroppedImage(base64);
-      form.setValue("avatarUrl", base64 || "No File Selected");
-      form.trigger("avatarUrl");
-    },
-    [form]
-  );
+
   const onSubmit = (data: z.infer<typeof profileSchema>) => {
     console.log(data);
   };

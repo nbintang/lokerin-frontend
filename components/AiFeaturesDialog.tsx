@@ -26,7 +26,6 @@ import {
   FileUploadItemDelete,
   FileUploadItemMetadata,
   FileUploadItemPreview,
-  FileUploadItemProgress,
   FileUploadList,
   FileUploadTrigger,
 } from "./ui/file-upload";
@@ -36,19 +35,12 @@ import { IconSparkles } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { useRecommendJobs } from "@/shared-api/hooks/jobs/useRecommendJobs";
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
-import { useRecommendationJobStore } from "@/shared-api/stores/useRecommendationJobStore";
 import { useRouter } from "next/navigation";
+import { resumeSchema } from "@/schemas/resumeSchema";
 
 const FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const formSchema = z.object({
-  files: z
-    .array(z.custom<File>())
-    .min(1, "Please select at least one file")
-    .max(1, "You can only upload one file")
-    .refine((files) => files.every((file) => file.size <= FILE_SIZE), {
-      message: "File size must be less than 5MB",
-      path: ["files"],
-    }),
+  files: resumeSchema(FILE_SIZE),
   minScore: z.number().min(0).max(1).default(0.43).optional(),
 });
 
@@ -61,7 +53,7 @@ const AIFeaturesDialog = () => {
     }))
   );
   const router = useRouter();
-  const setJobRes = useRecommendationJobStore((s) => s.setJobRes);
+
   const [isClicking, setIsClicking] = useState<boolean>(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -70,9 +62,10 @@ const AIFeaturesDialog = () => {
     },
   });
   const { data: profile, isPending, isError } = useProfile();
-  const { mutateAsync } = useRecommendJobs(); 
-  const isOperationInProgress = isPending || isClicking || form.formState.isSubmitting;
-  
+  const { mutateAsync } = useRecommendJobs();
+  const isOperationInProgress =
+    isPending || isClicking || form.formState.isSubmitting;
+
   const handleClickOwnResume = async () => {
     setIsClicking(true);
     await mutateAsync({
@@ -240,10 +233,7 @@ const AIFeaturesDialog = () => {
               type="button"
               variant="outline"
               onClick={handleClickOwnResume}
-              disabled={
-         isOperationInProgress ||
-                form.formState.isValid
-              }
+              disabled={isOperationInProgress || form.formState.isValid}
             >
               {form.formState.isSubmitting || isClicking ? (
                 <>

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import SignInForm from "@/components/auth/signin";
+import SignInForm from "@/features/auth/signin";
 
 export default function SignIn() {
   return (
@@ -14,7 +14,7 @@ export default function SignIn() {
       <SignInForm />
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <Link href="/auth/sign-up" className="underline underline-offset-4">
+        <Link href="/auth/signup" className="underline underline-offset-4">
           Sign up
         </Link>
       </div>

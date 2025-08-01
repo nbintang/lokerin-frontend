@@ -1,6 +1,6 @@
 "use client";
 
-import { ConfettiRef } from "@/components/magicui/confetti";
+import { Confetti, ConfettiRef } from "@/components/magicui/confetti";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
 import { cn } from "@/lib/utils";
 import { useRecommendationJobStore } from "@/shared-api/stores/useRecommendationJobStore";
 import { IconCash } from "@tabler/icons-react";
@@ -19,46 +20,6 @@ import confetti from "canvas-confetti";
 import { Building2, MapPin, Sparkles } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef } from "react";
-
-const dummyRecommendations = {
-  recommendations: [
-    {
-      id: "832ff233-c4e9-40cc-bace-524f09c9a293",
-      role: { name: "Frontend Developer" },
-      description:
-        "Mengembangkan antarmuka pengguna interaktif dengan React.js dan Tailwind CSS, memastikan aksesibilitas dan responsivitas.",
-      location: "Palembang",
-      salaryRange: "2000000 - 5000000",
-      company: { name: "Legros - Wilkinson" },
-      score: 0.4778,
-      matchPercentage: 48,
-    },
-    {
-      id: "b2f0774a-787c-4f72-bcab-44af9b8889c8",
-      role: { name: "Machine Learning Engineer" },
-      description:
-        "Mengembangkan dan deploy machine learning models menggunakan TensorFlow dan PyTorch.",
-      location: "Jakarta",
-      salaryRange: "2000000 - 5000000",
-      company: { name: "Osinski, Johnson and Roberts" },
-      score: 0.4752,
-      matchPercentage: 48,
-    },
-    {
-      id: "adbbc32d-e89a-4019-840d-09910d6cdb6a",
-      role: { name: "DevOps Engineer" },
-      description:
-        "Memantau sistem dengan ELK stack dan menyiapkan auto-scaling group.",
-      location: "Makassar",
-      salaryRange: "6000000 - 10000000",
-      company: { name: "Legros - Wilkinson" },
-      score: 0.4093,
-      matchPercentage: 41,
-    },
-  ],
-  totalJobs: 81,
-  recommendedJobs: 12,
-};
 
 function getRankColor(index: number) {
   switch (index) {
@@ -72,24 +33,12 @@ function getRankColor(index: number) {
       return "bg-muted text-muted-foreground";
   }
 }
-// Format gaji
-function formatSalary(salaryRange: string) {
-  return salaryRange
-    .split(" - ")
-    .map((s) =>
-      Number(s).toLocaleString("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-      })
-    )
-    .join(" - ");
-}
 
 export default function RecommendedJobsPages() {
   const jobRecommendationData = useRecommendationJobStore(
     (state) => state.jobRes
   );
+  const confettiRef = useRef<ConfettiRef>(null);
   const fireWorks = () => {
     const duration = 5 * 1000;
     const animationEnd = Date.now() + duration;
@@ -102,12 +51,12 @@ export default function RecommendedJobsPages() {
         return clearInterval(interval);
       }
       const particleCount = 50 * (timeLeft / duration);
-      confetti({
+      confettiRef.current?.fire({
         ...defaults,
         particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        origin: { x: randomInRange(0, 0.3), y: Math.random() - 0.2 },
       });
-      confetti({
+      confettiRef.current?.fire({
         ...defaults,
         particleCount,
         origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
@@ -119,7 +68,7 @@ export default function RecommendedJobsPages() {
     fireWorks();
   }, []);
   return (
-    <div className="space-y-6">
+    <Confetti className="space-y-6" ref={confettiRef} >
       {/* Summary Card */}
       <Card>
         <CardHeader>
@@ -186,11 +135,13 @@ export default function RecommendedJobsPages() {
                 <div className="flex items-center gap-1 ">
                   <IconCash className="h-4 w-4" />
                   <span className="font-medium text-sm">
-                    {formatSalary(job.salaryRange)}
+                    {formatSalaryRangePublic(job.salaryRange)}
                   </span>
                 </div>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={`/applier/dashboard/jobs/${job.id}`}>View Details</Link>
+                  <Link href={`/applier/dashboard/jobs/${job.id}`}>
+                    View Details
+                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -205,6 +156,6 @@ export default function RecommendedJobsPages() {
         </Button>
         <Button disabled>Save Recommendations (Coming so soon)</Button>
       </div>
-    </div>
+    </Confetti>
   );
 }
