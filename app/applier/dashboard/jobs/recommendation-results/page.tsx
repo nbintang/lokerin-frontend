@@ -1,6 +1,7 @@
 "use client";
 
 import { Confetti, ConfettiRef } from "@/components/magicui/confetti";
+import NotFound from "@/components/NotFound";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,7 @@ import { IconCash } from "@tabler/icons-react";
 import confetti from "canvas-confetti";
 import { Building2, MapPin, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 
 function getRankColor(index: number) {
@@ -63,14 +65,23 @@ export default function RecommendedJobsPages() {
       });
     }, 250);
   };
-
   useEffect(() => {
-    fireWorks();
-  }, []);
+    if(jobRecommendationData.recommendedJobs > 0){
+      fireWorks()
+    }
+  }, [ jobRecommendationData.recommendedJobs]);
+
+
+
+  if(jobRecommendationData.recommendedJobs === 0){
+    return notFound();
+  }
   return (
     <div  className="space-y-6"  >
- 
-      {/* Summary Card */}
+       <Confetti
+        ref={confettiRef}
+        manualstart
+        className="absolute left-0 top-0 z-0 size-full"/> 
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

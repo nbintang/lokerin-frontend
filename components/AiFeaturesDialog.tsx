@@ -133,8 +133,7 @@ const AIFeaturesDialog = () => {
               name="files"
               render={({ field }) => (
                 <FormItem className="flex-1 flex flex-col">
-                  {isPending ||
-                  form.formState.isSubmitting && !isClicking ? (
+                  {isPending || (form.formState.isSubmitting && !isClicking) ? (
                     <div className="grid place-items-center h-full w-full">
                       <LoaderCircleIcon className="size-12 animate-spin text-sky-400" />
                     </div>
@@ -154,16 +153,12 @@ const AIFeaturesDialog = () => {
                           }}
                           className={cn(
                             " w-full",
-                            form.formState.isValid
+                            form.formState.isValid || isOperationInProgress
                               ? "cursor-not-allowed"
                               : "cursor-pointer"
                           )}
                           multiple
-                          disabled={
-                            form.formState.isDirty ||
-isPending ||
-                  form.formState.isSubmitting 
-                          }
+                          disabled={isOperationInProgress}
                         >
                           <FileUploadDropzone className="flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center">
                             <CloudUpload className="size-4" />
@@ -213,7 +208,7 @@ isPending ||
               className="mt-2"
               disabled={isOperationInProgress}
             >
-              {form.formState.isSubmitting || isPending && !isClicking ? (
+              {form.formState.isSubmitting || (isPending && !isClicking) ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" /> Submitting
                 </>
@@ -234,9 +229,16 @@ isPending ||
               onClick={handleClickOwnResume}
               disabled={isOperationInProgress || form.formState.isValid}
             >
-              { isClicking && !isPending ? (
+              {isClicking && !isPending ? (
                 <>
-                  <Loader2 className="mr-2 size-4 animate-spin" /> Analyzing
+                  <Loader2   className="mr-2 size-4 animate-spin text-sky-400" />
+                  <p
+                    className={cn(
+                      "bg-gradient-to-br from-sky-400 to-indigo-600 bg-clip-text text-transparent"
+                    )}
+                  >
+                    Analyzing
+                  </p>
                 </>
               ) : (
                 <>

@@ -22,6 +22,7 @@ import Link from "next/link";
 import { CameraIcon, FileSymlink } from "lucide-react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { FileWithPreview, ImageCropper } from "@/components/ui/image-croppper";
+import { Separator } from "@/components/ui/separator";
 
 const accept: Record<string, string[]> = {
   "image/*": [".png", ".jpg", ".jpeg"],
@@ -41,14 +42,13 @@ const profileSchema = z.object({
   cvUrl: z.url({ message: "Invalid URL" }).optional(),
 });
 
-
 export default function Settings() {
   const { data: profile, isLoading, error } = useProfile();
-    const [selectedFile, setSelectedFile] = useState<FileWithPreview | null>(
-      null
-    );
-    const [croppedImage, setCroppedImage] = useState<string | null>(null);
-    const [isDialogOpen, setDialogOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<FileWithPreview | null>(
+    null
+  );
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [isDialogOpen, setDialogOpen] = useState(false);
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -75,7 +75,8 @@ export default function Settings() {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept,
-  });  const handleImageUpdate = useCallback(
+  });
+  const handleImageUpdate = useCallback(
     (base64: string | null) => {
       setCroppedImage(base64);
       form.setValue("avatarUrl", base64 || "No File Selected");
@@ -273,14 +274,21 @@ export default function Settings() {
                   </FormItem>
                 )}
               />
-              <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="flex items-center">
                 <div className="text-muted-foreground text-xs">
                   Created At: {format(profile.createdAt, "dd MMMM yyyy")}
                 </div>
+
+                <Separator
+                  orientation="vertical"
+                  className="mx-3   bg-border w-px data-[orientation=vertical]:h-4"
+                />
+
                 <div className="text-muted-foreground text-xs">
                   Updated At: {format(profile.updatedAt, "dd MMMM yyyy")}
                 </div>
               </div>
+
               {form.formState.isDirty && (
                 <div className="flex gap-4">
                   <Button

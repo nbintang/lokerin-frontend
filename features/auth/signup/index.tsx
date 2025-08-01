@@ -36,36 +36,22 @@ import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { defineStepper } from "@stepperize/react";
+import { userSchema, UserSchema } from "./schema";
+
 const accept: Record<string, string[]> = {
   "image/*": [".png", ".jpg", ".jpeg"],
 };
-const signUpSchema = z
-  .object({
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.url(),
-    phone: z.number(),
-    password: z.string().regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
-      message:
-        "Password must be at least 8 characters long and contain at least one letter and one number",
-    }),
-    confirmPassword: z.string(),
-    avatar: zodImageSchema().optional(),
-    cv: resumeSchema().optional(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-type SignUpForm = z.infer<typeof signUpSchema>;
+
 export default function SignUpForm() {
   const [selectedFile, setSelectedFile] = useState<FileWithPreview | null>(
     null
   );
+  const [isRecruiter, setIsRecruiter] = useState<boolean>(false);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const form = useForm<SignUpForm>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<UserSchema>({
+    resolver: zodResolver(userSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -102,7 +88,7 @@ export default function SignUpForm() {
     },
     [form]
   );
-  const onSubmit = (data: SignUpForm) => {
+  const onSubmit = (data: UserSchema) => {
     console.log(data);
   };
   return (
@@ -142,51 +128,56 @@ export default function SignUpForm() {
               <AvatarFallback>{"?"}</AvatarFallback>
             </Avatar>
           )}
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem className="grid relative ">
-                <FormControl>
-                  <Input
-                    id="firstName"
-                    placeholder="Enter your First Name"
-                    type="text"
-                    {...field}
-                  />
-                </FormControl>
-                <span className="absolute right-2  bottom-0 text-red-500 text-lg">
-                  *
-                </span>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem className="relative">
-                <FormControl>
-                  <Input
-                    id="lastName"
-                    placeholder="Enter your Last Name "
-                    type="text"
-                    {...field}
-                  />
-                </FormControl>
-                <span className="absolute right-2  bottom-0 text-red-500 text-lg">
-                  *
-                </span>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem className="grid relative ">
+                                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="firstName"
+                      placeholder="Enter your First Name"
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                  <span className="absolute right-2  bottom-0 text-red-500 text-lg">
+                    *
+                  </span>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="relative">
+                                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="lastName"
+                      placeholder="Enter your Last Name "
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                  <span className="absolute right-2  bottom-0 text-red-500 text-lg">
+                    *
+                  </span>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem className="grid gap-3 relative">
+                                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     id="email"
@@ -207,6 +198,7 @@ export default function SignUpForm() {
             name="phone"
             render={({ field }) => (
               <FormItem className="grid gap-3 relative">
+                <FormLabel>Phone</FormLabel>
                 <FormControl>
                   <Input
                     id="phone"
@@ -268,71 +260,65 @@ export default function SignUpForm() {
             name="cv"
             render={({ field }) => (
               <FormItem className="flex-1 flex flex-col">
- 
-                  <>
-                    <FormControl className="flex-1">
-                      <FileUpload
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        accept="application/pdf"
-                        maxFiles={1}
-                        maxSize={5 * 1024 * 1024}
-                        onFileReject={(_, message) => {
-                          form.setError("cv", {
-                            message,
-                          });
-                        }}
-                        className={cn(
-                          " w-full",
-                          form.formState.isValid
-                            ? "cursor-not-allowed"
-                            : "cursor-pointer"
-                        )}
-                        multiple
-                        disabled={
-                          form.formState.isDirty || form.formState.isSubmitting
-                        }
-                      >
-                        <FileUploadDropzone className="flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center">
-                          <CloudUpload className="size-4" />
-                          Drag and drop or
-                          <FileUploadTrigger asChild>
-                            <Button
-                            variant={"link"}
-                              size="sm"
-                              className="p-0 "
-                            >
-                              choose resume files
-                            </Button>
-                          </FileUploadTrigger>
-                          to upload
-                        </FileUploadDropzone>
-                        <FileUploadList>
-                          {field.value?.map((file, index) => (
-                            <FileUploadItem key={index} value={file}>
-                              <FileUploadItemPreview />
-                              <FileUploadItemMetadata />
-                              <FileUploadItemDelete asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="size-7"
-                                >
-                                  <X />
-                                  <span className="sr-only">Delete</span>
-                                </Button>
-                              </FileUploadItemDelete>
-                            </FileUploadItem>
-                          ))}
-                        </FileUploadList>
-                      </FileUpload>
-                    </FormControl>
-                    {/* <FormDescription>
+                <>
+                  <FormControl className="flex-1 flex flex-col">
+                    <FileUpload
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      accept="application/pdf"
+                      maxFiles={1}
+                      maxSize={5 * 1024 * 1024}
+                      onFileReject={(_, message) => {
+                        form.setError("cv", {
+                          message,
+                        });
+                      }}
+                      className={cn(
+                        " w-full",
+                        form.formState.isValid
+                          ? "cursor-not-allowed"
+                          : "cursor-pointer"
+                      )}
+                      multiple
+                      disabled={
+                        form.formState.isDirty || form.formState.isSubmitting
+                      }
+                    >
+                      <FileUploadDropzone className="flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center">
+                        <CloudUpload className="size-4" />
+                        Drag and drop or
+                        <FileUploadTrigger asChild>
+                          <Button variant={"link"} size="sm" className="p-0 ">
+                            choose resume files
+                          </Button>
+                        </FileUploadTrigger>
+                        to upload
+                      </FileUploadDropzone>
+                      <FileUploadList>
+                        {field.value?.map((file, index) => (
+                          <FileUploadItem key={index} value={file}>
+                            <FileUploadItemPreview />
+                            <FileUploadItemMetadata />
+                            <FileUploadItemDelete asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="size-7"
+                              >
+                                <X />
+                                <span className="sr-only">Delete</span>
+                              </Button>
+                            </FileUploadItemDelete>
+                          </FileUploadItem>
+                        ))}
+                      </FileUploadList>
+                    </FileUpload>
+                  </FormControl>
+                  {/* <FormDescription>
                               Upload up to 2 images up to 5MB each.
                             </FormDescription> */}
-                    <FormMessage />
-                  </>
-         
+                  <FormMessage />
+                </>
               </FormItem>
             )}
           />
