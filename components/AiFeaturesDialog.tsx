@@ -134,9 +134,7 @@ const AIFeaturesDialog = () => {
               render={({ field }) => (
                 <FormItem className="flex-1 flex flex-col">
                   {isPending ||
-                  isClicking ||
-                  isError ||
-                  form.formState.isSubmitting ? (
+                  form.formState.isSubmitting && !isClicking ? (
                     <div className="grid place-items-center h-full w-full">
                       <LoaderCircleIcon className="size-12 animate-spin text-sky-400" />
                     </div>
@@ -163,7 +161,8 @@ const AIFeaturesDialog = () => {
                           multiple
                           disabled={
                             form.formState.isDirty ||
-                            form.formState.isSubmitting
+isPending ||
+                  form.formState.isSubmitting 
                           }
                         >
                           <FileUploadDropzone className="flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center">
@@ -214,7 +213,7 @@ const AIFeaturesDialog = () => {
               className="mt-2"
               disabled={isOperationInProgress}
             >
-              {form.formState.isSubmitting || isPending ? (
+              {form.formState.isSubmitting || isPending && !isClicking ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" /> Submitting
                 </>
@@ -235,7 +234,7 @@ const AIFeaturesDialog = () => {
               onClick={handleClickOwnResume}
               disabled={isOperationInProgress || form.formState.isValid}
             >
-              {form.formState.isSubmitting || isClicking ? (
+              { isClicking && !isPending ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" /> Analyzing
                 </>

@@ -68,7 +68,8 @@ export default function RecommendedJobsPages() {
     fireWorks();
   }, []);
   return (
-    <Confetti className="space-y-6" ref={confettiRef} >
+    <div  className="space-y-6"  >
+ 
       {/* Summary Card */}
       <Card>
         <CardHeader>
@@ -156,6 +157,6 @@ export default function RecommendedJobsPages() {
         </Button>
         <Button disabled>Save Recommendations (Coming so soon)</Button>
       </div>
-    </Confetti>
+    </div>
   );
 }
