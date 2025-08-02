@@ -23,6 +23,11 @@ import { CameraIcon, FileSymlink } from "lucide-react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { FileWithPreview, ImageCropper } from "@/components/ui/image-croppper";
 import { Separator } from "@/components/ui/separator";
+import { useUpdateProfile } from "@/shared-api/hooks/profile/useUpdateProfile";
+import useUploadImage from "@/shared-api/hooks/media/useUploadImage";
+import useUploadDocument from "@/shared-api/hooks/media/useUploadDocument";
+import { zodImageSchema } from "@/schemas/imageSchema";
+import { zodResumeSchema } from "@/schemas/resumeSchema";
 
 const accept: Record<string, string[]> = {
   "image/*": [".png", ".jpg", ".jpeg"],
@@ -38,8 +43,8 @@ const profileSchema = z.object({
     .string()
     .min(1, "Phone number is required")
     .max(20, "Phone number is too long"),
-  avatarUrl: z.url({ message: "Invalid URL" }).optional(),
-  cvUrl: z.url({ message: "Invalid URL" }).optional(),
+  avatar: zodImageSchema().optional(),
+  cv: zodResumeSchema().or(z.url()).optional(),
 });
 
 export default function Settings() {
@@ -49,17 +54,19 @@ export default function Settings() {
   );
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const uploadImage = useUploadImage({});
+  const uploadDocument = useUploadDocument({});
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: profile?.name || "",
       email: profile?.email || "",
       phone: profile?.phone || "",
-      avatarUrl: profile?.avatarUrl || "",
-      cvUrl: profile?.cvUrl || "",
+      avatar: profile?.avatarUrl || "",
+      cv: profile?.cvUrl ? profile.cvUrl : [],
     },
   });
-
+  const { mutate, isPending } = useUpdateProfile();
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
     const file = acceptedFiles[0];
     if (!file) {
@@ -79,8 +86,8 @@ export default function Settings() {
   const handleImageUpdate = useCallback(
     (base64: string | null) => {
       setCroppedImage(base64);
-      form.setValue("avatarUrl", base64 || "No File Selected");
-      form.trigger("avatarUrl");
+      form.setValue("avatar", base64 || "No File Selected");
+      form.trigger("avatar");
     },
     [form]
   );
@@ -90,14 +97,26 @@ export default function Settings() {
         name: profile.name,
         email: profile.email,
         phone: profile.phone,
-        avatarUrl: profile.avatarUrl,
-        cvUrl: profile.cvUrl,
+        avatar: profile.avatarUrl,
+        cv: profile.cvUrl,
       });
     }
   }, [profile, form]);
 
-  const onSubmit = (data: z.infer<typeof profileSchema>) => {
+  const onSubmit = async (data: z.infer<typeof profileSchema>) => {
+    const { avatar, cv, name } = data;
+    const { secureUrl: avatarUrl } = await uploadImage.mutateAsync(
+      form.getValues("avatar") ?? ""
+    );
+    const { secureUrl: cvUrl } = await uploadDocument.mutateAsync(
+      form.getValues("cv")?.[0] ?? ""
+    );
     console.log(data);
+    mutate({
+      name: name ?? "",
+      avatarUrl,
+      cvUrl,
+    });
   };
 
   if (isLoading) {
@@ -234,7 +253,7 @@ export default function Settings() {
               />
               <FormField
                 control={form.control}
-                name="cvUrl"
+                name="cv"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Resume</FormLabel>
@@ -250,9 +269,7 @@ export default function Settings() {
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
-                              // Contoh: upload ke server atau Cloudinary
-                              const fakeUploadedUrl = URL.createObjectURL(file); // hanya untuk preview lokal
-                              form.setValue("cvUrl", fakeUploadedUrl); // ✅ ini menyetel cvUrl dengan hasil upload
+                              form.setValue("cv", [file]); // ✅ ini menyetel cvUrl dengan hasil upload
                             }
                           }}
                         />
@@ -296,11 +313,16 @@ export default function Settings() {
                     variant="secondary"
                     className="font-semibold py-2"
                     onClick={() => form.reset()}
+                    disabled={form.formState.isSubmitting || isPending}
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="font-semibold py-2">
-                    Save Changes
+                  <Button
+                    type="submit"
+                    className="font-semibold py-2"
+                    disabled={form.formState.isSubmitting || isPending}
+                  >
+                    {isPending ? "Saving changes..." : "Save Changes"}
                   </Button>
                 </div>
               )}

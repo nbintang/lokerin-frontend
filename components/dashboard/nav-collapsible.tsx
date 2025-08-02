@@ -16,6 +16,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Icon } from "@tabler/icons-react";
 import Link from "next/link";
@@ -49,6 +50,7 @@ export function NavCollapsible({
   const setAppearApplySuccess = useAppearApplySuccess(
     (state) => state.setAppearApplySuccess
   );
+  const { state, setOpen } = useSidebar();
   const currentStatus = useAppearApplySuccess((state) => state.status);
   const appearApplySuccess = useAppearApplySuccess(
     (state) => state.appearApplySuccess
@@ -66,11 +68,10 @@ export function NavCollapsible({
     return () => clearTimeout(timer);
   }, [appearApplySuccess, currentStatus, setAppearApplySuccess]);
 
-
   return (
     <TooltipProvider>
       <SidebarGroup>
-        <SidebarGroupLabel>Jobs</SidebarGroupLabel>
+        <SidebarGroupLabel>Company</SidebarGroupLabel>
         <SidebarMenu>
           {items.map((item) => {
             const shouldBeOpen =
@@ -89,7 +90,11 @@ export function NavCollapsible({
                 }
                 className="group/collapsible"
               >
-                <SidebarMenuItem>
+                <SidebarMenuItem
+                  onClick={() => {
+                    state === "collapsed" && setOpen(true);
+                  }}
+                >
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton tooltip={item.title}>
                       {item.icon && <item.icon />}
@@ -116,14 +121,18 @@ export function NavCollapsible({
                             <TooltipTrigger asChild>
                               <SidebarMenuSubItem>
                                 <SidebarMenuSubButton
-                         isActive = {subItem.url === pathname}
+                                  isActive={subItem.url === pathname}
                                   asChild
                                 >
                                   <Link href={subItem.url}>
-                                    {subItem.icon && <subItem.icon className={cn(
-                                      pathname ===subItem.url && 
-                                      "text-black dark:text-white"
-                                    )} />}
+                                    {subItem.icon && (
+                                      <subItem.icon
+                                        className={cn(
+                                          pathname === subItem.url &&
+                                            "text-black dark:text-white"
+                                        )}
+                                      />
+                                    )}
                                     <span>{subItem.title}</span>
                                   </Link>
                                 </SidebarMenuSubButton>

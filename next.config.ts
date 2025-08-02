@@ -11,6 +11,7 @@ images: {
   ]
 },
   reactStrictMode: true,
+ 
 };
 
 export default nextConfig;

@@ -1,5 +1,5 @@
 import { zodImageSchema } from "@/schemas/imageSchema";
-import { resumeSchema } from "@/schemas/resumeSchema";
+import { zodResumeSchema } from "@/schemas/resumeSchema";
 import z from "zod";
 
 export const userSchema = z
@@ -7,11 +7,13 @@ export const userSchema = z
     firstName: z
       .string()
       .min(3, "First name must be at least 3 characters")
-      .max(50).trim(),
+      .max(50)
+      .trim(),
     lastName: z
       .string()
       .min(3, "Last name must be at least 3 characters")
-      .max(50).trim(),
+      .max(50)
+      .trim(),
     email: z.email().min(3, "Email must be at least 3 characters").max(50),
     phone: z.coerce
       .number()
@@ -19,10 +21,14 @@ export const userSchema = z
       .refine((value) => value.toString().length === 10, {
         message: "Phone must be 10 digits",
       }),
-    password: z.string().regex(/^(?=.*[A-Z])(?=.*\d).+$/, {
-      message:
-        "Password must contain at least one uppercase letter and one number",
-    }),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(50)
+      .regex(/^(?=.*[A-Z])(?=.*\d).+$/, {
+        message:
+          "Password must contain at least one uppercase letter and one number",
+      }),
     confirmPassword: z.string(),
     role: z.enum(["MEMBER", "RECRUITER"]),
   })
@@ -36,16 +42,13 @@ export type UserSchema = z.infer<typeof userSchema>;
 export const mediaSchema = z
   .object({
     avatar: zodImageSchema().optional(),
-    cv: resumeSchema().optional(),
-    role: z.enum(["MEMBER", "RECRUITER"]),   // tambahkan role
+    cv: zodResumeSchema().optional(),
+    role: z.enum(["MEMBER", "RECRUITER"]), // tambahkan role
   })
-  .refine(
-    (data) => !(data.role === "MEMBER" && !data.cv),
-    {
-      message: "CV wajib diunggah untuk MEMBER",
-      path: ["cv"],
-    }
-  );
+  .refine((data) => !(data.role === "MEMBER" && !data.cv), {
+    message: "CV wajib diunggah untuk MEMBER",
+    path: ["cv"],
+  });
 
 export type MediaSchema = z.infer<typeof mediaSchema>;
 

@@ -1,5 +1,6 @@
 import { lokerinAPI } from "@/shared-api/config/api";
 import { useQuery } from "@tanstack/react-query";
+import { UserProfileResponse } from "./type";
 
 export const useProfile = () =>
   useQuery({
@@ -11,15 +12,3 @@ export const useProfile = () =>
     placeholderData: (prev) => prev,
   });
 
-export interface UserProfileResponse     {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  role: string;
-  avatarUrl: string;
-  cvUrl: string
-  isVerified: boolean;
-  createdAt: string;
-  updatedAt: string;
-}

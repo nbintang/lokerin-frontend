@@ -8,7 +8,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
+} from "../components/ui/dialog";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,23 +28,23 @@ import {
   FileUploadItemPreview,
   FileUploadList,
   FileUploadTrigger,
-} from "./ui/file-upload";
+} from "../components/ui/file-upload";
 import { CloudUpload, Loader2, LoaderCircleIcon, X } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../components/ui/button";
 import { IconSparkles } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { useRecommendJobs } from "@/shared-api/hooks/jobs/useRecommendJobs";
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { useRouter } from "next/navigation";
-import { resumeSchema } from "@/schemas/resumeSchema";
-import { AuroraText } from "./magicui/aurora-text";
-import { AnimatedGradientText } from "./magicui/animated-gradient-text";
-import GradientBorderButton from "./GradientBorderButton";
-import { SparklesText } from "./magicui/sparkles-text";
+import { zodResumeSchema } from "@/schemas/resumeSchema";
+import { AuroraText } from "../components/magicui/aurora-text";
+import { AnimatedGradientText } from "../components/magicui/animated-gradient-text";
+import GradientBorderButton from "../components/GradientBorderButton";
+import { SparklesText } from "../components/magicui/sparkles-text";
 
 const FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const formSchema = z.object({
-  files: resumeSchema(FILE_SIZE),
+  files: zodResumeSchema(FILE_SIZE),
   minScore: z.number().min(0).max(1).default(0.43).optional(),
 });
 
@@ -111,13 +111,13 @@ const AIFeaturesDialog = () => {
             className={cn(
               "flex items-center justify-center md:justify-start md:text-left gap-2"
             )}
-          > 
-            <IconSparkles className="text-sky-400" />
+          >
             <SparklesText>
-              <AuroraText colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}>
+              <IconSparkles className="text-sky-400" />
+            </SparklesText>
+            <AuroraText colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}>
                 AI Recommendation
               </AuroraText>
-            </SparklesText>
           </div>
           <DialogDescription>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit.

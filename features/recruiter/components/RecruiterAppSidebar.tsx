@@ -19,7 +19,7 @@ const data = {
   },
   navMain: [
     {
-      title: "Applicants",
+      title: "Applier",
       url: "/recruiter/dashboard",
       icon: IconDashboard,
     },

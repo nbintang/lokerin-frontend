@@ -77,7 +77,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative ">
         <div
           className="h-24 md:h-36 overflow-hidden"
           style={{
