@@ -8,7 +8,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
+} from "../components/ui/dialog";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,19 +28,19 @@ import {
   FileUploadItemPreview,
   FileUploadList,
   FileUploadTrigger,
-} from "./ui/file-upload";
+} from "../components/ui/file-upload";
 import { CloudUpload, Loader2, LoaderCircleIcon, X } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../components/ui/button";
 import { IconSparkles } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { useRecommendJobs } from "@/shared-api/hooks/jobs/useRecommendJobs";
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { useRouter } from "next/navigation";
 import { resumeSchema } from "@/schemas/resumeSchema";
-import { AuroraText } from "./magicui/aurora-text";
-import { AnimatedGradientText } from "./magicui/animated-gradient-text";
-import GradientBorderButton from "./GradientBorderButton";
-import { SparklesText } from "./magicui/sparkles-text";
+import { AuroraText } from "../components/magicui/aurora-text";
+import { AnimatedGradientText } from "../components/magicui/animated-gradient-text";
+import GradientBorderButton from "../components/GradientBorderButton";
+import { SparklesText } from "../components/magicui/sparkles-text";
 
 const FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const formSchema = z.object({
