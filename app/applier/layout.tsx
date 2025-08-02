@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { SiteHeader } from "@/components/dashboard/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { ApplierAppSidebar } from "@/features/applier/components/ApplierAppSidebar";
-import AIFeaturesDialog from "@/components/AIFeaturesDialog";
+import AIFeaturesDialog from "@/features/AiFeaturesDialog";
  
 export default async function RecruiterLayout({
   children,
