@@ -21,8 +21,7 @@ type PostImageProps = {
   "mutationFn" | "mutationKey" | "onError"
 >;
 
-const useUploadImage = ({ existedUrl, ...options }: PostImageProps) => {
-  return useMutation({
+const useUploadImage = ({ existedUrl, ...options }: PostImageProps) =>  useMutation({
     mutationKey: ["upload-image"],
     mutationFn: async (
       file: File | string | null
@@ -70,6 +69,4 @@ const useUploadImage = ({ existedUrl, ...options }: PostImageProps) => {
     },
     ...options,
   });
-};
-
 export default useUploadImage;

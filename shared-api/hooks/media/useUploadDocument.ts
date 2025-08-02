@@ -21,8 +21,8 @@ type PostDocumentProps = {
   "mutationFn" | "mutationKey" | "onError"
 >;
 
-const useUploadDocument = ({ existedUrl, ...options }: PostDocumentProps) => {
-  return useMutation({
+const useUploadDocument = ({ existedUrl, ...options }: PostDocumentProps) =>
+  useMutation({
     mutationKey: ["upload-document"],
     mutationFn: async (
       file: File | string | null
@@ -48,6 +48,5 @@ const useUploadDocument = ({ existedUrl, ...options }: PostDocumentProps) => {
     },
     ...options,
   });
-};
 
 export default useUploadDocument;

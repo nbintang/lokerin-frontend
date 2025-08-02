@@ -37,6 +37,10 @@ import { useRecommendJobs } from "@/shared-api/hooks/jobs/useRecommendJobs";
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { useRouter } from "next/navigation";
 import { resumeSchema } from "@/schemas/resumeSchema";
+import { AuroraText } from "./magicui/aurora-text";
+import { AnimatedGradientText } from "./magicui/animated-gradient-text";
+import GradientBorderButton from "./GradientBorderButton";
+import { SparklesText } from "./magicui/sparkles-text";
 
 const FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const formSchema = z.object({
@@ -61,8 +65,8 @@ const AIFeaturesDialog = () => {
       files: [],
     },
   });
-  const { data: profile, isPending, isError } = useProfile();
-  const { mutateAsync } = useRecommendJobs();
+  const { data: profile, isLoading } = useProfile();
+  const { mutateAsync, isPending } = useRecommendJobs();
   const isOperationInProgress =
     isPending || isClicking || form.formState.isSubmitting;
 
@@ -108,15 +112,13 @@ const AIFeaturesDialog = () => {
             className={cn(
               "flex items-center justify-center md:justify-start md:text-left gap-2"
             )}
-          >
+          > 
             <IconSparkles className="text-sky-400" />
-            <h2
-              className={cn(
-                "bg-gradient-to-br from-sky-400 to-indigo-600 bg-clip-text text-transparent"
-              )}
-            >
-              AI Recommendation
-            </h2>
+            <SparklesText>
+              <AuroraText colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}>
+                AI Recommendation
+              </AuroraText>
+            </SparklesText>
           </div>
           <DialogDescription>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -133,7 +135,7 @@ const AIFeaturesDialog = () => {
               name="files"
               render={({ field }) => (
                 <FormItem className="flex-1 flex flex-col">
-                  {isPending || (form.formState.isSubmitting && !isClicking) ? (
+                  {(isPending || form.formState.isSubmitting) && !isClicking ? (
                     <div className="grid place-items-center h-full w-full">
                       <LoaderCircleIcon className="size-12 animate-spin text-sky-400" />
                     </div>
@@ -160,16 +162,21 @@ const AIFeaturesDialog = () => {
                           multiple
                           disabled={isOperationInProgress}
                         >
-                          <FileUploadDropzone className="flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center">
+                          <FileUploadDropzone
+                            className={cn(
+                              "flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center",
+                              isPending ? "opacity-50 pointer-events-none" : ""
+                            )}
+                          >
                             <CloudUpload className="size-4" />
                             Drag and drop or
                             <FileUploadTrigger asChild>
-                              <Button
-                                size="sm"
-                                className="p-0 bg-gradient-to-br from-sky-400 to-indigo-600 bg-clip-text text-transparent hover:bg-gradient-to-br hover:from-sky-500 hover:to-indigo-700 duration-500 ease-in-out"
+                              <AuroraText
+                                colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
+                                className="text-sm"
                               >
                                 choose resume files
-                              </Button>
+                              </AuroraText>
                             </FileUploadTrigger>
                             to upload
                           </FileUploadDropzone>
@@ -224,32 +231,30 @@ const AIFeaturesDialog = () => {
               </span>
             </div>
             <Button
-              type="button"
               variant="outline"
+              type="button"
               onClick={handleClickOwnResume}
               disabled={isOperationInProgress || form.formState.isValid}
             >
-              {isClicking && !isPending ? (
+              {isClicking && !form.formState.isSubmitting ? (
                 <>
-                  <Loader2   className="mr-2 size-4 animate-spin text-sky-400" />
-                  <p
-                    className={cn(
-                      "bg-gradient-to-br from-sky-400 to-indigo-600 bg-clip-text text-transparent"
-                    )}
+                  <Loader2 className="mr-2 size-4 animate-spin text-sky-400" />
+                  <AuroraText
+                    colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
+                    className="text-sm"
                   >
                     Analyzing
-                  </p>
+                  </AuroraText>
                 </>
               ) : (
                 <>
-                  <IconSparkles className="text-sky-400" />{" "}
-                  <p
-                    className={cn(
-                      "bg-gradient-to-br from-sky-400 to-indigo-600 bg-clip-text text-transparent"
-                    )}
+                  <IconSparkles className="text-sky-400 size-4" />
+                  <AuroraText
+                    colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
+                    className="text-sm"
                   >
                     Try Use Resume From Your Profile
-                  </p>
+                  </AuroraText>
                 </>
               )}
             </Button>

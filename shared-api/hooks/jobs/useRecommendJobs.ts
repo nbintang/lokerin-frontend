@@ -28,7 +28,7 @@ export const useRecommendJobs = (
 ) => {
   const router = useRouter();
   const progress = useProgress();
-    const setJobRes = useRecommendationJobStore((s) => s.setJobRes);
+  const setJobRes = useRecommendationJobStore((s) => s.setJobRes);
   return useMutation({
     mutationKey: ["recommend-job"],
     mutationFn: async ({
@@ -59,7 +59,7 @@ export const useRecommendJobs = (
       if (context?.toastId) {
         toast.dismiss(context.toastId);
       }
-            setJobRes(res);
+      setJobRes(res);
       toast.success("Job recommended successfully");
       router.push("/applier/dashboard/jobs/recommendation-results");
     },

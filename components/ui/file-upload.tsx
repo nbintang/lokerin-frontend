@@ -1073,7 +1073,7 @@ interface FileUploadItemPreviewProps
   asChild?: boolean;
 }
 
-function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
+function  FileUploadItemPreview(props: FileUploadItemPreviewProps) {
   const { render, asChild, children, className, ...previewProps } = props;
 
   const itemContext = useFileUploadItemContext(ITEM_PREVIEW_NAME);

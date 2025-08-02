@@ -55,7 +55,6 @@ async function onRequest(
 async function onResponseError(error: AxiosError) {
   if (error.response) {
     const { status, data, config } = error.response;
-
     if (status === 401) {
       const originalRequest = config as InternalAxiosRequestConfig & {
         _retry?: boolean;
@@ -66,7 +65,7 @@ async function onResponseError(error: AxiosError) {
         if (newAccessToken) {
           originalRequest.headers = originalRequest.headers || {};
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return axios(originalRequest);
+          return lokerinAPI(originalRequest);
         }
       }
     }
