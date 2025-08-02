@@ -1,7 +1,7 @@
 import { lokerinAPI } from "@/shared-api/config/api";
 import { useQuery } from "@tanstack/react-query";
-
-export const useJobApplicants = (page: number = 1, limit: number = 10) =>
+type JobApplicantsOptions = { page?: number; limit? : number };
+export const useJobApplicants = ({ page, limit }: JobApplicantsOptions) =>
   useQuery({
     queryKey: ["applicants"],
     queryFn: async () => {

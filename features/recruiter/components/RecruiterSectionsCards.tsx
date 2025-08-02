@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/card";
 import {
   JobApplicantResponse,
-  useJobApplicants,
-} from "@/shared-api/hooks/job-applicants/useJobApplicants";
+  useApplicants,
+} from "@/shared-api/hooks/job-applicants/useApplicants";
 import { LoaderCircleIcon } from "lucide-react";
 import { UseQueryResult } from "@tanstack/react-query";
 import { Skeleton } from "../../../components/ui/skeleton";

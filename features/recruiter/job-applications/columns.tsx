@@ -1,5 +1,5 @@
 "use client";
-import { Applier } from "../../../shared-api/hooks/job-applicants/useJobApplicants";
+import { Applier } from "../../../shared-api/hooks/job-applicants/useApplicants";
 
 import {
   IconCircleCheckFilled,

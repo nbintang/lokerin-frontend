@@ -38,8 +38,7 @@ async function onRequest(
   const token = Cookies.get("accessToken");
   if (token) {
     if (isExpiredToken(token)) {
-      await getRefreshToken();
-      const newToken = Cookies.get("accessToken");
+      const newToken = await getRefreshToken();
       if (newToken) {
         config.headers = config.headers || {};
         config.headers.Authorization = `Bearer ${newToken}`;

@@ -9,8 +9,8 @@ import {
 import { RecruiterSectionsCards } from "@/features/recruiter/components/RecruiterSectionsCards";
 import {
   Applier,
-  useJobApplicants,
-} from "@/shared-api/hooks/job-applicants/useJobApplicants";
+  useApplicants,
+} from "@/shared-api/hooks/job-applicants/useApplicants";
 import { jobAppColumns } from "@/features/recruiter/job-applications/columns";
 import { useSearchParams } from "next/navigation";
 
@@ -18,7 +18,7 @@ export default function RecruiterDashboardPage() {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
-  const jobApplicant = useJobApplicants(page, limit);
+  const jobApplicant = useApplicants(page, limit);
   const { table } = useTable<Applier>({
     columns: jobAppColumns,
     data: jobApplicant.data?.appliers ?? [],

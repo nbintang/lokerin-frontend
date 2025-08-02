@@ -9,7 +9,7 @@ export const useUpdateApplicantStatus = (id: string, jobId: string) => {
   return useMutation({
     mutationKey: ["update-applicant-status"],
     mutationFn: async (body: { status: ApplicantResponse["status"] }) =>
-      await lokerinAPI.put<ApplicantResponse>(`/job-applicants/${id}`, body, {
+      await lokerinAPI.put<ApplicantResponse>(`/job-applicants/applicants/${id}`, body, {
         params: {
           jobId,
         },

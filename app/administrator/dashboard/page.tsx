@@ -1,59 +1,67 @@
-"use client"
-import { UserGrowthChart } from "@/components/dashboard/chart-area-interactive";
-import { SectionCards } from "@/components/dashboard/section-cards"; 
-import { StatsCard } from "@/features/administrator/components/StatsCard";
-import { UserRoleDistribution } from "@/features/administrator/components/UserRoleDistribution";
-import { generateDummyUsers } from "@/features/administrator/dummy";
-import { User } from "@/shared-api/hooks/users/useUsers";
-// Sample data untuk demo (hapus ini ketika menggunakan data real)
-const sampleUsers: User[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "+1234567890",
-    role: "MEMBER",
-    avatarUrl: null,
-    cvUrl: null,
-    isVerified: true,
-    createdAt: "2024-04-01T10:00:00Z",
-    updatedAt: "2024-04-01T10:00:00Z"
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane@example.com",
-    phone: "+1234567891",
-    role: "RECRUITER",
-    avatarUrl: null,
-    cvUrl: null,
-    isVerified: true,
-    createdAt: "2024-04-02T14:30:00Z",
-    updatedAt: "2024-04-02T14:30:00Z"
-  },
-  // Tambahkan lebih banyak sample data untuk visualisasi yang lebih baik
-  ...Array.from({ length: 100 }, (_, i) => ({
-    id: `user-${i + 3}`,
-    name: `User ${i + 3}`,
-    email: `user${i + 3}@example.com`,
-    phone: `+123456789${i + 2}`,
-    role: Math.random() > 0.7 ? "RECRUITER" : "MEMBER" as "MEMBER" | "RECRUITER",
-    avatarUrl: null,
-    cvUrl: null,
-    isVerified: Math.random() > 0.3,
-    // Spread data dalam 90 hari terakhir dengan distribusi acak
-    createdAt: new Date(Date.now() - Math.floor(Math.random() * 90) * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date().toISOString()
-  }))
-]
+"use client";
 
-export default function AdminDashboardPage() { 
-  return (
+import { UserGrowthChart } from "@/features/administrator/components/UserGrowthChart";
+import { StatsCard } from "@/features/administrator/components/StatsCard";
+import { useUsers } from "@/shared-api/hooks/users/useUsers";
+import { useRecruiters } from "@/shared-api/hooks/recruiters/useRecruiters";
+import { useJobApplicants } from "@/shared-api/hooks/job-applicants/useJobApplicants";
+import { useJobs } from "@/shared-api/hooks/jobs/useJobs";
+import { Skeleton } from "@/components/ui/skeleton"; // Pastikan path ini sesuai dengan struktur proyek Anda
+import { AlertTriangle } from "lucide-react";
+import { DashboardSkeleton } from "@/features/administrator/components/DashboardSkeleton";
+import { ErrorDisplay } from "@/features/administrator/components/DashboardError";
+ 
+ 
+
+
+export default function AdminDashboardPage() {
+  const { data: users, ...usersQuery } = useUsers({
+    limit: 1000,
+  });
+  const { data: recruiters, ...recruitersQuery } = useRecruiters({
+    limit: 100,
+  });
+  const { data: applicants, ...applicantsQuery } = useJobApplicants({
+    limit: 100,
+  });
+  const { data: job, ...jobsQuery } = useJobs({
+    isPublic: true,
+  });
+
+  const isLoading =
+    usersQuery.isLoading ||
+    recruitersQuery.isLoading ||
+    applicantsQuery.isLoading ||
+    jobsQuery.isLoading;
+
+  const isError =
+    usersQuery.isError ||
+    !users ||
+    recruitersQuery.isError ||
+    !recruiters ||
+    applicantsQuery.isError ||
+    !applicants ||
+    jobsQuery.isError ||
+    !job;
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  if (isError) {
+    return <ErrorDisplay />;
+  }
+
+   return (
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-      <StatsCard />
+      <StatsCard
+        users={users}
+        recruiters={recruiters}
+        applicants={applicants}
+        jobs={job}
+      />
       <div className="px-4 lg:px-6">
-        <UserGrowthChart users={sampleUsers} /> 
+        <UserGrowthChart users={users.users} />
       </div>
     </div>
-  ); 
+  );
 }

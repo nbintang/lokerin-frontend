@@ -6,7 +6,7 @@ export const useApplicant = (id: string) =>
     queryKey: ["applicants", id],
     queryFn: async () => {
       const response = await lokerinAPI.get<ApplicantResponse>(
-        `/job-applicants/${id}`
+        `/job-applicants/applicants/${id}`
       );
       return response.data;
     },

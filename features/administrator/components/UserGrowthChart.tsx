@@ -27,36 +27,8 @@ import {
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { format } from "date-fns";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  role: "MEMBER" | "RECRUITER";
-  avatarUrl: string | null;
-  cvUrl: string | null;
-  isVerified: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface UsersResponse {
-  users: User[];
-  page: number;
-  limit: number;
-  total: number;
-}
-
-interface ChartData {
-  date: string;
-  member: number;
-  recruiter: number;
-  total: number;
-}
-
-export const description =
-  "An interactive line chart showing user growth by role";
+import { User } from "@/shared-api/hooks/users/useUsers";
+import processUserData from "@/helpers/processUserData";
 
 const chartConfig = {
   users: {
@@ -64,15 +36,15 @@ const chartConfig = {
   },
   member: {
     label: "Members",
-    color: "hsl(var(--chart-1))",
+    color: "#0284c7",
   },
   recruiter: {
     label: "Recruiters",
-    color: "hsl(var(--chart-2))",
+    color: "#38bdf8",
   },
   total: {
     label: "Total Users",
-    color: "hsl(var(--chart-3))",
+    color: "#0369a1",
   },
 } satisfies ChartConfig;
 
@@ -80,46 +52,6 @@ interface UserGrowthChartProps {
   users: User[];
   className?: string;
 }
-
-// Fungsi untuk memproses data user menjadi data chart
-const processUserData = (users: User[]): ChartData[] => {
-  if (!users || users.length === 0) return [];
-
-  // Group users by date (berdasarkan createdAt)
-  const dateGroups: { [key: string]: { member: number; recruiter: number } } =
-    {};
-
-  users.forEach((user) => {
-    const date = new Date(user.createdAt).toISOString().split("T")[0];
-
-    if (!dateGroups[date]) {
-      dateGroups[date] = { member: 0, recruiter: 0 };
-    }
-
-    if (user.role === "MEMBER") {
-      dateGroups[date].member++;
-    } else if (user.role === "RECRUITER") {
-      dateGroups[date].recruiter++;
-    }
-  });
-
-  // Convert to chart data dengan cumulative growth
-  const sortedDates = Object.keys(dateGroups).sort();
-  let cumulativeMember = 0;
-  let cumulativeRecruiter = 0;
-
-  return sortedDates.map((date) => {
-    cumulativeMember += dateGroups[date].member;
-    cumulativeRecruiter += dateGroups[date].recruiter;
-
-    return {
-      date,
-      member: cumulativeMember,
-      recruiter: cumulativeRecruiter,
-      total: cumulativeMember + cumulativeRecruiter,
-    };
-  });
-};
 
 export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
   const isMobile = useIsMobile();
@@ -140,8 +72,6 @@ export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
 
   const filteredData = React.useMemo(() => {
     if (!chartData.length) return [];
-
-    // Gunakan tanggal terakhir dari data sebagai referensi, bukan hari ini
     const lastDataDate = new Date(chartData[chartData.length - 1].date);
     let daysToSubtract = 90;
     if (timeRange === "30d") {
@@ -149,10 +79,8 @@ export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
     } else if (timeRange === "7d") {
       daysToSubtract = 7;
     }
-
     const startDate = new Date(lastDataDate);
     startDate.setDate(startDate.getDate() - daysToSubtract);
-
     return chartData.filter((item) => {
       const date = new Date(item.date);
       return date >= startDate;
@@ -219,7 +147,7 @@ export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[300px] w-full [&_.recharts-surface]:border-t [&_.recharts-surface]:border-white/20"
+          className="aspect-auto h-[450px] w-full  "
         >
           <AreaChart data={filteredData}>
             <defs>
@@ -247,6 +175,18 @@ export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
                   stopOpacity={0.1}
                 />
               </linearGradient>
+              <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-total)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-total)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
             <XAxis
@@ -255,31 +195,21 @@ export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
-              }}
+              tickFormatter={(value) => format(new Date(value), "MMM dd")}
             />
             <ChartTooltip
               cursor={false}
               defaultIndex={isMobile ? -1 : Math.floor(filteredData.length / 2)}
               content={
                 <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    });
-                  }}
+                  labelFormatter={(value) =>
+                    format(new Date(value), "MMM dd yyyy")
+                  }
                   indicator="dot"
                 />
               }
             />
-           
+
             <Area
               dataKey="member"
               type="natural"
@@ -287,7 +217,6 @@ export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
               stroke="var(--color-member)"
               strokeWidth={2}
               stackId="a"
-              dot={false}
             />
             <Area
               dataKey="recruiter"
@@ -296,33 +225,14 @@ export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
               stroke="var(--color-recruiter)"
               strokeWidth={2}
               stackId="a"
-              dot={false}
             />
-            
-            {/* Garis putih tipis untuk setiap area */}
-            <Line
-              dataKey="member"
-              type="natural"
-              stroke="rgba(255, 255, 255, 0.4)"
-              strokeWidth={1}
-              dot={false}
-              isAnimationActive={false}
-            />
-            <Line
-              dataKey="recruiter"
-              type="natural"
-              stroke="rgba(255, 255, 255, 0.4)"
-              strokeWidth={1}
-              dot={false}
-              isAnimationActive={false}
-            />
-            <Line
+            <Area
               dataKey="total"
               type="natural"
-              stroke="rgba(255, 255, 255, 0.6)"
+              fill="url(#fillTotal)"
+              stroke="var(--color-total)"
               strokeWidth={2}
-              dot={false}
-              isAnimationActive={false}
+              stackId="a"
             />
           </AreaChart>
         </ChartContainer>

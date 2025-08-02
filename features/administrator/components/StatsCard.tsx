@@ -1,5 +1,5 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
-import { Badge } from "@/components/ui/badge"
+import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardAction,
@@ -7,17 +7,30 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card" 
-import React from "react";
+} from "@/components/ui/card";
+import { UsersResponse } from "@/shared-api/hooks/users/useUsers";
+import { RecruitersAdminResponse } from "@/shared-api/hooks/recruiters/useRecruiters";
+import { JobsResponse } from "@/shared-api/hooks/jobs/useJobs";
+import { JobApplicantResponse } from "@/shared-api/hooks/job-applicants/useApplicants";
 
-export function StatsCard() {
+export function StatsCard({
+  users,
+  recruiters,
+  applicants,
+  jobs,
+}: {
+  users: UsersResponse;
+  recruiters: RecruitersAdminResponse;
+  applicants: JobApplicantResponse;
+  jobs: JobsResponse;
+}) {
   return (
-  <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription>Total Users</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
+           {users.total}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
@@ -31,15 +44,15 @@ export function StatsCard() {
             Trending up this month <IconTrendingUp className="size-4" />
           </div>
           <div className="text-muted-foreground">
-            Visitors for the last 6 months
+            Users for the last 6 months
           </div>
         </CardFooter>
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>New Customers</CardDescription>
+          <CardDescription>New Recruiters</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
+          {recruiters.total}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
@@ -59,9 +72,9 @@ export function StatsCard() {
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>New Applicants</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
+           {applicants.total}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
@@ -79,9 +92,9 @@ export function StatsCard() {
       </Card>
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Growth Rate</CardDescription>
+          <CardDescription> Total Job Listings</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4.5%
+          {jobs.total}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">

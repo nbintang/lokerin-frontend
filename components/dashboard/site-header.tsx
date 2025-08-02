@@ -10,9 +10,7 @@ import { useApplicant } from "@/shared-api/hooks/job-applicants/useApplicant";
 export function SiteHeader() {
   const pathname = usePathname();
   const { applicantId, id } = useParams();
-  const { data: applicant, isSuccess } = useApplicant(
-    String(applicantId) ?? ""
-  );
+
   return (
     <header className="flex h-(--header-height) z-20 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -23,8 +21,13 @@ export function SiteHeader() {
         />
         <DynamicBreadcrumb
           path={pathname}
-          excludeSegments={["recruiter", "admin", "applier", String(applicantId), String(id)]}
-          appendSegments={isSuccess ? [applicant?.user.name] : []}
+          excludeSegments={[
+            "recruiter",
+            "administrator",
+            "applier",
+            String(applicantId),
+            String(id),
+          ]}
         />
         <div className="ml-auto flex items-center gap-2">
           <ToggleTheme />
