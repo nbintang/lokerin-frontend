@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import * as React from "react";
+import { Area, AreaChart, CartesianGrid, Line, XAxis } from "recharts";
 
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Card,
   CardAction,
@@ -11,170 +11,178 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { format } from "date-fns";
 
-export const description = "An interactive area chart"
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: "MEMBER" | "RECRUITER";
+  avatarUrl: string | null;
+  cvUrl: string | null;
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
-const chartData = [
-  { date: "2024-04-01", desktop: 222, mobile: 150 },
-  { date: "2024-04-02", desktop: 97, mobile: 180 },
-  { date: "2024-04-03", desktop: 167, mobile: 120 },
-  { date: "2024-04-04", desktop: 242, mobile: 260 },
-  { date: "2024-04-05", desktop: 373, mobile: 290 },
-  { date: "2024-04-06", desktop: 301, mobile: 340 },
-  { date: "2024-04-07", desktop: 245, mobile: 180 },
-  { date: "2024-04-08", desktop: 409, mobile: 320 },
-  { date: "2024-04-09", desktop: 59, mobile: 110 },
-  { date: "2024-04-10", desktop: 261, mobile: 190 },
-  { date: "2024-04-11", desktop: 327, mobile: 350 },
-  { date: "2024-04-12", desktop: 292, mobile: 210 },
-  { date: "2024-04-13", desktop: 342, mobile: 380 },
-  { date: "2024-04-14", desktop: 137, mobile: 220 },
-  { date: "2024-04-15", desktop: 120, mobile: 170 },
-  { date: "2024-04-16", desktop: 138, mobile: 190 },
-  { date: "2024-04-17", desktop: 446, mobile: 360 },
-  { date: "2024-04-18", desktop: 364, mobile: 410 },
-  { date: "2024-04-19", desktop: 243, mobile: 180 },
-  { date: "2024-04-20", desktop: 89, mobile: 150 },
-  { date: "2024-04-21", desktop: 137, mobile: 200 },
-  { date: "2024-04-22", desktop: 224, mobile: 170 },
-  { date: "2024-04-23", desktop: 138, mobile: 230 },
-  { date: "2024-04-24", desktop: 387, mobile: 290 },
-  { date: "2024-04-25", desktop: 215, mobile: 250 },
-  { date: "2024-04-26", desktop: 75, mobile: 130 },
-  { date: "2024-04-27", desktop: 383, mobile: 420 },
-  { date: "2024-04-28", desktop: 122, mobile: 180 },
-  { date: "2024-04-29", desktop: 315, mobile: 240 },
-  { date: "2024-04-30", desktop: 454, mobile: 380 },
-  { date: "2024-05-01", desktop: 165, mobile: 220 },
-  { date: "2024-05-02", desktop: 293, mobile: 310 },
-  { date: "2024-05-03", desktop: 247, mobile: 190 },
-  { date: "2024-05-04", desktop: 385, mobile: 420 },
-  { date: "2024-05-05", desktop: 481, mobile: 390 },
-  { date: "2024-05-06", desktop: 498, mobile: 520 },
-  { date: "2024-05-07", desktop: 388, mobile: 300 },
-  { date: "2024-05-08", desktop: 149, mobile: 210 },
-  { date: "2024-05-09", desktop: 227, mobile: 180 },
-  { date: "2024-05-10", desktop: 293, mobile: 330 },
-  { date: "2024-05-11", desktop: 335, mobile: 270 },
-  { date: "2024-05-12", desktop: 197, mobile: 240 },
-  { date: "2024-05-13", desktop: 197, mobile: 160 },
-  { date: "2024-05-14", desktop: 448, mobile: 490 },
-  { date: "2024-05-15", desktop: 473, mobile: 380 },
-  { date: "2024-05-16", desktop: 338, mobile: 400 },
-  { date: "2024-05-17", desktop: 499, mobile: 420 },
-  { date: "2024-05-18", desktop: 315, mobile: 350 },
-  { date: "2024-05-19", desktop: 235, mobile: 180 },
-  { date: "2024-05-20", desktop: 177, mobile: 230 },
-  { date: "2024-05-21", desktop: 82, mobile: 140 },
-  { date: "2024-05-22", desktop: 81, mobile: 120 },
-  { date: "2024-05-23", desktop: 252, mobile: 290 },
-  { date: "2024-05-24", desktop: 294, mobile: 220 },
-  { date: "2024-05-25", desktop: 201, mobile: 250 },
-  { date: "2024-05-26", desktop: 213, mobile: 170 },
-  { date: "2024-05-27", desktop: 420, mobile: 460 },
-  { date: "2024-05-28", desktop: 233, mobile: 190 },
-  { date: "2024-05-29", desktop: 78, mobile: 130 },
-  { date: "2024-05-30", desktop: 340, mobile: 280 },
-  { date: "2024-05-31", desktop: 178, mobile: 230 },
-  { date: "2024-06-01", desktop: 178, mobile: 200 },
-  { date: "2024-06-02", desktop: 470, mobile: 410 },
-  { date: "2024-06-03", desktop: 103, mobile: 160 },
-  { date: "2024-06-04", desktop: 439, mobile: 380 },
-  { date: "2024-06-05", desktop: 88, mobile: 140 },
-  { date: "2024-06-06", desktop: 294, mobile: 250 },
-  { date: "2024-06-07", desktop: 323, mobile: 370 },
-  { date: "2024-06-08", desktop: 385, mobile: 320 },
-  { date: "2024-06-09", desktop: 438, mobile: 480 },
-  { date: "2024-06-10", desktop: 155, mobile: 200 },
-  { date: "2024-06-11", desktop: 92, mobile: 150 },
-  { date: "2024-06-12", desktop: 492, mobile: 420 },
-  { date: "2024-06-13", desktop: 81, mobile: 130 },
-  { date: "2024-06-14", desktop: 426, mobile: 380 },
-  { date: "2024-06-15", desktop: 307, mobile: 350 },
-  { date: "2024-06-16", desktop: 371, mobile: 310 },
-  { date: "2024-06-17", desktop: 475, mobile: 520 },
-  { date: "2024-06-18", desktop: 107, mobile: 170 },
-  { date: "2024-06-19", desktop: 341, mobile: 290 },
-  { date: "2024-06-20", desktop: 408, mobile: 450 },
-  { date: "2024-06-21", desktop: 169, mobile: 210 },
-  { date: "2024-06-22", desktop: 317, mobile: 270 },
-  { date: "2024-06-23", desktop: 480, mobile: 530 },
-  { date: "2024-06-24", desktop: 132, mobile: 180 },
-  { date: "2024-06-25", desktop: 141, mobile: 190 },
-  { date: "2024-06-26", desktop: 434, mobile: 380 },
-  { date: "2024-06-27", desktop: 448, mobile: 490 },
-  { date: "2024-06-28", desktop: 149, mobile: 200 },
-  { date: "2024-06-29", desktop: 103, mobile: 160 },
-  { date: "2024-06-30", desktop: 446, mobile: 400 },
-]
+export interface UsersResponse {
+  users: User[];
+  page: number;
+  limit: number;
+  total: number;
+}
+
+interface ChartData {
+  date: string;
+  member: number;
+  recruiter: number;
+  total: number;
+}
+
+export const description =
+  "An interactive line chart showing user growth by role";
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  users: {
+    label: "Users",
   },
-  desktop: {
-    label: "Desktop",
-    color: "var(--primary)",
+  member: {
+    label: "Members",
+    color: "hsl(var(--chart-1))",
   },
-  mobile: {
-    label: "Mobile",
-    color: "var(--primary)",
+  recruiter: {
+    label: "Recruiters",
+    color: "hsl(var(--chart-2))",
   },
-} satisfies ChartConfig
+  total: {
+    label: "Total Users",
+    color: "hsl(var(--chart-3))",
+  },
+} satisfies ChartConfig;
 
-export function ChartAreaInteractive() {
-  const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = React.useState("90d")
+interface UserGrowthChartProps {
+  users: User[];
+  className?: string;
+}
+
+// Fungsi untuk memproses data user menjadi data chart
+const processUserData = (users: User[]): ChartData[] => {
+  if (!users || users.length === 0) return [];
+
+  // Group users by date (berdasarkan createdAt)
+  const dateGroups: { [key: string]: { member: number; recruiter: number } } =
+    {};
+
+  users.forEach((user) => {
+    const date = new Date(user.createdAt).toISOString().split("T")[0];
+
+    if (!dateGroups[date]) {
+      dateGroups[date] = { member: 0, recruiter: 0 };
+    }
+
+    if (user.role === "MEMBER") {
+      dateGroups[date].member++;
+    } else if (user.role === "RECRUITER") {
+      dateGroups[date].recruiter++;
+    }
+  });
+
+  // Convert to chart data dengan cumulative growth
+  const sortedDates = Object.keys(dateGroups).sort();
+  let cumulativeMember = 0;
+  let cumulativeRecruiter = 0;
+
+  return sortedDates.map((date) => {
+    cumulativeMember += dateGroups[date].member;
+    cumulativeRecruiter += dateGroups[date].recruiter;
+
+    return {
+      date,
+      member: cumulativeMember,
+      recruiter: cumulativeRecruiter,
+      total: cumulativeMember + cumulativeRecruiter,
+    };
+  });
+};
+
+export function UserGrowthChart({ users, className }: UserGrowthChartProps) {
+  const isMobile = useIsMobile();
+  const [timeRange, setTimeRange] = React.useState("90d");
+  const [viewType, setViewType] = React.useState<"cumulative" | "daily">(
+    "cumulative"
+  );
 
   React.useEffect(() => {
     if (isMobile) {
-      setTimeRange("7d")
+      setTimeRange("30d");
     }
-  }, [isMobile])
+  }, [isMobile]);
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date)
-    const referenceDate = new Date("2024-06-30")
-    let daysToSubtract = 90
+  const chartData = React.useMemo(() => {
+    return processUserData(users);
+  }, [users]);
+
+  const filteredData = React.useMemo(() => {
+    if (!chartData.length) return [];
+
+    // Gunakan tanggal terakhir dari data sebagai referensi, bukan hari ini
+    const lastDataDate = new Date(chartData[chartData.length - 1].date);
+    let daysToSubtract = 90;
     if (timeRange === "30d") {
-      daysToSubtract = 30
+      daysToSubtract = 30;
     } else if (timeRange === "7d") {
-      daysToSubtract = 7
+      daysToSubtract = 7;
     }
-    const startDate = new Date(referenceDate)
-    startDate.setDate(startDate.getDate() - daysToSubtract)
-    return date >= startDate
-  })
+
+    const startDate = new Date(lastDataDate);
+    startDate.setDate(startDate.getDate() - daysToSubtract);
+
+    return chartData.filter((item) => {
+      const date = new Date(item.date);
+      return date >= startDate;
+    });
+  }, [chartData, timeRange]);
+
+  const totalUsers = React.useMemo(() => {
+    if (!filteredData.length) return { member: 0, recruiter: 0, total: 0 };
+    const latest = filteredData[filteredData.length - 1];
+    return {
+      member: latest.member,
+      recruiter: latest.recruiter,
+      total: latest.total,
+    };
+  }, [filteredData]);
 
   return (
-    <Card className="@container/card">
+    <Card className={`@container/card ${className}`}>
       <CardHeader>
-        <CardTitle>Total Visitors</CardTitle>
+        <CardTitle>User Growth Analysis</CardTitle>
         <CardDescription>
           <span className="hidden @[540px]/card:block">
-            Total for the last 3 months
+            Total users: {totalUsers.total} (Members: {totalUsers.member},
+            Recruiters: {totalUsers.recruiter})
           </span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
+          <span className="@[540px]/card:hidden">
+            {totalUsers.total} users total
+          </span>
         </CardDescription>
-        <CardAction>
+        <CardAction className="flex flex-col gap-2 @[767px]/card:flex-row">
           <ToggleGroup
             type="single"
             value={timeRange}
@@ -190,7 +198,7 @@ export function ChartAreaInteractive() {
             <SelectTrigger
               className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
               size="sm"
-              aria-label="Select a value"
+              aria-label="Select time range"
             >
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
@@ -211,31 +219,31 @@ export function ChartAreaInteractive() {
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[300px] w-full [&_.recharts-surface]:border-t [&_.recharts-surface]:border-white/20"
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillMember" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={1.0}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-member)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-member)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
+              <linearGradient id="fillRecruiter" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-recruiter)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-recruiter)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -248,45 +256,77 @@ export function ChartAreaInteractive() {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value)
+                const date = new Date(value);
                 return date.toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
-                })
+                });
               }}
             />
             <ChartTooltip
               cursor={false}
-              defaultIndex={isMobile ? -1 : 10}
+              defaultIndex={isMobile ? -1 : Math.floor(filteredData.length / 2)}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
-                    })
+                      year: "numeric",
+                    });
                   }}
                   indicator="dot"
                 />
               }
             />
+           
             <Area
-              dataKey="mobile"
+              dataKey="member"
               type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
+              fill="url(#fillMember)"
+              stroke="var(--color-member)"
+              strokeWidth={2}
               stackId="a"
+              dot={false}
             />
             <Area
-              dataKey="desktop"
+              dataKey="recruiter"
               type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
+              fill="url(#fillRecruiter)"
+              stroke="var(--color-recruiter)"
+              strokeWidth={2}
               stackId="a"
+              dot={false}
+            />
+            
+            {/* Garis putih tipis untuk setiap area */}
+            <Line
+              dataKey="member"
+              type="natural"
+              stroke="rgba(255, 255, 255, 0.4)"
+              strokeWidth={1}
+              dot={false}
+              isAnimationActive={false}
+            />
+            <Line
+              dataKey="recruiter"
+              type="natural"
+              stroke="rgba(255, 255, 255, 0.4)"
+              strokeWidth={1}
+              dot={false}
+              isAnimationActive={false}
+            />
+            <Line
+              dataKey="total"
+              type="natural"
+              stroke="rgba(255, 255, 255, 0.6)"
+              strokeWidth={2}
+              dot={false}
+              isAnimationActive={false}
             />
           </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }
