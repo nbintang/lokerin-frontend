@@ -1,0 +1,101 @@
+"use client";
+
+import * as React from "react";
+import {
+  IconHelp,
+  IconUsers,
+  IconSearch,
+  IconSettings,
+  IconUserCheck,
+  IconUserStar,
+  IconFileText,
+  IconBriefcase2,
+  IconBuildingSkyscraper,
+} from "@tabler/icons-react";
+
+import { Sidebar } from "@/components/ui/sidebar";
+import { LayoutDashboard } from "lucide-react";
+import { AppSidebar } from "@/components/dashboard/app-sidebar";
+
+const data = {
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "/administrator/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "User Management",
+      url: "/administrator/dashboard/users",
+      icon: IconUsers,
+    },
+  ],
+  navCollapsible: [
+    {
+      title: "User Roles",
+      url: "#",
+      icon: IconUsers,
+      items: [
+        {
+          title: "Manage Applicants",
+          url: "/administrator/dashboard/appliers",
+          icon: IconUserCheck,
+        },
+        {
+          title: "Manage Recruiters",
+          url: "/administrator/dashboard/recruiters",
+          icon: IconUserStar,
+        },
+      ],
+    },
+    {
+      title: "Job Management",
+      url: "#",
+      icon: IconBriefcase2,
+      items: [
+        {
+          title: "Manage Job Listings",
+          url: "/administrator/dashboard/jobs",
+          icon: IconFileText,
+        },
+        {
+          title: "Manage Job Positions",
+          url: "/administrator/dashboard/job-positions",
+          icon: IconBuildingSkyscraper,
+        },
+      ],
+    },
+  ],
+  navSecondary: [
+    {
+      title: "Settings",
+      url: "/administrator/account/settings",
+      icon: IconSettings,
+    },
+    {
+      title: "Get Help",
+      url: "#",
+      icon: IconHelp,
+    },
+    {
+      title: "Search",
+      url: "#",
+      icon: IconSearch,
+    },
+  ],
+  accountPath: "/administrator/account",
+};
+
+export function AdministratorAppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  return (
+    <AppSidebar
+      navMain={data.navMain}
+      navSecondary={data.navSecondary}
+      navCollapsible={data.navCollapsible}
+      accountPath={data.accountPath}
+      {...props}
+    />
+  );
+}

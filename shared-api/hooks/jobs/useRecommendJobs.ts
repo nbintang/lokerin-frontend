@@ -9,6 +9,7 @@ import {
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import useSound from "use-sound";
 
 type RecommendJobsOptions = {
   resumeUrl?: string;
@@ -28,6 +29,12 @@ export const useRecommendJobs = (
 ) => {
   const router = useRouter();
   const progress = useProgress();
+  const [playNotification] = useSound(
+    "/sounds/new-notification-014-363678_conv.mp3",
+    {
+      volume: 0.8,
+    }
+  );
   const setJobRes = useRecommendationJobStore((s) => s.setJobRes);
   return useMutation({
     mutationKey: ["recommend-job"],
@@ -59,6 +66,7 @@ export const useRecommendJobs = (
       if (context?.toastId) {
         toast.dismiss(context.toastId);
       }
+      playNotification();
       setJobRes(res);
       toast.success("Job recommended successfully");
       router.push("/applier/dashboard/jobs/recommendation-results");

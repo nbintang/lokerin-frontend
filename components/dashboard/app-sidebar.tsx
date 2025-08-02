@@ -13,12 +13,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { LucideIcon } from "lucide-react";
 import { NavCollapsible } from "./nav-collapsible";
+import Link from "next/link";
 
 export function AppSidebar({
   navMain,
@@ -50,7 +52,7 @@ export function AppSidebar({
   accountPath: string;
 }) {
   const { data: userProfile, isLoading, isSuccess } = useProfile();
-  
+  const { state } = useSidebar();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -60,10 +62,10 @@ export function AppSidebar({
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <Link href="#">
                 <IconInnerShadowTop className="!size-5" />
                 <span className="text-base font-semibold">Lokerin</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -74,15 +76,18 @@ export function AppSidebar({
         <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
+        {/* profile skeleton */}
         {isLoading && (
           <div
             className={cn("flex items-center gap-2  py-1.5 text-left text-sm")}
           >
-            <Skeleton className="size-9 bg-muted-foreground rounded-lg grayscale" />
-            <div className="flex flex-col h-6 gap-1 justify-between text-black">
-              <Skeleton className="h-3 w-16 rounded-md bg-muted-foreground" />
-              <Skeleton className="h-2.5 w-20 rounded-md bg-muted-foreground" />
-            </div>
+            <Skeleton className="size-8 bg-muted-foreground rounded-lg grayscale" />
+            {state === "expanded" && (
+              <div className="flex flex-col h-6 gap-1 justify-between text-black">
+                <Skeleton className="h-3 w-16 rounded-md bg-muted-foreground" />
+                <Skeleton className="h-2.5 w-20 rounded-md bg-muted-foreground" />
+              </div>
+            )}
           </div>
         )}
         {isSuccess && <NavUser user={userProfile} accountPath={accountPath} />}

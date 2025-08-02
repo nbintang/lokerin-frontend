@@ -4,7 +4,7 @@ export default function ProfileSkeleton() {
   return (
     <div>
       {/* Banner Placeholder */}
-      <Skeleton className="h-24 md:h-36 rounded-none " />
+      <Skeleton className="h-24 md:h-36 rounded-none z-0 " />
 
       <div className="container mx-auto">
         <div className="bg-background rounded-none border-0">
@@ -14,7 +14,7 @@ export default function ProfileSkeleton() {
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between sm:space-x-4 -mt-16 sm:-mt-20">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:space-x-4">
                   {/* Avatar Placeholder */}
-                  <div className="h-32 bg-border   w-32 sm:h-40 sm:w-40 rounded-full border-4 border-background" />
+                  <Skeleton className="h-32  z-10  w-32 sm:h-40 sm:w-40 rounded-full  " />
 
                   <div className="mt-4 sm:mt-0 sm:pb-4 flex-1 space-y-2">
                     {/* Name Placeholder */}

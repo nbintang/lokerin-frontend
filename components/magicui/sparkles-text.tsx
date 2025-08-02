@@ -27,8 +27,8 @@ const Sparkle: React.FC<Sparkle> = ({ id, x, y, color, delay, scale }) => {
         rotate: [75, 120, 150],
       }}
       transition={{ duration: 0.8, repeat: Infinity, delay }}
-      width="12"
-      height="12"
+      width="7"
+      height="7"
       viewBox="0 0 21 21"
     >
       <path
@@ -84,11 +84,11 @@ interface SparklesTextProps {
   };
 }
 
-export const SparklesText: React.FC<SparklesTextProps> = ({
+export const  SparklesText: React.FC<SparklesTextProps> = ({
   children,
   colors = { first: "#bae6fd", second: "#818cf8" },
   className,
-  sparklesCount = 5,
+  sparklesCount = 7,
   ...props
 }) => {
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);

@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const tokenQueryConfirmation = req.nextUrl.searchParams.get("token");
   const isProtected =
-    pathname.startsWith("/admin") ||
+    pathname.startsWith("/administrator") ||
     pathname.startsWith("/recruiter") ||
     pathname.startsWith("/applier");
   const isPublicRequireVerified = pathname.startsWith("/jobs");
@@ -35,8 +35,8 @@ export async function middleware(req: NextRequest) {
   }
   // jik admin coba akses selain admin dashboard, redirect ke admin dashboard
   if (role === "ADMINISTRATOR") {
-    if (!pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    if (!pathname.startsWith("/administrator")) {
+      return NextResponse.redirect(new URL("/administrator/dashboard", req.url));
     }
   }
 
@@ -64,7 +64,7 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/auth/verify", // pastikan ini ditulis
+    "/auth/verify",  
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };

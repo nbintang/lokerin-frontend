@@ -27,8 +27,8 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import { useProgress } from "@bprogress/next";
-import Link from "next/link";
-import { UserProfileResponse } from "@/shared-api/hooks/profile/useProfile";
+import Link from "next/link"; 
+import { UserProfileResponse } from "@/shared-api/hooks/profile/type";
 
 export function NavUser({
   accountPath,
