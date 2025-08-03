@@ -26,6 +26,8 @@ import {
 } from "lucide-react";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { User } from "@/shared-api/hooks/users/useUsers";
+import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
+import { useDeleteUser } from "@/shared-api/hooks/users/useDeleteUser";
 
 export const userColumns: ColumnDef<User>[] = [
   {
@@ -105,7 +107,18 @@ export const userColumns: ColumnDef<User>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const user = row.original;
+      const id = row.original.id;
+      const setOpenDeleteDialog = useHandleWarningDialog(
+        (state) => state.setOpenDialog
+      );
+      const { mutate } = useDeleteUser(id);
+      const handleDeleteUser = () =>
+        setOpenDeleteDialog({
+          isOpen: true,
+          title: "Delete User",
+          description: "Are you sure you want to delete this user?",
+          onConfirm: () => mutate(),
+        });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -116,26 +129,15 @@ export const userColumns: ColumnDef<User>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
             <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href={`/admin/users/details/${user.id}`}>
-                <Eye className="mr-2 h-4 w-4" />
+              <Link href={`/administrator/dashboard/users/${id}`}>
+                <Eye />
                 <span>View Details</span>
               </Link>
             </DropdownMenuItem>
-            {user.cvUrl && (
-              <DropdownMenuItem className="cursor-pointer" asChild>
-                <Link
-                  href={user.cvUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FileText className="mr-2 h-4 w-4" />
-                  <span>View CV</span>
-                </Link>
-              </DropdownMenuItem>
-            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               variant="destructive"
+              onClick={handleDeleteUser}
               className="cursor-pointer  "
             >
               <Trash2 />

@@ -14,7 +14,7 @@ type AlertDialogStore = {
     isOpen: boolean;
     title: string;
     description?: string;
-    onConfirm?: () => void;
+    onConfirm: () => void;
     buttonVariants?: ButtonVariants["variant"];
   }) => void;
   onConfirm: () => void | Promise<void>;

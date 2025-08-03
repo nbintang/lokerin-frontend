@@ -34,11 +34,11 @@ export   function TableMain<TData>({
                     <TableHead 
                       key={header.id}
                       className={`px-3 py-3 text-left font-medium ${
-                        index === 0 ? 'min-w-[200px]' : // Name column
-                        index === 1 ? 'min-w-[150px]' : // Job column  
-                        index === 2 ? 'min-w-[100px]' : // Status column
-                        index === 3 ? 'min-w-[120px]' : // Date column
-                        'min-w-[80px]' // Actions column
+                        index === 0 ? 'min-w-[200px]' :
+                        index === 1 ? 'min-w-[150px]' :  
+                        index === 2 ? 'min-w-[100px]' :
+                        index === 3 ? 'min-w-[120px]' :
+                        'min-w-[80px]' 
                       }`}
                     >
                       {header.isPlaceholder

@@ -1,12 +1,16 @@
 import { lokerinAPI } from "@/shared-api/config/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useApplicants = (page: number = 1, limit: number = 10) =>
+export const useApplicants = (
+  page: number = 1,
+  limit: number = 10,
+  isForAdmin: boolean = false
+) =>
   useQuery({
     queryKey: ["applicants"],
     queryFn: async () => {
       const response = await lokerinAPI.get<JobApplicantResponse>(
-        "/job-applicants/applicants",
+        `/job-applicants${isForAdmin ? "" : "/applicants"}`,
         { params: { page, limit } }
       );
       return response.data;

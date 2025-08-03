@@ -1,4 +1,4 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import { IconTrendingUp } from "@tabler/icons-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -9,18 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  JobApplicantResponse,
-  useApplicants,
-} from "@/shared-api/hooks/job-applicants/useApplicants";
-import { LoaderCircleIcon } from "lucide-react";
 import { UseQueryResult } from "@tanstack/react-query";
 import { Skeleton } from "../../../components/ui/skeleton";
+import { RecruitersAdminResponse } from "@/shared-api/hooks/recruiters/useRecruiters";
 
-export function RecruiterSectionsCards({
+export function AdminSectionsCard({
   query,
 }: {
-  query: UseQueryResult<JobApplicantResponse, Error>;
+  query: UseQueryResult<RecruitersAdminResponse, Error>;
 }) {
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid-cols-1 gap-4  *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
@@ -29,11 +25,11 @@ export function RecruiterSectionsCards({
           {query.isLoading ? (
             <Skeleton className="h-7 w-1/3 md:w-1/12" />
           ) : (
-            <CardDescription>Total Applicants</CardDescription>
+            <CardDescription>Total Recruiters</CardDescription>
           )}
           <CardTitle className="text-2xl font-semibold tabular-nums flex items-center @[250px]/card:text-3xl">
             {query.isLoading ? (
-            <Skeleton className="size-12 rounded-full" />
+              <Skeleton className="size-12 rounded-full" />
             ) : (
               query.data?.total
             )}
@@ -56,13 +52,13 @@ export function RecruiterSectionsCards({
             <Skeleton className="h-4 w-1/3 md:w-1/12" />
           ) : (
             <div className="line-clamp-1 flex gap-2 font-medium">
-              Applicants for the last 6 months{" "}
+              Recruiters for the last 6 months{" "}
               <IconTrendingUp className="size-4" />
             </div>
           )}
           {query.isSuccess && (
             <div className="text-muted-foreground">
-              Your applicants for the last 6 months
+              Your recruiters for the last 6 months
             </div>
           )}
         </CardFooter>

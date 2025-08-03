@@ -44,7 +44,7 @@ const profileSchema = z.object({
     .min(1, "Name is required")
     .max(50, "Name is too long")
     .optional(),
-  email: z.string().email({ message: "Invalid email" }).optional(),
+  email: z.email({ message: "Invalid email" }).optional(),
   phone: z
     .string()
     .min(1, "Phone number is required")

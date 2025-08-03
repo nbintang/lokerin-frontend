@@ -14,11 +14,11 @@ import {
 import { jobAppColumns } from "@/features/recruiter/job-applications/columns";
 import { useSearchParams } from "next/navigation";
 
-export default function RecruiterDashboardPage() {
+export default function ApplicantsDashboardPage() {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
-  const jobApplicant = useApplicants(page, limit);
+  const jobApplicant = useApplicants(page, limit, true);
   const { table } = useTable<Applier>({
     columns: jobAppColumns,
     data: jobApplicant.data?.appliers ?? [],

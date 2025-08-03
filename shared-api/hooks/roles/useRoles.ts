@@ -1,22 +1,29 @@
 import { lokerinAPI } from "@/shared-api/config/api";
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query";
+type RolesOptions = {
+  page?: number;
+  limit?: number;
+  name?: string;
+};
 
-
-export const useRoles = () => useQuery({
+export const useRoles = (params?: RolesOptions) =>
+  useQuery({
     queryKey: ["roles"],
     queryFn: async () => {
-        const response = await lokerinAPI.get<Roles>("/roles");
-        return response.data;
-    }
-})
-export type Roles = {
-  roles: Array<{
-    id: string
-    name: string
-    createdAt: string
-    updatedAt: string
-  }>
-  page: number
-  limit: number
-  total: number
-}
+      const response = await lokerinAPI.get<RolesResponse>("/roles", { params });
+      return response.data;
+    },
+  });
+
+export type Roles= {
+    id: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+  }
+export type RolesResponse = {
+  roles: Array<Roles>;
+  page: number;
+  limit: number;
+  total: number;
+};

@@ -18,10 +18,47 @@ import { Recruiter } from "@/shared-api/hooks/recruiters/useRecruiters";
 
 
 export const recruiterColumns: ColumnDef<Recruiter>[] = [
- 
   {
-    accessorFn: (row) => row.user.email,
-    header: "Email",
+    accessorKey: "user.name",
+    header: "Name",
+    cell: ({ row }) => {
+      const recruiter = row.original;
+      return (
+        <div className="flex items-center gap-3">
+          <Avatar className="h-9 w-9">
+            <AvatarImage
+              src={recruiter.user.avatarUrl ?? ""}
+              alt={recruiter.user.name}
+            />
+            <AvatarFallback>
+              {recruiter.user.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <span className="font-medium">{recruiter.user.name}</span>
+        </div>
+      );
+    }
+  },
+  {
+    header: "Company",
+    accessorKey: "company.name",
+    cell: ({ row }) => {
+      const recruiter = row.original;
+      return (
+        <div className="flex items-center gap-3">
+          <Avatar className="h-9 w-9">
+            <AvatarImage
+              src={recruiter.company.logoUrl ?? ""}
+              alt={recruiter.company.name}
+            />
+            <AvatarFallback>
+              {recruiter.company.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <span className="font-medium">{recruiter.company.name}</span>
+        </div>
+      );
+    }
   },
   {
     accessorKey: "createdAt",
@@ -47,13 +84,13 @@ export const recruiterColumns: ColumnDef<Recruiter>[] = [
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href={`/admin/recruiters/details/${recruiter.id}`}>
-                <Eye className="mr-2 h-4 w-4" />
+                <Eye   />
                 <span>View Recruiter Profile</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href={`/admin/users/details/${recruiter.user.id}`}>
-                <UserIcon className="mr-2 h-4 w-4" />
+                <UserIcon   />
                 <span>View User Account</span>
               </Link>
             </DropdownMenuItem>

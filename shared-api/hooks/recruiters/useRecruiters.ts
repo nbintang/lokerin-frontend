@@ -33,6 +33,12 @@ export interface Recruiter {
     id: string;
     email: string;
     name: string;
+    avatarUrl: string;
+  };
+  company: {
+    id: string;
+    name: string;
+    logoUrl: string;
   };
 }
 

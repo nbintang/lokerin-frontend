@@ -14,7 +14,7 @@ import {
 } from "@tabler/icons-react";
 
 import { Sidebar } from "@/components/ui/sidebar";
-import { LayoutDashboard } from "lucide-react";
+import { Building2, LayoutDashboard } from "lucide-react";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 
 const data = {
@@ -29,6 +29,11 @@ const data = {
       url: "/administrator/dashboard/users",
       icon: IconUsers,
     },
+    {
+      title: "Company Management",
+      url: "/administrator/dashboard/companies",
+      icon: Building2,
+    },
   ],
   navCollapsible: [
     {
@@ -38,7 +43,7 @@ const data = {
       items: [
         {
           title: "Manage Applicants",
-          url: "/administrator/dashboard/appliers",
+          url: "/administrator/dashboard/applicants",
           icon: IconUserCheck,
         },
         {

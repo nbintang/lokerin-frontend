@@ -1,18 +1,22 @@
+"use client";
 import {
-    TableFilters,
-    TableMain,
-    TablePagination,
-    TableSkeleton,
-    useTable,
+  TableFilters,
+  TableMain,
+  TablePagination,
+  TableSkeleton,
+  useTable,
 } from "@/components/dashboard/data-table";
+import { Button } from "@/components/ui/button";
 import { companyColumns } from "@/features/administrator/companies/columns";
 import {
-    Company,
-    useCompanies,
+  Company,
+  useCompanies,
 } from "@/shared-api/hooks/companies/useCompanies";
+import { Building2 } from "lucide-react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export default function RecruiterPage() {
+export default function CompanyPage() {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
@@ -36,6 +40,12 @@ export default function RecruiterPage() {
         <>
           <div className="flex items-start gap-x-3 justify-start rounded-b-md  ">
             <TableFilters<Company> table={table} />
+            <Button asChild>
+              <Link href="/administrator/dashboard/companies/new">
+                <Building2 />
+                Add New Company
+              </Link>
+            </Button>
           </div>
           <TableMain<Company> table={table} />
           <TablePagination<Company>

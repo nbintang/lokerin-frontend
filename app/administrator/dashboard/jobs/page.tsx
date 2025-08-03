@@ -23,6 +23,7 @@ export default function JobDashboard() {
   const { data: user, isLoading: isProfileLoading } = useProfile();
   const jobApplicant = useJobs(
     {
+ isPublic: false,
       page,
       limit,
       postedBy: user?.id,

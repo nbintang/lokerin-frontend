@@ -17,8 +17,7 @@ export const TableSkeleton = ({ className, wrapperClassName }: { className?: str
     <CardContent className={cn("flex-1 px-2", className)}>
       <Skeleton className="h-full w-full " />
     </CardContent>
-    <CardFooter className="flex justify-between px-2 gap-3 flex-col md:flex-row mt-3">
-      <Skeleton className="h-6 w-1/2 md:w-1/12 " />
+    <CardFooter className="flex justify-end px-2 gap-3 flex-col md:flex-row mt-3">
       <Skeleton className="h-6 w-1/3 md:w-1/12 hidden sm:block" />
     </CardFooter>
   </div>

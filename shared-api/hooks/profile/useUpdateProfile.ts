@@ -11,7 +11,7 @@ export const useUpdateProfile = () => {
     mutationKey: ["profile"],
     mutationFn: async (body: {
       avatarUrl: string;
-      cvUrl: string;
+      cvUrl?: string;
       name: string;
     }) => {
       const response = await lokerinAPI.patch<UserProfileResponse>(
