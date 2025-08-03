@@ -15,6 +15,7 @@ import { FilePlus2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { IconBriefcase2 } from "@tabler/icons-react";
+import { adminJobColumns } from "@/features/administrator/job-applications/columns";
 
 export default function JobDashboard() {
   const searchParams = useSearchParams();
@@ -23,7 +24,7 @@ export default function JobDashboard() {
   const { data: user, isLoading: isProfileLoading } = useProfile();
   const jobApplicant = useJobs(
     {
- isPublic: false,
+      isPublic: false,
       page,
       limit,
       postedBy: user?.id,
@@ -34,7 +35,7 @@ export default function JobDashboard() {
     }
   );
   const { table } = useTable<Jobs>({
-    columns: recruiterJobColumns,
+    columns: adminJobColumns,
     data: jobApplicant.data?.jobs ?? [],
   });
   if (isProfileLoading || jobApplicant.isLoading) {
@@ -52,12 +53,6 @@ export default function JobDashboard() {
         <>
           <div className="flex items-start gap-x-3 justify-start rounded-b-md  ">
             <TableFilters<Jobs> table={table} />
-            <Button asChild>
-              <Link href="/recruiter/dashboard/jobs/new">
-                <IconBriefcase2 />
-                Add New Job
-              </Link>
-            </Button>
           </div>
           <TableMain<Jobs> table={table} />
           <TablePagination<Jobs>

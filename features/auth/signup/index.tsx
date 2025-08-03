@@ -11,11 +11,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { defineStepper } from "@stepperize/react";
 import { mediaSchema, recruiterSchema, userSchema } from "./schema";
-import UserForm from "./components/UserForm";
-import RecruiterForm from "./components/RecruiterForm";
-import AvatarForm from "./components/AvatarForm";
-import ResumeForm from "./components/ResumeForm";
-import RoleForm from "./components/RoleForm";
+import UserInput from "./components/UserInput";
+import RecruiterInput from "./components/RecruiterInput";
+import AvatarInput from "./components/AvatarInput";
+import ResumeInput from "./components/ResumeInput";
+import RoleInput from "./components/RoleInput";
 import { cn } from "@/lib/utils";
 import useUploadImage from "@/shared-api/hooks/media/useUploadImage";
 import useUploadDocument from "@/shared-api/hooks/media/useUploadDocument";
@@ -121,15 +121,15 @@ export default function SignUpForm() {
         {stepper.switch({
           user: () => (
             <>
-              <UserForm />
-              <RoleForm />
+              <UserInput />
+              <RoleInput />
             </>
           ),
-          recruiter: () => <RecruiterForm />,
+          recruiter: () => <RecruiterInput />,
           media: () => (
             <>
-              <AvatarForm />
-              {userRole === "MEMBER" && <ResumeForm />}
+              <AvatarInput />
+              {userRole === "MEMBER" && <ResumeInput />}
             </>
           ),
         })}

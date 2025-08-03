@@ -9,13 +9,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
- 
+
 import { Eye, Trash2, User as UserIcon } from "lucide-react";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { Recruiter } from "@/shared-api/hooks/recruiters/useRecruiters";
-
+import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
+import { useDeleteRecruiter } from "@/shared-api/hooks/recruiters/useDeleteRecruiter";
 
 export const recruiterColumns: ColumnDef<Recruiter>[] = [
   {
@@ -37,7 +39,18 @@ export const recruiterColumns: ColumnDef<Recruiter>[] = [
           <span className="font-medium">{recruiter.user.name}</span>
         </div>
       );
-    }
+    },
+  },
+  {
+    header: "Position",
+    accessorKey: "position.name",
+    cell: ({ row }) => {
+      return (
+        <div>
+          <span className="font-medium">{row.original.position.name}</span>
+        </div>
+      );
+    },
   },
   {
     header: "Company",
@@ -55,10 +68,16 @@ export const recruiterColumns: ColumnDef<Recruiter>[] = [
               {recruiter.company.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <span className="font-medium">{recruiter.company.name}</span>
+          <Button variant={"link"} className="p-0 m-0" asChild>
+            <Link
+              href={`/administrator/dashboard/companies/${recruiter.company.id}`}
+            >
+              {recruiter.company.name}
+            </Link>
+          </Button>
         </div>
       );
-    }
+    },
   },
   {
     accessorKey: "createdAt",
@@ -73,6 +92,17 @@ export const recruiterColumns: ColumnDef<Recruiter>[] = [
     id: "actions",
     cell: ({ row }) => {
       const recruiter = row.original;
+      const setOpenWarningDialog = useHandleWarningDialog(
+        (s) => s.setOpenDialog
+      );
+      const { mutate } = useDeleteRecruiter(row.original.id);
+      const handleDelete = () =>
+        setOpenWarningDialog({
+          isOpen: true,
+          title: "Delete Recruiter And User Account",
+          description: "This will contains the user account. are you sure you want to delete this recruiter?",
+          onConfirm: () => mutate(),
+        });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -83,23 +113,20 @@ export const recruiterColumns: ColumnDef<Recruiter>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href={`/admin/recruiters/details/${recruiter.id}`}>
-                <Eye   />
-                <span>View Recruiter Profile</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href={`/admin/users/details/${recruiter.user.id}`}>
-                <UserIcon   />
+              <Link
+                href={`/administrator/dashboard/users/${recruiter.user.id}`}
+              >
+                <UserIcon />
                 <span>View User Account</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               variant="destructive"
               className="cursor-pointer  "
+              onClick={handleDelete}
             >
               <Trash2 />
-              Delete User
+              Delete Recruiter
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

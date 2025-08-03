@@ -13,6 +13,10 @@ import {
 import { Eye, Pencil, ExternalLink, Trash2 } from "lucide-react";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { Company } from "@/shared-api/hooks/companies/useCompanies";
+import { useCompany } from "@/shared-api/hooks/companies/useCompany";
+import { useCompanyDialogStore } from "../hooks/useCompanyDialogStore";
+import { useDeleteCompany } from "@/shared-api/hooks/companies/useDeleteCompany";
+import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
 
 export const companyColumns: ColumnDef<Company>[] = [
   {
@@ -36,15 +40,17 @@ export const companyColumns: ColumnDef<Company>[] = [
     cell: ({ row }) => {
       const websiteUrl = row.original.website;
       return (
-        <a
+        <Link
           href={websiteUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 text-sm text-blue-500 hover:underline"
+          className="max-w-[150px] flex items-center space-x-1 gap-1 text-sm text-blue-500 hover:underline"
         >
-          <ExternalLink className="h-4 w-4" />
-          <span>{websiteUrl.replace(/^(https?:\/\/)?(www\.)?/, "")}</span>
-        </a>
+          <ExternalLink className="mr-1 h-4 w-4 flex-shrink-0" />
+          <span className=" truncate">
+            {websiteUrl.replace(/^(https?:\/\/)?(www\.)?/, "")}
+          </span>
+        </Link>
       );
     },
   },
@@ -59,7 +65,19 @@ export const companyColumns: ColumnDef<Company>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const company = row.original;
+      const open = useCompanyDialogStore((state) => state.open);
+      const handleOpenDialog = () => open(row.original);
+      const { mutate } = useDeleteCompany(row.original.id);
+      const setOpenWarningDialog = useHandleWarningDialog(
+        (state) => state.setOpenDialog
+      );
+      const handleDelete = () =>
+        setOpenWarningDialog({
+          isOpen: true,
+          title: "Delete Company",
+          description: "Are you sure you want to delete this company?",
+          onConfirm: () => mutate(),
+        });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -69,17 +87,21 @@ export const companyColumns: ColumnDef<Company>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href={`/admin/companies/${company.id}`}>
-                <Eye   />
-                <span>View Details</span>
-              </Link>
+            <DropdownMenuItem
+              onClick={handleOpenDialog}
+              className="cursor-pointer"
+            >
+              <Eye />
+              View Details
             </DropdownMenuItem>
- 
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive" className="cursor-pointer">
+            <DropdownMenuItem
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={handleDelete}
+            >
               <Trash2 />
-             Delete Company
+              Delete Company
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

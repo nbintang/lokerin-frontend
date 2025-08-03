@@ -37,14 +37,9 @@ const data = {
     },
     {
       title: "Get Help",
-      url: "#",
+      url: "/recruiter/help",
       icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
+    }, 
   ],
   accountPath: "/recruiter/account",
 };

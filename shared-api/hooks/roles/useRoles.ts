@@ -15,14 +15,14 @@ export const useRoles = (params?: RolesOptions) =>
     },
   });
 
-export type Roles= {
+export type Role= {
     id: string;
     name: string;
     createdAt: string;
     updatedAt: string;
   }
 export type RolesResponse = {
-  roles: Array<Roles>;
+  roles: Array<Role>;
   page: number;
   limit: number;
   total: number;

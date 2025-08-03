@@ -68,14 +68,9 @@ const data = {
     },
     {
       title: "Get Help",
-      url: "#",
+      url: "/applier/help",
       icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
+    }, 
   ],
   accountPath: '/applier/account',
 };

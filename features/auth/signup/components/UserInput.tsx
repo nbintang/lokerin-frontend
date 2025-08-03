@@ -10,7 +10,7 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { UserSchema } from "../schema";
 
-const UserForm = () => {
+const UserInput = () => {
   const form = useFormContext<UserSchema>();
   return (
     <>
@@ -142,4 +142,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default UserInput;

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Icon, IconInnerShadowTop } from "@tabler/icons-react";
+import { Icon, IconBrandMetabrainz, IconInnerShadowTop } from "@tabler/icons-react";
 import { NavMain } from "@/components/dashboard/nav-main";
 import { NavSecondary } from "@/components/dashboard/nav-secondary";
 import { NavUser } from "@/components/dashboard/nav-user";
@@ -63,7 +63,7 @@ export function AppSidebar({
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link href="#">
-                <IconInnerShadowTop className="!size-5" />
+                <IconBrandMetabrainz className="!size-5" />
                 <span className="text-base font-semibold">Lokerin</span>
               </Link>
             </SidebarMenuButton>

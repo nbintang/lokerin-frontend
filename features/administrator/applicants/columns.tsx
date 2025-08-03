@@ -18,10 +18,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CircleAlertIcon } from "lucide-react";
+import { CircleAlertIcon, Trash2, UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
+import { useDeleteApplicant } from "@/shared-api/hooks/job-applicants/useDeleteJobApplicant";
+import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
 
 export const jobAppColumns: ColumnDef<Applier>[] = [
   {
@@ -124,6 +126,17 @@ export const jobAppColumns: ColumnDef<Applier>[] = [
     id: "actions",
     header: () => null,
     cell: ({ row }) => {
+      const { mutate } = useDeleteApplicant(row.original.id);
+      const setOpenWarningDialog = useHandleWarningDialog(
+        (s) => s.setOpenDialog
+      );
+      const handleDelete = () =>
+        setOpenWarningDialog({
+          isOpen: true,
+          title: "Eliminate Applicant",
+          description: "Are you sure you want to Eliminate this applicant?",
+          onConfirm: () => mutate(),
+        });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -138,11 +151,21 @@ export const jobAppColumns: ColumnDef<Applier>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <Link href={`/administrator/dashboard/applicants/${row.original.id}`}>
+              <Link
+                href={`/administrator/dashboard/applicants/${row.original.id}`}
+              >
+                <UserIcon />
                 View {row.original.user.name.split(" ")[0]}'s profile
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Make a copy</DropdownMenuItem>
+            <DropdownMenuItem
+              variant="destructive"
+              className="cursor-pointer  "
+              onClick={handleDelete}
+            >
+              <Trash2 />
+              Eliminate Applicant
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

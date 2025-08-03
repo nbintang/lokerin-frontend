@@ -23,7 +23,7 @@ import { CloudUpload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MediaSchema } from "../schema";
 
-const ResumeForm = () => {
+const ResumeInput = () => {
   const form = useFormContext<MediaSchema>();
   return (
     <FormField
@@ -90,4 +90,4 @@ const ResumeForm = () => {
   );
 };
 
-export default ResumeForm;
+export default ResumeInput;

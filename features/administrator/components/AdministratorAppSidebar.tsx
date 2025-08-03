@@ -79,13 +79,8 @@ const data = {
     },
     {
       title: "Get Help",
-      url: "#",
+      url: "/administrator/help",
       icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
     },
   ],
   accountPath: "/administrator/account",

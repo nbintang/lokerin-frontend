@@ -11,7 +11,7 @@ import {
   Applier,
   useApplicants,
 } from "@/shared-api/hooks/job-applicants/useApplicants";
-import { jobAppColumns } from "@/features/recruiter/job-applications/columns";
+import { jobAppColumns } from "@/features/administrator/applicants/columns";
 import { useSearchParams } from "next/navigation";
 
 export default function ApplicantsDashboardPage() {

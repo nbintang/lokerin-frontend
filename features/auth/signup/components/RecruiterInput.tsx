@@ -23,7 +23,7 @@ import { CommandItem } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { AsyncSelectRoles } from "@/components/ui/async-select-roles";
 
-const RecruiterForm = () => {
+const RecruiterInput = () => {
   const form = useFormContext<RecruiterSchema>();
 
   return (
@@ -178,4 +178,4 @@ const RecruiterForm = () => {
   );
 };
 
-export default RecruiterForm;
+export default RecruiterInput;

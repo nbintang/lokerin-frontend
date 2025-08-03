@@ -11,7 +11,7 @@ import { CameraIcon } from "lucide-react";
 const accept: Record<string, string[]> = {
   "image/*": [".png", ".jpg", ".jpeg"],
 };
-const AvatarForm = () => {
+const AvatarInput = () => {
   const form = useFormContext<MediaSchema>();
   const [selectedFile, setSelectedFile] = useState<FileWithPreview | null>(
     null
@@ -89,4 +89,4 @@ const AvatarForm = () => {
   );
 };
 
-export default AvatarForm;
+export default AvatarInput;

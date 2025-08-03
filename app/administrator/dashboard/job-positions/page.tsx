@@ -1,31 +1,33 @@
 "use client";
 import {
-    TableFilters,
-    TableMain,
-    TablePagination,
-    TableSkeleton,
-    useTable,
+  TableFilters,
+  TableMain,
+  TablePagination,
+  TableSkeleton,
+  useTable,
 } from "@/components/dashboard/data-table";
 import { Button } from "@/components/ui/button";
-import { Jobs } from "@/shared-api/hooks/jobs/useJobs";
-
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { IconBriefcase2 } from "@tabler/icons-react";
-import { Roles, useRoles } from "@/shared-api/hooks/roles/useRoles";
-import { positiionColumns } from "@/features/administrator/positions/columns";
+import { Role, useRoles } from "@/shared-api/hooks/roles/useRoles";
+import { positionColumns } from "@/features/administrator/positions/columns";
+import { usePositionDialogStore } from "@/features/administrator/positions/hooks/usePositionDialogStore";
 
 export default function JobDashboard() {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
+  const open = usePositionDialogStore((state) => state.open);
   const { data: user, isLoading: isProfileLoading } = useProfile();
-  const positions = useRoles()
-  const { table } = useTable<Roles>({
-    columns: positiionColumns,
+  const positions = useRoles();
+  const { table } = useTable<Role>({
+    columns: positionColumns,
     data: positions.data?.roles ?? [],
   });
+
+  const handleOpenDialog = () => open();
+
   if (isProfileLoading || positions.isLoading) {
     return <TableSkeleton />;
   }
@@ -40,16 +42,14 @@ export default function JobDashboard() {
       {positions.isSuccess && positions.data && (
         <>
           <div className="flex items-start gap-x-3 justify-start rounded-b-md  ">
-            <TableFilters<Roles> table={table} />
-            <Button asChild>
-              <Link href="/recruiter/dashboard/jobs/new">
-                <IconBriefcase2 />
-                Add New Roles
-              </Link>
+            <TableFilters<Role> table={table} />
+            <Button onClick={handleOpenDialog}>
+              <IconBriefcase2 />
+              Add New Roles
             </Button>
           </div>
-          <TableMain<Roles> table={table} />
-          <TablePagination<Roles>
+          <TableMain<Role> table={table} />
+          <TablePagination<Role>
             limit={limit}
             page={page}
             table={table}

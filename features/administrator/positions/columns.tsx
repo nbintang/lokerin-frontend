@@ -5,13 +5,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Roles } from "@/shared-api/hooks/roles/useRoles";
+import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
+import { useDeleteRole } from "@/shared-api/hooks/roles/useDeleteRole";
+import { Role } from "@/shared-api/hooks/roles/useRoles";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { formatDistanceToNow } from "date-fns";
 import { Eye, Trash2, UserIcon } from "lucide-react";
 import Link from "next/link";
 
-export const positiionColumns: ColumnDef<Roles>[] = [
+export const positionColumns: ColumnDef<Role>[] = [
   {
     accessorKey: "name",
     header: "Position",
@@ -19,11 +22,26 @@ export const positiionColumns: ColumnDef<Roles>[] = [
   {
     accessorKey: "createdAt",
     header: "Date Added",
+    cell: ({ cell }) => {
+      const date = new Date(cell.getValue<string>());
+      return formatDistanceToNow(date, { addSuffix: true });
+    },
   },
   {
     id: "actions",
     header: () => null,
-    cell: () => {
+    cell: ({ row }) => {
+      const { mutate } = useDeleteRole(row.original.id);
+      const setOpenWarningDialog = useHandleWarningDialog(
+        (s) => s.setOpenDialog
+      );
+      const handleDelete = () =>
+        setOpenWarningDialog({
+          isOpen: true,
+          title: "Delete Position",
+          description: "Are you sure you want to delete this position?",
+          onConfirm: () => mutate(),
+        });
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -33,24 +51,13 @@ export const positiionColumns: ColumnDef<Roles>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href={``}>
-                <Eye />
-                <span>View Recruiter Profile</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href={`/ `}>
-                <UserIcon />
-                <span>View User Account</span>
-              </Link>
-            </DropdownMenuItem>
             <DropdownMenuItem
               variant="destructive"
-              className="cursor-pointer  "
+              className="cursor-pointer"
+              onClick={handleDelete}
             >
               <Trash2 />
-              Delete User
+              Delete Position
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

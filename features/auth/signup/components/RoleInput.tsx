@@ -18,7 +18,7 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { UserSchema } from "../schema";
 
-const RoleForm = () => {
+const RoleInput = () => {
   const form = useFormContext<UserSchema>();
   return (
     <FormField
@@ -51,4 +51,4 @@ const RoleForm = () => {
   );
 };
 
-export default RoleForm;
+export default RoleInput;

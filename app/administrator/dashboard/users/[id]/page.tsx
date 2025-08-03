@@ -62,7 +62,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   }
 
   const getRoleBadgeVariant = (role: string) => {
-    return role === "RECRUITER" ? "default" : "secondary";
+    return role === "RECRUITER" ? "secondary" : "outline";
   };
 
   const getRoleIcon = (role: string) => {

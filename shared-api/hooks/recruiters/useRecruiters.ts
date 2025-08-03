@@ -29,6 +29,12 @@ export interface Recruiter {
   about: string;
   createdAt: string;
   updatedAt: string;
+  position: {
+    id: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+  };
   user: {
     id: string;
     email: string;
