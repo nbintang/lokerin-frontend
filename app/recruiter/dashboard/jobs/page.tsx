@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Jobs, useJobs } from "@/shared-api/hooks/jobs/useJobs";
 
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
-import { FilePlus2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { IconBriefcase2 } from "@tabler/icons-react";

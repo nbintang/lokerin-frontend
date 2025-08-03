@@ -1,15 +1,13 @@
-import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-export const TableSkeleton = ({ className, wrapperClassName }: { className?: string; wrapperClassName?:string; }) => (
+export const TableSkeleton = ({
+  className,
+  wrapperClassName,
+}: {
+  className?: string;
+  wrapperClassName?: string;
+}) => (
   <div className={cn("flex flex-1 flex-col", wrapperClassName)}>
     <CardHeader className="flex flex-row   items-center justify-start mb-2 gap-4 px-2">
       <Skeleton className="h-7 w-1/3 md:w-1/12  " />

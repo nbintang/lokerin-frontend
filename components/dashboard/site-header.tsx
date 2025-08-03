@@ -1,11 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { DynamicBreadcrumb } from "../ui/dynamic-breadcrumb";
 import ToggleTheme from "../ThemeToggle";
-import { useApplicant } from "@/shared-api/hooks/job-applicants/useApplicant";
 
 export function SiteHeader() {
   const pathname = usePathname();

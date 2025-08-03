@@ -6,11 +6,8 @@ import {
   TableSkeleton,
   useTable,
 } from "@/components/dashboard/data-table";
-import { recruiterJobColumns } from "@/features/recruiter/job/columns";
 import { Button } from "@/components/ui/button";
 import { type Jobs, useJobs } from "@/shared-api/hooks/jobs/useJobs";
-import { FilePlus2 } from "lucide-react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { applierJobColumns } from "@/features/applier/job/columns";
 import { IconSparkles } from "@tabler/icons-react";

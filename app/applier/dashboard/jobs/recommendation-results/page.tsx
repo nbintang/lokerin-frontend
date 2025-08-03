@@ -1,7 +1,6 @@
 "use client";
 
 import { Confetti, ConfettiRef } from "@/components/magicui/confetti";
-import NotFound from "@/components/NotFound";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,11 +16,10 @@ import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
 import { cn } from "@/lib/utils";
 import { useRecommendationJobStore } from "@/shared-api/stores/useRecommendationJobStore";
 import { IconCash } from "@tabler/icons-react";
-import confetti from "canvas-confetti";
 import { Building2, MapPin, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 function getRankColor(index: number) {
   switch (index) {

@@ -1,20 +1,16 @@
 "use client";
 import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { Card, CardContent } from "@/components/ui/card";
-  
+
 import { use } from "react";
 import CompanyImageExample from "@/public/placeholder/company-example.jpeg";
 import { isValidImageUrl } from "@/helpers/validate-image-url";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   CalendarDays,
   Globe,
-  Mail,
-  Phone,
   MapPin,
-  DollarSign,
   Briefcase,
   CheckCircle,
   XCircle,
@@ -32,7 +28,11 @@ import {
 } from "@/components/ui/tooltip";
 import { useAppliedJob } from "@/shared-api/hooks/applied-job/useAppliedJob";
 
-export default function AppliedDetailPages({ params }: { params: Promise<{ id: string }> }) {
+export default function AppliedDetailPages({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = use(params);
   const { data: appliedJob, isLoading, error } = useAppliedJob({ id });
 
@@ -66,33 +66,37 @@ export default function AppliedDetailPages({ params }: { params: Promise<{ id: s
     switch (status) {
       case "ACCEPTED":
         return {
-          color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+          color:
+            "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
           icon: CheckCircle,
-          label: "Accepted"
+          label: "Accepted",
         };
       case "REJECTED":
         return {
           color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
           icon: XCircle,
-          label: "Rejected"
+          label: "Rejected",
         };
       case "REVIEWED":
         return {
-          color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+          color:
+            "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
           icon: FileText,
-          label: "Under Review"
+          label: "Under Review",
         };
       case "APPLIED":
         return {
-          color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+          color:
+            "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
           icon: Clock,
-          label: "Applied"
+          label: "Applied",
         };
       default:
         return {
-          color: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
+          color:
+            "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
           icon: Clock,
-          label: "Unknown"
+          label: "Unknown",
         };
     }
   };
@@ -154,7 +158,7 @@ export default function AppliedDetailPages({ params }: { params: Promise<{ id: s
                             <p className="w-[150px]">{location}</p>
                           </TooltipContent>
                         </Tooltip>
-                        
+
                         {/* Application Status Badge */}
                         <Badge
                           className={cn(
@@ -168,39 +172,44 @@ export default function AppliedDetailPages({ params }: { params: Promise<{ id: s
                       </div>
                     </div>
                   </div>
- 
                 </div>
               </div>
 
               <div className="p-4 sm:p-6 space-y-6">
                 {/* Application Status Information */}
                 <div>
-                  <h2 className="text-lg font-semibold mb-3">Application Status</h2>
-                     <div className="grid grid-cols-1   gap-4">
-                        <div className="flex items-center space-x-3 text-sm">
-                          <CalendarDays className="w-4 h-4 text-muted-foreground" />
-                          <div>
-                            <span className="font-medium">Applied:</span>
-                            <span className="ml-1">{format(new Date(appliedAt), "dd MMMM yyyy")}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-3 text-sm">
-                          <StatusIcon className="w-4 h-4 text-muted-foreground" />
-                          <div>
-                            <span className="font-medium">Status:</span>
-                            <span className="ml-1">{statusConfig.label}</span>
-                          </div>
-                        </div>
-                        {updatedAt !== appliedAt && (
-                          <div className="flex items-center space-x-3 text-sm sm:col-span-2">
-                            <Clock className="w-4 h-4 text-muted-foreground" />
-                            <div>
-                              <span className="font-medium">Last Updated:</span>
-                              <span className="ml-1">{format(new Date(updatedAt), "dd MMMM yyyy")}</span>
-                            </div>
-                          </div>
-                        )}
+                  <h2 className="text-lg font-semibold mb-3">
+                    Application Status
+                  </h2>
+                  <div className="grid grid-cols-1   gap-4">
+                    <div className="flex items-center space-x-3 text-sm">
+                      <CalendarDays className="w-4 h-4 text-muted-foreground" />
+                      <div>
+                        <span className="font-medium">Applied:</span>
+                        <span className="ml-1">
+                          {format(new Date(appliedAt), "dd MMMM yyyy")}
+                        </span>
                       </div>
+                    </div>
+                    <div className="flex items-center space-x-3 text-sm">
+                      <StatusIcon className="w-4 h-4 text-muted-foreground" />
+                      <div>
+                        <span className="font-medium">Status:</span>
+                        <span className="ml-1">{statusConfig.label}</span>
+                      </div>
+                    </div>
+                    {updatedAt !== appliedAt && (
+                      <div className="flex items-center space-x-3 text-sm sm:col-span-2">
+                        <Clock className="w-4 h-4 text-muted-foreground" />
+                        <div>
+                          <span className="font-medium">Last Updated:</span>
+                          <span className="ml-1">
+                            {format(new Date(updatedAt), "dd MMMM yyyy")}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Job Description */}
@@ -227,7 +236,7 @@ export default function AppliedDetailPages({ params }: { params: Promise<{ id: s
                     </div>
                   </div>
                 </div>
-     
+
                 {/* Company Information */}
                 <div>
                   <h2 className="text-lg font-semibold mb-3">Company</h2>

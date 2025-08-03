@@ -5,7 +5,6 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 import { BASE_URL } from "@/shared-api/constants";
-import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import { isExpiredToken } from "../helpers/isExpiredToken";
 import Cookies from "js-cookie";
 

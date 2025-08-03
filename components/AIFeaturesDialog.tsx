@@ -29,17 +29,14 @@ import {
   FileUploadList,
   FileUploadTrigger,
 } from "../components/ui/file-upload";
-import { CloudUpload, Loader2, LoaderCircleIcon, X } from "lucide-react";
+import { CloudUpload, Loader2, X } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { IconSparkles } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { useRecommendJobs } from "@/shared-api/hooks/jobs/useRecommendJobs";
 import { useProfile } from "@/shared-api/hooks/profile/useProfile";
-import { useRouter } from "next/navigation";
 import { zodResumeSchema } from "@/schemas/resumeSchema";
 import { AuroraText } from "../components/magicui/aurora-text";
-import { AnimatedGradientText } from "../components/magicui/animated-gradient-text";
-import GradientBorderButton from "../components/GradientBorderButton";
 import { SparklesText } from "../components/magicui/sparkles-text";
 
 const FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -56,7 +53,6 @@ const AIFeaturesDialog = () => {
       setOpen: state.setOpen,
     }))
   );
-  const router = useRouter();
 
   const [isClicking, setIsClicking] = useState<boolean>(false);
   const form = useForm<FormValues>({
@@ -71,20 +67,28 @@ const AIFeaturesDialog = () => {
     isPending || isClicking || form.formState.isSubmitting;
   const handleClickOwnResume = async () => {
     setIsClicking(true);
-    await mutateAsync({
-      resumeUrl: profile?.cvUrl,
-      minScore: 0.43,
-    });
-    router.push("/applier/dashboard/jobs/recommendation-results");
-    setIsClicking(false);
-    setOpen(false);
+    try {
+      await mutateAsync({
+        resumeUrl: profile?.cvUrl,
+        minScore: 0.43,
+      });
+      form.reset();
+      setOpen(true);
+    } catch (error) {
+      setIsClicking(false);
+    }
   };
   const onSubmit = React.useCallback(
     async (data: FormValues) => {
       const resumeFile = data.files[0];
       const minScore = data.minScore;
-      await mutateAsync({ resumeFile, minScore });
-      setOpen(false);
+      try {
+        await mutateAsync({ resumeFile, minScore });
+        form.reset();
+        setOpen(false);
+      } catch (error) {
+        console.error(error);
+      }
     },
     [mutateAsync]
   );
@@ -116,8 +120,8 @@ const AIFeaturesDialog = () => {
               <IconSparkles className="text-sky-400" />
             </SparklesText>
             <AuroraText colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}>
-                AI Recommendation
-              </AuroraText>
+              AI Recommendation
+            </AuroraText>
           </div>
           <DialogDescription>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -136,7 +140,15 @@ const AIFeaturesDialog = () => {
                 <FormItem className="flex-1 flex flex-col">
                   {(isPending || form.formState.isSubmitting) && !isClicking ? (
                     <div className="grid place-items-center h-full w-full">
-                      <LoaderCircleIcon className="size-12 animate-spin text-sky-400" />
+                      <div className="flex flex-col items-center gap-4 animate-fade-in">
+                        <Loader2 className="animate-spin  text-sky-700 size-10" />
+                        <AuroraText
+                          colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
+                          className="text-muted-foreground text-base tracking-wide text-center"
+                        >
+                          Analyzing, please wait...
+                        </AuroraText>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -159,7 +171,9 @@ const AIFeaturesDialog = () => {
                               : "cursor-pointer"
                           )}
                           multiple
-                          disabled={isOperationInProgress}
+                          disabled={
+                            form.formState.isValid || isOperationInProgress
+                          }
                         >
                           <FileUploadDropzone
                             className={cn(
@@ -202,7 +216,7 @@ const AIFeaturesDialog = () => {
                       {/* <FormDescription>
                     Upload up to 2 images up to 5MB each.
                   </FormDescription> */}
-                      <FormMessage />
+                      {form.formState.errors.files && <FormMessage />}
                     </>
                   )}
                 </FormItem>

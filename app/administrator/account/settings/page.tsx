@@ -18,16 +18,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import Link from "next/link";
-import { CameraIcon, FileSymlink } from "lucide-react";
+import { CameraIcon } from "lucide-react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { FileWithPreview, ImageCropper } from "@/components/ui/image-croppper";
 import { Separator } from "@/components/ui/separator";
 import { useUpdateProfile } from "@/shared-api/hooks/profile/useUpdateProfile";
 import useUploadImage from "@/shared-api/hooks/media/useUploadImage";
-import useUploadDocument from "@/shared-api/hooks/media/useUploadDocument";
 import { zodImageSchema } from "@/schemas/imageSchema";
-import { zodResumeSchema } from "@/schemas/resumeSchema";
 
 const accept: Record<string, string[]> = {
   "image/*": [".png", ".jpg", ".jpeg"],

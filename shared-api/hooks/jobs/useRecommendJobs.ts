@@ -1,11 +1,7 @@
 import { lokerinAPI } from "@/shared-api/config/api";
 import { useRecommendationJobStore } from "@/shared-api/stores/useRecommendationJobStore";
 import { useProgress } from "@bprogress/next";
-import {
-  useMutation,
-  UseMutationOptions,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

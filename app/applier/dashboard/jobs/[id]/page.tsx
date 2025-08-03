@@ -2,7 +2,7 @@
 import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { useJob } from "@/shared-api/hooks/jobs/useJob";
-import { use, useEffect } from "react";
+import { use } from "react";
 import CompanyImageExample from "@/public/placeholder/company-example.jpeg";
 import { isValidImageUrl } from "@/helpers/validate-image-url";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -10,19 +10,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   CalendarDays,
-  Globe,
-  Mail,
-  Phone,
-  MapPin,
-  DollarSign,
-  Briefcase,
+  Globe, MapPin, Briefcase
 } from "lucide-react";
 import Link from "next/link";
 import {
-  convertApiSalaryToRange,
-  formatSalaryRangePublic,
+  formatSalaryRangePublic
 } from "@/helpers/concurrency-converter";
-import { cn } from "@/lib/utils";
 import { IconCash } from "@tabler/icons-react";
 import { format } from "date-fns";
 import {
@@ -33,8 +26,6 @@ import {
 } from "@/components/ui/tooltip";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
 import { useApplyJob } from "@/shared-api/hooks/applied-job/useApplyJob";
-import { useAppliedJob } from "@/shared-api/hooks/applied-job/useAppliedJob";
-import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

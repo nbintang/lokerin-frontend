@@ -6,8 +6,6 @@ import { useUsers } from "@/shared-api/hooks/users/useUsers";
 import { useRecruiters } from "@/shared-api/hooks/recruiters/useRecruiters";
 import { useJobApplicants } from "@/shared-api/hooks/job-applicants/useJobApplicants";
 import { useJobs } from "@/shared-api/hooks/jobs/useJobs";
-import { Skeleton } from "@/components/ui/skeleton"; // Pastikan path ini sesuai dengan struktur proyek Anda
-import { AlertTriangle } from "lucide-react";
 import { DashboardSkeleton } from "@/features/administrator/components/DashboardSkeleton";
 import { ErrorDisplay } from "@/features/administrator/components/DashboardError";
  

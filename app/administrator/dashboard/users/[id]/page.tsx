@@ -3,13 +3,7 @@ import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
 import { useDeleteUser } from "@/shared-api/hooks/users/useDeleteUser";
@@ -18,7 +12,6 @@ import { format } from "date-fns";
 import {
   CalendarDays,
   Mail,
-  Pen,
   Phone,
   Shield,
   ShieldCheck,
@@ -28,7 +21,6 @@ import {
   Briefcase,
   Trash2,
 } from "lucide-react";
-import Link from "next/link";
 import { use } from "react";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {

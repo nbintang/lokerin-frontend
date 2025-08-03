@@ -1,7 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { Icon, IconBrandMetabrainz, IconInnerShadowTop } from "@tabler/icons-react";
+import {
+  Icon,
+  IconBrandAirtable,
+  IconBrandMetabrainz,
+  IconInnerShadowTop,
+} from "@tabler/icons-react";
 import { NavMain } from "@/components/dashboard/nav-main";
 import { NavSecondary } from "@/components/dashboard/nav-secondary";
 import { NavUser } from "@/components/dashboard/nav-user";
@@ -20,7 +25,6 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { LucideIcon } from "lucide-react";
 import { NavCollapsible } from "./nav-collapsible";
-import Link from "next/link";
 
 export function AppSidebar({
   navMain,
@@ -58,14 +62,9 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
-              <Link href="#">
-                <IconBrandMetabrainz className="!size-5" />
-                <span className="text-base font-semibold">Lokerin</span>
-              </Link>
+            <SidebarMenuButton className="data-[slot=sidebar-menu-button]:!p-1.5">
+              <IconBrandAirtable className="!size-5" />
+              <span className="text-base font-semibold">Lokerin</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

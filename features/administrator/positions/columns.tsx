@@ -11,8 +11,7 @@ import { Role } from "@/shared-api/hooks/roles/useRoles";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDistanceToNow } from "date-fns";
-import { Eye, Trash2, UserIcon } from "lucide-react";
-import Link from "next/link";
+import { Trash2 } from "lucide-react";
 
 export const positionColumns: ColumnDef<Role>[] = [
   {

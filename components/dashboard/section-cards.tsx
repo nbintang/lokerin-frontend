@@ -1,4 +1,4 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import { IconTrendingUp } from "@tabler/icons-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,10 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  JobApplicantResponse,
-  useApplicants,
+  JobApplicantResponse
 } from "@/shared-api/hooks/job-applicants/useApplicants";
-import { LoaderCircleIcon } from "lucide-react";
 import { UseQueryResult } from "@tanstack/react-query";
 import { Skeleton } from "../ui/skeleton";
 

@@ -11,9 +11,7 @@ export const TablePagination = <TData,>({
   limit: number;
   table: Table<TData>;
   total: number;
-}) => {
-  const selectedRowCount = table.getFilteredSelectedRowModel().rows.length;
-  const visibleRowCountOnPage = table.getPaginationRowModel().rows.length;
+}) => { 
   return (
     <div className="flex justify-center md:justify-end w-full flex-wrap-reverse items-center gap-4 mt-3 px-3">
       <PaginationWithLinks page={page} pageSize={limit} totalCount={total} />

@@ -1,7 +1,5 @@
 import { cn } from "@/lib/utils";
-import { IconSparkles } from "@tabler/icons-react";
 import React from "react";
-import { AnimatedGradientText } from "./magicui/animated-gradient-text";
 
 const GradientBorderButton = ({ children, className, ...props }: React.ComponentProps<"button">) => {
   return (

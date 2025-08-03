@@ -10,10 +10,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Eye, Pencil, ExternalLink, Trash2 } from "lucide-react";
+import { Eye, ExternalLink, Trash2 } from "lucide-react";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { Company } from "@/shared-api/hooks/companies/useCompanies";
-import { useCompany } from "@/shared-api/hooks/companies/useCompany";
 import { useCompanyDialogStore } from "../hooks/useCompanyDialogStore";
 import { useDeleteCompany } from "@/shared-api/hooks/companies/useDeleteCompany";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";

@@ -3,14 +3,12 @@
 import * as React from "react";
 import {
   IconHelp,
-  IconUsers,
-  IconSearch,
-  IconSettings,
+  IconUsers, IconSettings,
   IconUserCheck,
   IconUserStar,
   IconFileText,
   IconBriefcase2,
-  IconBuildingSkyscraper,
+  IconBuildingSkyscraper
 } from "@tabler/icons-react";
 
 import { Sidebar } from "@/components/ui/sidebar";

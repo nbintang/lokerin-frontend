@@ -1,12 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  IconHelp,
-  IconListDetails,
-  IconSearch,
-  IconSettings,
-} from "@tabler/icons-react";
+import { IconHelp, IconListDetails, IconSettings } from "@tabler/icons-react";
 
 import { Sidebar } from "@/components/ui/sidebar";
 import {
@@ -70,9 +65,9 @@ const data = {
       title: "Get Help",
       url: "/applier/help",
       icon: IconHelp,
-    }, 
+    },
   ],
-  accountPath: '/applier/account',
+  accountPath: "/applier/account",
 };
 
 export function ApplierAppSidebar({

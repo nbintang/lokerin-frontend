@@ -1,6 +1,5 @@
 import { lokerinAPI } from "@/shared-api/config/api";
 import {
-  QueryOptions,
   useQuery,
   UseQueryOptions,
   UseQueryResult,
@@ -11,13 +10,12 @@ type JobQueryOptions = {
   name?: string;
   companyId?: string;
   postedBy?: string;
-  isPublic?: boolean 
+  isPublic?: boolean;
 };
 
 export const useJobs = (
   params?: JobQueryOptions,
-  options?: Omit<UseQueryOptions<JobsResponse, Error>, "queryFn" | "queryKey">,
- 
+  options?: Omit<UseQueryOptions<JobsResponse, Error>, "queryFn" | "queryKey">
 ): UseQueryResult<JobsResponse, Error> => {
   const { isPublic = true } = params || {};
   return useQuery<JobsResponse, Error>({
@@ -33,7 +31,7 @@ export const useJobs = (
     },
     ...options,
   });
-}
+};
 export interface JobsResponse {
   jobs: Array<Jobs>;
   page: number;

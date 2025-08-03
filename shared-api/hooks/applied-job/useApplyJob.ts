@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import z from "zod";
 
 export const useApplyJob = (id: string) => {
   const router = useRouter();

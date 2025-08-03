@@ -1,8 +1,8 @@
-import { ColumnDef } from "@tanstack/react-table"; 
+import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { MapPin, Calendar, Pen, Trash2 } from "lucide-react";
+import { MapPin, Calendar, Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import {
   DropdownMenu,
@@ -12,11 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { Marquee } from "@/components/magicui/marquee";
-import Link from "next/link";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
-import { useDeleteJob } from "@/shared-api/hooks/jobs/useDeleteJob"; 
-import { Jobs } from "@/shared-api/hooks/jobs/useJobs"; 
-import { formatSalaryRangePublic } from "@/helpers/concurrency-converter"; 
+import { useDeleteJob } from "@/shared-api/hooks/jobs/useDeleteJob";
+import { Jobs } from "@/shared-api/hooks/jobs/useJobs";
+import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
 export const adminJobColumns: ColumnDef<Jobs>[] = [
   {
     accessorKey: "role.name",

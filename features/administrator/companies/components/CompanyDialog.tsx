@@ -1,9 +1,7 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createDialogStore } from "@/hooks/createDialogStore";
-import { Company } from "@/shared-api/hooks/companies/useCompanies";
 import {
   accept,
   FileWithPreview,
@@ -30,7 +28,6 @@ import { useShallow } from "zustand/shallow";
 import { format } from "date-fns";
 import { useCreateCompany } from "@/shared-api/hooks/companies/useCreateCompany";
 import { useUpdateCompany } from "@/shared-api/hooks/companies/useUpdateCompany";
-import { off } from "process";
 import useUploadImage from "@/shared-api/hooks/media/useUploadImage";
 
 export const CompanyDialog = () => {

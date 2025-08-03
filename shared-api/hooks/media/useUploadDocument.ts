@@ -1,5 +1,4 @@
 import { lokerinAPI } from "@/shared-api/config/api";
-import { base64ToFile } from "@/shared-api/helpers/base64ToFile";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { toast } from "sonner";

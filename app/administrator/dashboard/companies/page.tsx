@@ -14,7 +14,6 @@ import {
   useCompanies,
 } from "@/shared-api/hooks/companies/useCompanies";
 import { Building2 } from "lucide-react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 export default function CompanyPage() {

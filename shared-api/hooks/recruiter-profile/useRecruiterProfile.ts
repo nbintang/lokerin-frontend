@@ -8,6 +8,7 @@ export const useRecruiterProfile = () => useQuery({
       const response = await lokerinAPI.get<RecruiterProfileResponse>(
         "/recruiters/profile"
       );
+      console.log(response.data)
       return response.data;
     },
   });

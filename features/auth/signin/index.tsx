@@ -19,13 +19,12 @@ import { toast } from "sonner";
 import { jwtDecode } from "@/shared-api/helpers/jwtDecode";
 import { useProgress } from "@bprogress/next";
 import z from "zod";
-import { lokerinAPI } from "@/shared-api/config/api";
 import axios, { isAxiosError } from "axios";
 import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import { BASE_URL } from "@/shared-api/constants";
 import Cookies from "js-cookie";
 const signInSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(8),
 });
 type SignIn = z.infer<typeof signInSchema>;

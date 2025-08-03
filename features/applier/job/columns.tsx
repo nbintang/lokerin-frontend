@@ -3,8 +3,7 @@ import { Jobs } from "@/shared-api/hooks/jobs/useJobs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { MapPin, Calendar, Briefcase, Info } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { MapPin, Briefcase, Info } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,

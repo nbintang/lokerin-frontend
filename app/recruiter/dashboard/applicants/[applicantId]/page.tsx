@@ -9,9 +9,7 @@ import {
   Mail,
   Phone,
   MapPin,
-  Briefcase,
   Globe,
-  User,
   Pen,
   CalendarDays,
   FileUser,
@@ -19,14 +17,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import ProfileSkeleton from "@/components/ProfileSkeleton";
 import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
 export default function Applicant({
@@ -176,7 +167,9 @@ export default function Applicant({
                       className="flex items-center space-x-3 max-w-sm text-sm "
                     >
                       <FileUser className="w-4 h-4 text-muted-foreground" />
-                      <span className="underline underline-offset-4 hover:text-primary">{user.name}</span>
+                      <span className="underline underline-offset-4 hover:text-primary">
+                        {user.name}
+                      </span>
                     </Link>
                   )}
                 </div>

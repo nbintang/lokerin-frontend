@@ -1,4 +1,3 @@
-import React from "react";
 import { useFormContext } from "react-hook-form";
 import { RecruiterSchema } from "../schema";
 import {
@@ -9,13 +8,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { AsyncSelect } from "@/components/ui/async-select";
 import {
   CompaniesResponse,
   Company,
-  useCompanies,
 } from "@/shared-api/hooks/companies/useCompanies";
 import { lokerinAPI } from "@/shared-api/config/api";
 import { AsyncSelectCompanies } from "@/components/ui/async-select-companies";
@@ -33,7 +29,9 @@ const RecruiterInput = () => {
         name="about"
         render={({ field }) => (
           <FormItem className="grid relative ">
-            <FormLabel className="after:content-['*'] after:ml-1 after:text-red-500">About You</FormLabel>
+            <FormLabel className="after:content-['*'] after:ml-1 after:text-red-500">
+              About You
+            </FormLabel>
             <FormControl>
               <Textarea
                 rows={4}
@@ -44,7 +42,7 @@ const RecruiterInput = () => {
                 {...field}
               />
             </FormControl>
-      
+
             <FormMessage />
           </FormItem>
         )}
@@ -54,7 +52,9 @@ const RecruiterInput = () => {
         name="companyId"
         render={({ field }) => (
           <FormItem className="grid relative ">
-            <FormLabel className="after:content-['*'] after:ml-1 after:text-red-500">Company</FormLabel>
+            <FormLabel className="after:content-['*'] after:ml-1 after:text-red-500">
+              Company
+            </FormLabel>
             <FormControl>
               <AsyncSelectCompanies<Company>
                 fetcher={async (query, page = 1, limit = 10) => {
@@ -96,7 +96,7 @@ const RecruiterInput = () => {
                 {...field}
               />
             </FormControl>
- 
+
             <FormMessage />
           </FormItem>
         )}
@@ -106,7 +106,9 @@ const RecruiterInput = () => {
         name="position"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="after:content-['*'] after:ml-1 after:text-red-500">Position</FormLabel>
+            <FormLabel className="after:content-['*'] after:ml-1 after:text-red-500">
+              Position
+            </FormLabel>
             <FormDescription>
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi
               quod consectetur ut.

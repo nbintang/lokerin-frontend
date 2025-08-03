@@ -1,5 +1,5 @@
 import { lokerinAPI } from "@/shared-api/config/api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { toast } from "sonner";
 import { Role } from "./useRoles";
