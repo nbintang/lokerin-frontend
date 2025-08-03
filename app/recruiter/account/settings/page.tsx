@@ -320,7 +320,7 @@ export default function Settings() {
                     <FormItem>
                       <FormLabel>About</FormLabel>
                       <FormDescription>
-                        Tell us about yourself, your experience, and what you're
+                        Tell us about yourself, your experience, and what you&apos;re
                         looking for.
                       </FormDescription>
                       <FormControl>
@@ -388,7 +388,7 @@ export default function Settings() {
                           notFound={(name, onSelect) => (
                             <div className="flex justify-center items-center flex-col h-[90px]">
                               <div className="text-xs text-muted-foreground">
-                                Role "{name}" not found
+                                Role &quot;{name}&quot; not found
                               </div>
                               <CommandItem
                                 className="!bg-transparent justify-center"
@@ -448,7 +448,7 @@ export default function Settings() {
                       </FormDescription>
                       <FormControl>
                         <Textarea
-                          placeholder="Describe your company's mission and services..."
+                          placeholder="Describe your company&apos;s mission and services..."
                           className="min-h-[80px]"
                           disabled
                           {...field}

@@ -1,12 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Icon,
-  IconBrandAirtable,
-  IconBrandMetabrainz,
-  IconInnerShadowTop,
-} from "@tabler/icons-react";
+import { Icon, IconBrandAirtable } from "@tabler/icons-react";
 import { NavMain } from "@/components/dashboard/nav-main";
 import { NavSecondary } from "@/components/dashboard/nav-secondary";
 import { NavUser } from "@/components/dashboard/nav-user";

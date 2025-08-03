@@ -7,10 +7,7 @@ import {
   useTable,
 } from "@/components/dashboard/data-table";
 import { appliedJobColumns } from "@/features/applier/applied-job/columns";
-import { 
-  AppliedJobsResponse,
-  useAppliedJobs,
-} from "@/shared-api/hooks/applied-job/useAppliedJobs";
+import { useAppliedJobs } from "@/shared-api/hooks/applied-job/useAppliedJobs";
 import { useSearchParams } from "next/navigation";
 import { use } from "react";
 import { AppliedJobResponse } from "@/shared-api/hooks/applied-job/useAppliedJob";
@@ -27,10 +24,9 @@ export default function StatusPages({
   const {
     data: appliedJobs,
     isLoading,
-    isError,
-    error,
+    isError, 
     isSuccess,
-  } = useAppliedJobs({page, limit, status});
+  } = useAppliedJobs({ page, limit, status });
   const { table } = useTable<AppliedJobResponse>({
     columns: appliedJobColumns,
     data: appliedJobs?.appliedJobs ?? [],

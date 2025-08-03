@@ -73,7 +73,7 @@ export default function Settings() {
     setSelectedFile(fileWithPreview);
     setDialogOpen(true);
           form.trigger("avatar");
-  }, []);
+  }, [ form]);
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept,

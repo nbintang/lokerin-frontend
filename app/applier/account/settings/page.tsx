@@ -106,10 +106,10 @@ export default function Settings() {
   const onSubmit = async (data: z.infer<typeof profileSchema>) => {
     const { avatar, cv, name } = data;
     const { secureUrl: avatarUrl } = await uploadImage.mutateAsync(
-      form.getValues("avatar") ?? ""
+      avatar ?? ""
     );
     const { secureUrl: cvUrl } = await uploadDocument.mutateAsync(
-      form.getValues("cv")?.[0] ?? ""
+      cv?.[0] ?? ""
     );
     console.log(data);
     mutate({
@@ -254,7 +254,7 @@ export default function Settings() {
               <FormField
                 control={form.control}
                 name="cv"
-                render={({ field }) => (
+                render={( ) => (
                   <FormItem>
                     <FormLabel>Resume</FormLabel>
                     <FormDescription>

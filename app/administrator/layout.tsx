@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { SiteHeader } from "@/components/dashboard/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { RecruiterAppSidebar } from "@/features/recruiter/components/RecruiterAppSidebar";
 import SelectStatusDialog from "@/components/SelectStatusDialog";
 import { AdministratorAppSidebar } from "@/features/administrator/components/AdministratorAppSidebar";
 export default async function AdminLayout({

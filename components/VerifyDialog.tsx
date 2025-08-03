@@ -11,7 +11,6 @@ import { useShallow } from "zustand/shallow";
 
 import { CheckCircle, Loader2, BadgeX } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useHandleVerifyDialog from "@/hooks/useHandleVerifyDialog";
 

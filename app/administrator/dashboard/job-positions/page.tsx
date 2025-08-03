@@ -7,7 +7,6 @@ import {
   useTable,
 } from "@/components/dashboard/data-table";
 import { Button } from "@/components/ui/button";
-import { useProfile } from "@/shared-api/hooks/profile/useProfile";
 import { useSearchParams } from "next/navigation";
 import { IconBriefcase2 } from "@tabler/icons-react";
 import { Role, useRoles } from "@/shared-api/hooks/roles/useRoles";
@@ -18,8 +17,7 @@ export default function JobDashboard() {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
-  const open = usePositionDialogStore((state) => state.open);
-  const { data: user, isLoading: isProfileLoading } = useProfile();
+  const open = usePositionDialogStore((state) => state.open); 
   const positions = useRoles();
   const { table } = useTable<Role>({
     columns: positionColumns,
@@ -28,7 +26,7 @@ export default function JobDashboard() {
 
   const handleOpenDialog = () => open();
 
-  if (isProfileLoading || positions.isLoading) {
+  if (  positions.isLoading) {
     return <TableSkeleton />;
   }
 

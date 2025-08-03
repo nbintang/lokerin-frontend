@@ -61,7 +61,7 @@ const AIFeaturesDialog = () => {
       files: [],
     },
   });
-  const { data: profile, isLoading } = useProfile();
+  const { data: profile } = useProfile();
   const { mutateAsync, isPending } = useRecommendJobs();
   const isOperationInProgress =
     isPending || isClicking || form.formState.isSubmitting;
@@ -75,6 +75,7 @@ const AIFeaturesDialog = () => {
       form.reset();
       setOpen(true);
     } catch (error) {
+      console.error(error);
       setIsClicking(false);
     }
   };
@@ -90,7 +91,7 @@ const AIFeaturesDialog = () => {
         console.error(error);
       }
     },
-    [mutateAsync]
+    [mutateAsync, form, setOpen]
   );
 
   return (

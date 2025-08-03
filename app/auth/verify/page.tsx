@@ -83,7 +83,7 @@ export default function VerifyPage() {
           isSuccessVerifying={isSuccess}
         />
         <p className="text-xs text-center text-muted-foreground mb-4">
-          Didn't receive the email? Check your spam folder or request a new
+          Didn&apos;t receive the email? Check your spam folder or request a new
           verification email.
         </p>
         <Button className="grid place-items-center " variant={"link"} asChild>

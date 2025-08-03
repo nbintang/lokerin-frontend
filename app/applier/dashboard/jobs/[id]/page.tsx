@@ -63,8 +63,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   // Destructure data from job response
   const { company, role, user, description, location, salaryRange, createdAt } =
-    job;
-  const recruiterPosition = user?.recruiterProfile?.position;
+    job; 
 
   return (
     <>

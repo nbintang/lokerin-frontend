@@ -12,6 +12,7 @@ export const TablePagination = <TData,>({
   table: Table<TData>;
   total: number;
 }) => { 
+  console.log(table)
   return (
     <div className="flex justify-center md:justify-end w-full flex-wrap-reverse items-center gap-4 mt-3 px-3">
       <PaginationWithLinks page={page} pageSize={limit} totalCount={total} />

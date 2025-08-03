@@ -1,28 +1,17 @@
 "use client";
-import React from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
 import { useShallow } from "zustand/shallow";
-import { useParams } from "next/navigation";
 import z from "zod";
 import { ApplicantResponse } from "@/shared-api/hooks/job-applicants/useApplicant";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem } from "./ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 import { Button } from "./ui/button";
 import { useUpdateApplicantStatus } from "@/shared-api/hooks/job-applicants/useUpdateApplicantStatus";
 

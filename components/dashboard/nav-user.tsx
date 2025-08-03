@@ -1,10 +1,8 @@
 "use client";
 
 import {
-  IconCreditCard,
   IconDotsVertical,
   IconLogout,
-  IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react";
 
@@ -12,7 +10,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -27,7 +24,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import { useProgress } from "@bprogress/next";
-import Link from "next/link"; 
 import { UserProfileResponse } from "@/shared-api/hooks/profile/type";
 
 export function NavUser({

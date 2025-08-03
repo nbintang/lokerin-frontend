@@ -92,7 +92,7 @@ export function NavCollapsible({
               >
                 <SidebarMenuItem
                   onClick={() => {
-                    state === "collapsed" && setOpen(true);
+                    if (state === "collapsed") setOpen(true);
                   }}
                 >
                   <CollapsibleTrigger asChild>

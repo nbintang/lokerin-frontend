@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 
-const GradientBorderButton = ({ children, className, ...props }: React.ComponentProps<"button">) => {
+const GradientBorderButton = ({ children, ...props }: React.ComponentProps<"button">) => {
   return (
     <button className="group relative mx-auto cursor-pointer flex items-center w-full gap-3 justify-center rounded-md px-4 py-2 shadow-[inset_0_-8px_10px_#8fdfff1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#8fdfff3f] "{...props}>
       <span

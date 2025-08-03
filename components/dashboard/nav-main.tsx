@@ -1,8 +1,7 @@
 "use client";
 
-import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react";
+import { type Icon } from "@tabler/icons-react";
 
-import { Button } from "@/components/ui/button";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -13,7 +12,6 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 
 export function NavMain({
@@ -34,7 +32,7 @@ export function NavMain({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
-                      isActive = {item.url === pathname}
+                isActive={item.url === pathname}
                 tooltip={item.title}
                 asChild
               >

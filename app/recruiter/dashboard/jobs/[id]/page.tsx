@@ -169,7 +169,7 @@ export default function NewJob({
                   notFound={(name, onSelect) => (
                     <div className="flex justify-center items-center flex-col h-[90px]">
                       <div className="text-xs text-muted-foreground">
-                        Role "{name}" not found
+                        Role &quot;{name}&quot; not found
                       </div>
                       <CommandItem
                         className="!bg-transparent justify-center"
