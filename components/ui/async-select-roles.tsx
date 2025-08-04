@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
@@ -133,7 +133,9 @@ export function AsyncSelectRoles<T>({
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
   });
-  const options = data?.pages.flatMap((page) => page.roles) ?? [];
+  const options = useMemo(() => {
+    return data?.pages.flatMap((page) => page.roles) ?? [];
+  }, [data]);
   const totalItems = data?.pages[0]?.total ?? 0;
   useEffect(() => {
     setSelectedValue(value);

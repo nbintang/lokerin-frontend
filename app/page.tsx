@@ -1,20 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Check,
-  ChevronRight,
-  Menu,
-  X,
-  ArrowRight,
+  Check, ArrowRight,
   Star,
   Zap,
   Shield,
   Users,
   BarChart,
-  Layers,
+  Layers
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,16 +21,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ToggleTheme from "@/components/ThemeToggle";
 import {
-  IconBrandAirtable,
   IconBrandAppleFilled,
   IconBrandAws,
   IconBrandGoogle,
   IconBrandMeta,
   IconBrandOpenai,
   IconBrandX,
-  IconSparkles,
+  IconSparkles
 } from "@tabler/icons-react";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import { InteractiveGridPattern } from "@/components/magicui/interactive-grid-pattern";
@@ -126,7 +119,7 @@ export default function LandingPage() {
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Lokerin is an AI-powered recruitment platform that connects
-                talent with the right opportunities. Whether you're hiring or
+                talent with the right opportunities. Whether you&apos;re hiring or
                 job-seeking, our smart recommendations and seamless tools make
                 the process faster, easier, and more personalized.
               </p>
@@ -211,7 +204,7 @@ export default function LandingPage() {
                   IconBrandAws,
                   IconBrandAppleFilled,
                 ].map((Icon, i) => (
-                  <Icon className="size-14 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0" />
+                  <Icon key={i} className="size-14 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0" />
                 ))}
               </div>
             </div>
@@ -367,7 +360,7 @@ export default function LandingPage() {
                 Loved by Teams Worldwide
               </h2>
               <p className="max-w-[800px] text-muted-foreground md:text-lg">
-                Don't just take our word for it. See what our customers have to
+                Don&apos;t just take our word for it. See what our customers have to
                 say about their experience.
               </p>
             </motion.div>
@@ -483,7 +476,7 @@ export default function LandingPage() {
                 Simple, Transparent Pricing
               </h2>
               <p className="max-w-[800px] text-muted-foreground md:text-lg">
-                Choose the plan that's right for your business. All plans
+                Choose the plan that&#39;s right for your business. All plans
                 include a 14-day free trial.
               </p>
             </motion.div>
@@ -842,9 +835,12 @@ export default function LandingPage() {
                   size="lg"
                   variant="secondary"
                   className="rounded-full h-12 px-8 text-base"
+                  asChild
                 >
-                  Start Free Trial
-                  <ArrowRight className="ml-2 size-4" />
+                <Link href={"/auth/signin"}>
+                    Start Free Trial
+                    <ArrowRight className="ml-2 size-4" />
+                  </Link>
                 </Button>
                 <Button
                   size="lg"

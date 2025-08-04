@@ -4,11 +4,9 @@ import {
   ArrowLeft,
   MapPin,
   Building2,
-  DollarSign,
   Clock,
   Globe,
   Calendar,
-  User,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,120 +16,9 @@ import { Separator } from "@/components/ui/separator";
 import { useJob } from "@/shared-api/hooks/jobs/useJob";
 import { formatDistanceToNow } from "date-fns";
 import { use } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { IconCash } from "@tabler/icons-react";
 import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
-
-function JobDetailSkeleton() {
-  return (
-    <div className="min-h-screen ">
-      <div className="container mx-auto px-4 py-8">
-        {/* Back Button Skeleton */}
-        <div className="mb-6">
-          <Skeleton className="h-5 w-24" />
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Job Header Skeleton */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <Skeleton className="h-16 w-16 rounded-full" />
-                    <div className="space-y-2">
-                      <Skeleton className="h-7 w-64" />
-                      <Skeleton className="h-5 w-40" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-6 w-20 rounded-full" />
-                </div>
-
-                <div className="flex flex-wrap items-center gap-6">
-                  {Array.from({ length: 4 }).map((_, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <Skeleton className="h-4 w-4" />
-                      <Skeleton className="h-4 w-20" />
-                    </div>
-                  ))}
-                </div>
-              </CardHeader>
-            </Card>
-
-            {/* Job Description Skeleton */}
-            <Card>
-              <CardHeader>
-                <Skeleton className="h-6 w-32" />
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {Array.from({ length: 6 }).map((_, index) => (
-                    <Skeleton key={index} className="h-4 w-full" />
-                  ))}
-                  <Skeleton className="h-4 w-3/4" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Apply Card Skeleton */}
-            <Card>
-              <CardContent className="pt-6">
-                <Skeleton className="h-12 w-full mb-4 rounded-md" />
-                <Skeleton className="h-12 w-full rounded-md" />
-              </CardContent>
-            </Card>
-
-            {/* Company Info Skeleton */}
-            <Card>
-              <CardHeader>
-                <Skeleton className="h-6 w-32" />
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-3/4" />
-                </div>
-
-                <Separator />
-
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Skeleton className="h-4 w-4" />
-                    <Skeleton className="h-4 w-32" />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Skeleton className="h-4 w-4" />
-                    <Skeleton className="h-4 w-24" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Job Details Skeleton */}
-            <Card>
-              <CardHeader>
-                <Skeleton className="h-6 w-24" />
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <div key={index} className="flex justify-between">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-4 w-20" />
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { JobDetailSkeleton } from "@/features/public/components/skeletons/JobDetailSkeleton";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -196,7 +83,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                   </Badge>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
+                <div className="flex flex-col items-start justify-center gap-6 text-muted-foreground">
                   <div className="flex items-center max-w-[200px] md:max-w-md gap-1">
                     <MapPin className="size-4 flex-shrink-0" />
                     <span className="truncate">{job.location}</span>
@@ -247,8 +134,13 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                     Similique culpa dolores placeat?
                   </p>
                 </div>
-                <Button size="lg" className="w-full mb-4">
-                  Apply Now
+                <Button
+                  size="lg"
+                  className="w-full mb-4"
+                  variant={"default"}
+                  asChild
+                >
+                  <Link href={"/auth/signin"}>Apply Now</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -271,6 +163,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                     <Link
                       href={job.company.website}
                       className="text-blue-600 hover:text-blue-700"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       {job.company.website}
                     </Link>
@@ -278,7 +172,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4 " />
                     <span>
-                      Founded in {new Date(job.company.createdAt).getFullYear()}
+                      Created at {new Date(job.company.createdAt).getFullYear()}
                     </span>
                   </div>
                 </div>
@@ -313,7 +207,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                 <div className="grid grid-cols-2">
                   <span className="text-muted-foreground">Salary:</span>
                   <span className="font-medium text-right">
-                    {job.salaryRange}
+                    {formatSalaryRangePublic(job.salaryRange)}
                   </span>
                 </div>
               </CardContent>

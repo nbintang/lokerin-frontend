@@ -465,7 +465,7 @@ export default function Settings() {
                     <FormItem>
                       <FormLabel>Company Website</FormLabel>
                       <FormDescription>
-                        Your company's official website URL.
+                        Your company&apos;s official website URL.
                       </FormDescription>
                       <FormControl>
                         <Input

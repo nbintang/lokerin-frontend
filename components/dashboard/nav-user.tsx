@@ -22,7 +22,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import { useProgress } from "@bprogress/next";
 import { UserProfileResponse } from "@/shared-api/hooks/profile/type";
 import Cookies from "js-cookie";
@@ -37,14 +36,15 @@ export function NavUser({
   user: UserProfileResponse;
 }) {
   const { isMobile } = useSidebar();
-  const router = useRouter();
-  const logout = useAuthStore((state) => state.logout);
+  const router = useRouter(); 
   const progress = useProgress();
   const handleLogout = () =>
     toast
       .promise(
         async () => (
-          await logout(), progress.start(), Cookies.remove("accessToken")
+          await lokerinAPI.delete("/auth/signout"),
+          progress.start(),
+          Cookies.remove("accessToken")
         ),
         {
           loading: "Logging out...",

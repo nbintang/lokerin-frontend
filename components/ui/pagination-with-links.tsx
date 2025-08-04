@@ -10,10 +10,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./pagination";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useProgress } from '@bprogress/next';
 
 export interface PaginationWithLinksProps {
   pageSizeSelectOptions?: {
@@ -45,7 +50,7 @@ export function PaginationWithLinks({
   totalCount,
   page,
   pageSearchParam,
-  className
+  className,
 }: PaginationWithLinksProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -61,7 +66,7 @@ export function PaginationWithLinks({
       return `${pathname}?${newSearchParams.toString()}`;
     },
 
-    [searchParams, pathname],
+    [searchParams, pathname, pageSearchParam]
   );
 
   const navToPageSize = useCallback(
@@ -72,7 +77,7 @@ export function PaginationWithLinks({
       newSearchParams.delete(pageSearchParam || "page"); // Clear the page number when changing page size
       router.push(`${pathname}?${newSearchParams.toString()}`);
     },
-    [searchParams, pathname],
+    [searchParams, pathname, router, pageSearchParam, pageSizeSelectOptions]
   );
 
   const renderPageNumbers = () => {
@@ -86,7 +91,7 @@ export function PaginationWithLinks({
             <PaginationLink href={buildLink(i)} isActive={page === i}>
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     } else {
@@ -95,14 +100,14 @@ export function PaginationWithLinks({
           <PaginationLink href={buildLink(1)} isActive={page === 1}>
             1
           </PaginationLink>
-        </PaginationItem>,
+        </PaginationItem>
       );
 
       if (page > 3) {
         items.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
@@ -115,7 +120,7 @@ export function PaginationWithLinks({
             <PaginationLink href={buildLink(i)} isActive={page === i}>
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
@@ -123,16 +128,19 @@ export function PaginationWithLinks({
         items.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
       items.push(
         <PaginationItem key={totalPageCount}>
-          <PaginationLink href={buildLink(totalPageCount)} isActive={page === totalPageCount}>
+          <PaginationLink
+            href={buildLink(totalPageCount)}
+            isActive={page === totalPageCount}
+          >
             {totalPageCount}
           </PaginationLink>
-        </PaginationItem>,
+        </PaginationItem>
       );
     }
 
@@ -140,7 +148,9 @@ export function PaginationWithLinks({
   };
 
   return (
-    <div className={cn("flex flex-col md:flex-row items-center gap-3 ", className)}>
+    <div
+      className={cn("flex flex-col md:flex-row items-center gap-3 ", className)}
+    >
       {pageSizeSelectOptions && (
         <div className="flex flex-col gap-4 flex-1">
           <SelectRowsPerPage
@@ -157,7 +167,9 @@ export function PaginationWithLinks({
               href={buildLink(Math.max(page - 1, 1))}
               aria-disabled={page === 1}
               tabIndex={page === 1 ? -1 : undefined}
-              className={page === 1 ? "pointer-events-none opacity-50" : undefined}
+              className={
+                page === 1 ? "pointer-events-none opacity-50" : undefined
+              }
             />
           </PaginationItem>
           {renderPageNumbers()}
@@ -166,7 +178,11 @@ export function PaginationWithLinks({
               href={buildLink(Math.min(page + 1, totalPageCount))}
               aria-disabled={page === totalPageCount}
               tabIndex={page === totalPageCount ? -1 : undefined}
-              className={page === totalPageCount ? "pointer-events-none opacity-50" : undefined}
+              className={
+                page === totalPageCount
+                  ? "pointer-events-none opacity-50"
+                  : undefined
+              }
             />
           </PaginationItem>
         </PaginationContent>
@@ -188,9 +204,14 @@ function SelectRowsPerPage({
     <div className="flex items-center gap-4">
       <span className="whitespace-nowrap text-sm">Rows per page</span>
 
-      <Select value={String(pageSize)} onValueChange={(value) => setPageSize(Number(value))}>
+      <Select
+        value={String(pageSize)}
+        onValueChange={(value) => setPageSize(Number(value))}
+      >
         <SelectTrigger>
-          <SelectValue placeholder="Select page size">{String(pageSize)}</SelectValue>
+          <SelectValue placeholder="Select page size">
+            {String(pageSize)}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (

@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
   MapPin,
   Building2,
-  DollarSign,
   Clock,
   ChevronRight,
   Loader2,
@@ -20,48 +19,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useJobsInfinite } from "@/shared-api/hooks/jobs/useJobs";
 import { formatDistanceToNow } from "date-fns";
-import { useSearchParams } from "next/navigation";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { formatSalaryRangePublic } from "@/helpers/concurrency-converter";
 import { IconCash } from "@tabler/icons-react";
-
-function JobCardSkeleton() {
-  return (
-    <Card>
-      <CardHeader className="pb-4">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <Skeleton className="h-12 w-12 rounded-full" />
-            <div className="space-y-2">
-              <Skeleton className="h-5 w-[250px]" />
-              <Skeleton className="h-4 w-[200px]" />
-            </div>
-          </div>
-          <Skeleton className="h-6 w-[100px]" />
-        </div>
-      </CardHeader>
-      <CardContent className="pb-4">
-        <div className="space-y-2 mb-4">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-[90%]" />
-        </div>
-        <div className="flex flex-col gap-4 text-sm">
-          <Skeleton className="h-5 w-[120px]" />
-          <div className="flex gap-2">
-            <Skeleton className="h-5 w-[120px]" />
-            <Skeleton className="h-5 w-[120px]" />
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="pt-4 border-t flex items-center justify-between">
-        <Skeleton className="h-5 w-[100px]" />
-        <Skeleton className="h-10 w-[110px]" />
-      </CardFooter>
-    </Card>
-  );
-}
+import { JobCardSkeleton } from "@/features/public/components/skeletons/JobsSkeleton";
+ 
 
 export default function JobsPage() {
   const { ref, inView } = useInView({
@@ -114,7 +77,7 @@ export default function JobsPage() {
     <>
       <div className="mt-4 mb-8 flex items-center gap-4 text-sm">
         <span>{data?.pages?.[0]?.total ?? 0} jobs found</span>
-        <Separator orientation="vertical" className="h-4" />
+        <Separator orientation="vertical" className="h-4 w-px data-[orientation=vertical]:h-4" />
         <span>
           Page {data?.pages.length ?? 1} of{" "}
           {Math.ceil(
@@ -189,7 +152,10 @@ export default function JobsPage() {
                 View Details
                 <ChevronRight className="h-4 w-4" />
               </Link>
-              <Button>Apply Now</Button>
+              <Button   variant={"default"}
+                  asChild
+                >
+                  <Link href={"/auth/signin"}>Apply Now</Link></Button>
             </CardFooter>
           </Card>
         ))}
@@ -220,7 +186,7 @@ export default function JobsPage() {
       {/* End of results message */}
       {!hasNextPage && jobs.length > 0 && (
         <div className="mt-8 text-center py-8 text-muted-foreground">
-          You've reached the end of the job listings
+          You&apos;ve reached the end of the job listings
         </div>
       )}
     </>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
@@ -18,7 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {useDebounce} from "use-debounce";
+import { useDebounce } from "use-debounce";
 
 export interface Option {
   value: string;
@@ -129,7 +129,9 @@ export function AsyncSelectCompanies<T>({
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
   });
-  const options = data?.pages.flatMap((page) => page.companies) ?? [];
+  const options = useMemo(() => {
+    return data?.pages.flatMap((page) => page.companies) ?? [];
+  }, [data]);
   const totalItems = data?.pages[0]?.total ?? 0;
   useEffect(() => {
     setSelectedValue(value);

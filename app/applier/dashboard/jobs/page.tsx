@@ -138,6 +138,7 @@ const [currentTip, setCurrentTip] = useState<string>("");
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     className="max-w-sm"
+                    disabled={isSearchLoading}
                   />
                   {/* Show loading indicator for search */}
                   {isSearchLoading && (
