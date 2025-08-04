@@ -331,16 +331,15 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
           </div>
 
-          {/* Background Text - positioned between footer content and copyright */}
-          {/* Background Text - positioned between footer content and copyright */}
-          <div className="relative flex items-center justify-center -py-1 -mb-3.5">
-            <AuroraText
-              colors={["#082f49", "#1e1b4b", "#172554"]}
-              className="text-[120px] md:text-[150px] lg:text-[180px] font-semibold text-foreground/5 pointer-events-none select-none leading-none"
-            >
-              Lokerin.
-            </AuroraText>
-          </div>
+<div className="relative h-32 md:h-44 lg:h-52 overflow-hidden">
+  <AuroraText
+    colors={["#082f49", "#1e1b4b", "#172554"]}
+    className="absolute inset-0 w-full text-center text-[120px] md:text-[150px] lg:text-[180px] font-semibold text-foreground/5 pointer-events-none select-none leading-none"
+  >
+    Lokerin.
+  </AuroraText>
+</div>
+
 
           <div className="flex flex-col gap-4 sm:flex-row justify-between items-center border-t border-border/40 pt-8">
             <p className="text-xs text-muted-foreground">
