@@ -63,28 +63,32 @@ export default function SignUpForm() {
       const { secureUrl: avatarUrl } = await uploadImage.mutateAsync(
         form.getValues("avatar") ?? ""
       );
-      const userInput = {
-        email: form.getValues("email"),
-        password: form.getValues("password"),
-        name: `${form.getValues("firstName")} ${form.getValues("lastName")}`,
-        phone: form.getValues("phone"),
-        avatarUrl,
-      };
-      const recruiterInput = {
-        ...userInput,
-        about: form.getValues("about"),
-        companyId: form.getValues("companyId"),
-        position: form.getValues("position"),
-      };
+       const userInput = {
+          email: form.getValues("email"),
+          password: form.getValues("password"),
+          name: `${form.getValues("firstName")} ${form.getValues("lastName")}`,
+          phone: form.getValues("phone"),
+          avatarUrl,
+        };
       if (isRoles === "MEMBER") {
+        const applierInput = {
+          ...userInput,
+          avatarUrl,
+        };
         const { secureUrl: cvUrl } = await uploadDocument.mutateAsync(
           form.getValues("cv")?.[0] ?? ""
         );
         signUpUser.mutate({
-          ...userInput,
+          ...applierInput,
           cvUrl,
         });
       } else if (isRoles === "RECRUITER") {
+        const recruiterInput = {
+          ...userInput,
+          about: form.getValues("about"),
+          companyId: form.getValues("companyId"),
+          position: form.getValues("position"),
+        };
         signUpRecruiter.mutate(recruiterInput);
       }
     } else {
