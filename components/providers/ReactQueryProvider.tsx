@@ -58,7 +58,7 @@ export default function ReactQueryProvider({ children }: RQProviderProps) {
   return (
     <QueryClientProvider client={queryClientRef.current}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }

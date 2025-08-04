@@ -25,6 +25,9 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/shared-api/stores/useAuthStore";
 import { useProgress } from "@bprogress/next";
 import { UserProfileResponse } from "@/shared-api/hooks/profile/type";
+import Cookies from "js-cookie";
+import { lokerinAPI } from "@/shared-api/config/api";
+import { toast } from "sonner";
 
 export function NavUser({
   accountPath,
@@ -37,12 +40,27 @@ export function NavUser({
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
   const progress = useProgress();
-  const handleLogout = async () => {
-    progress.start();
-    await logout();
-    router.push("/auth/signin");
-    progress.stop();
-  };
+  const handleLogout = () =>
+    toast
+      .promise(
+        async () => (
+          await logout(), progress.start(), Cookies.remove("accessToken")
+        ),
+        {
+          loading: "Logging out...",
+          success: () => {
+            router.push("/auth/signin");
+            progress.stop();
+            return "Signed out successfully";
+          },
+          error: (err) => {
+            progress.stop();
+            console.log(err);
+            return "Something went wrong. Please try again.";
+          },
+        }
+      )
+      .unwrap();
   return (
     <SidebarMenu>
       <SidebarMenuItem>

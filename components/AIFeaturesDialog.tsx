@@ -125,8 +125,7 @@ const AIFeaturesDialog = () => {
             </AuroraText>
           </div>
           <DialogDescription>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Repudiandae eaque quae tempore!
+            Try to input your resume to get AI recommendation.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -217,7 +216,7 @@ const AIFeaturesDialog = () => {
                       {/* <FormDescription>
                     Upload up to 2 images up to 5MB each.
                   </FormDescription> */}
-                      {form.formState.errors.files && <FormMessage />}
+                      {form.formState.errors.files && !form.formState.isValid && <FormMessage />}
                     </>
                   )}
                 </FormItem>
@@ -231,7 +230,7 @@ const AIFeaturesDialog = () => {
             >
               {form.formState.isSubmitting || (isPending && !isClicking) ? (
                 <>
-                  <Loader2 className="mr-2 size-4 animate-spin" /> Submitting
+                  <Loader2 className="mr-2 size-4 animate-spin" /> Submitting...
                 </>
               ) : (
                 <>

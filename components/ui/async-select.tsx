@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import useDebounce from "@/hooks/use-debounce";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react"; 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useDebounce } from "use-debounce";
 
 export interface Option {
   value: string;
@@ -89,7 +89,7 @@ export function AsyncSelect<T>({
   const [selectedValue, setSelectedValue] = useState(value);
   const [selectedOption, setSelectedOption] = useState<T | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm, preload ? 0 : 300);
+  const [debouncedSearchTerm] = useDebounce(searchTerm, preload ? 0 : 300);
   const [originalOptions, setOriginalOptions] = useState<T[]>([]);
 
   useEffect(() => {

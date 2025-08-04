@@ -1,5 +1,6 @@
 import { lokerinAPI } from "@/shared-api/config/api";
 import {
+  useInfiniteQuery,
   useQuery,
   UseQueryOptions,
   UseQueryResult,
@@ -19,7 +20,7 @@ export const useJobs = (
 ): UseQueryResult<JobsResponse, Error> => {
   const { isPublic = true } = params || {};
   return useQuery<JobsResponse, Error>({
-    queryKey: ["jobs", isPublic],
+    queryKey: ["jobs", isPublic, params],
     queryFn: async () => {
       const response = await lokerinAPI.get<JobsResponse>(
         `/jobs/${isPublic ? "public" : ""}`,
@@ -32,6 +33,34 @@ export const useJobs = (
     ...options,
   });
 };
+
+export const useJobsInfinite = (params?: { page?: number; limit?: number }) =>
+  useInfiniteQuery<JobsResponse, Error>({
+    queryKey: ["jobs", params],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await lokerinAPI.get<JobsResponse>("/jobs/public", {
+        params: { page: pageParam, limit: params?.limit },
+      });
+      console.log(response.data);
+      return response.data;
+    },
+    getNextPageParam: (lastPage, allPages) => {
+       const totalPages = Math.ceil(lastPage.total / lastPage.limit);
+      if (lastPage.page < totalPages) {
+        const nextPage = lastPage.page + 1; 
+        return nextPage;
+      } 
+      return undefined;
+    },
+    getPreviousPageParam: (firstPage, allPages) => {
+     if (firstPage.page > 1) {
+        return firstPage.page - 1;
+      }
+      return undefined;
+    },
+    placeholderData: (prev) => prev,
+    initialPageParam: 1, // Add this line
+  });
 export interface JobsResponse {
   jobs: Array<Jobs>;
   page: number;

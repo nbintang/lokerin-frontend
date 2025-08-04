@@ -33,25 +33,33 @@ export async function middleware(req: NextRequest) {
   if (!verified && isPublicRequireVerified) {
     return NextResponse.redirect(new URL("/auth/verify", req.url));
   }
-  // jik admin coba akses selain admin dashboard, redirect ke admin dashboard
-  if (role === "ADMINISTRATOR") {
-    if (!pathname.startsWith("/administrator")) {
+   if (
+    pathname === "/" ||
+    pathname === "/auth/signin"
+  ) {
+    if (role === "ADMINISTRATOR") {
       return NextResponse.redirect(new URL("/administrator/dashboard", req.url));
     }
-  }
-
-  // jika reporter coba akses selain reporter dashboard, redirect ke reporter dashboard
-  if (role === "RECRUITER") {
-    if (!pathname.startsWith("/recruiter")) {
+    if (role === "RECRUITER") {
       return NextResponse.redirect(new URL("/recruiter/dashboard", req.url));
+    }
+    if (role === "MEMBER") {
+      return NextResponse.redirect(new URL("/applier/dashboard", req.url));
     }
   }
 
-  // jika reader coba akses dashboard dan auth, redirect ke main
-  if (role === "MEMBER") {
-    if (!pathname.startsWith("/applier"))
-      return NextResponse.redirect(new URL("/applier/dashboard", req.url));
+  // Role guard: jika role tidak sesuai dengan prefix url, redirect ke dashboardnya
+  if (role === "ADMINISTRATOR" && !pathname.startsWith("/administrator")) {
+    return NextResponse.redirect(new URL("/administrator/dashboard", req.url));
   }
+  if (role === "RECRUITER" && !pathname.startsWith("/recruiter")) {
+    return NextResponse.redirect(new URL("/recruiter/dashboard", req.url));
+  }
+  if (role === "MEMBER" && !pathname.startsWith("/applier")) {
+    return NextResponse.redirect(new URL("/applier/dashboard", req.url));
+  }
+
+
   return NextResponse.next();
 }
 

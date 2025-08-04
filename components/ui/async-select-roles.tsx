@@ -18,7 +18,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useDebounce from "@/hooks/use-debounce";
+import { useDebounce } from "use-debounce";
+ 
 
 export interface Option {
   value: string;
@@ -104,7 +105,7 @@ export function AsyncSelectRoles<T>({
   const [selectedValue, setSelectedValue] = useState(value);
   const [selectedOption, setSelectedOption] = useState<T | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0,
     rootMargin: "70px",

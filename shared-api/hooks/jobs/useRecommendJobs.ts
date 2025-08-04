@@ -84,6 +84,7 @@ export const useRecommendJobs = (
   });
 };
 
+
 export type RecommendationsResponse = {
   recommendations: Array<Recommendations>;
   totalJobs: number;

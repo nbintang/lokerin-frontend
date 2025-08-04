@@ -17,9 +17,9 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverAnchor,
-} from "@/components/ui/popover"; // Import Popover components
-import useDebounce from "@/hooks/use-debounce";
- 
+} from "@/components/ui/popover";
+import { useDebounce } from "use-debounce";
+
 interface AsyncTagInputProps<T> {
   value: T[];
   onChange: (value: T[]) => void;
@@ -70,7 +70,7 @@ const AsyncTagsInput = <T extends { id: string; name: string }>({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const debouncedInputValue = useDebounce(inputValue, debounceDelay);
+  const [debouncedInputValue] = useDebounce(inputValue, debounceDelay);
   const tagExists = useCallback(
     (tagToFind: string | T): boolean => {
       if (typeof tagToFind === "string") {
