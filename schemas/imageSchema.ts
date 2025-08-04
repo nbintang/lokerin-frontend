@@ -13,7 +13,7 @@ type ZodImageSchemaOptions = {
 };
 export const zodImageSchemaOptions: ZodImageSchemaOptions = {
   ACCEPTED_IMAGE_TYPES: ["image/jpeg", "image/jpg", "image/png"],
-  MAX_FILE_SIZE: 1024 * 1024 * 3, 
+  MAX_FILE_SIZE: 1024 * 1024 * 1, 
   MAX_DIMENSIONS: { width: 1600, height: 900 },
   MIN_DIMENSIONS: { width: 400, height: 250 },
 };
@@ -67,4 +67,5 @@ export const zodImageSchema = (
       ),
     z.url(),
     z.null(),
+
   ]);
