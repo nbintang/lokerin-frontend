@@ -1,22 +1,20 @@
-import React from 'react'
-import { Button } from '../button';
-import Link from 'next/link';
-import { IconBrandAirtable } from '@tabler/icons-react';
-import ToggleTheme from '@/components/ThemeToggle';
-import { ChevronRight } from 'lucide-react';
-import { navLinks } from './links';
- 
+import React from "react";
+import { Button } from "../button";
+import Link from "next/link";
+import { IconBrandAirtable } from "@tabler/icons-react";
+import ToggleTheme from "@/components/ThemeToggle";
+import { ChevronRight } from "lucide-react";
+import { navLinks } from "./links";
+
 export const NavbarDesktop = () => {
   return (
-<>
-  <Button variant="link" className="font-bold " asChild>
+    <>
+      <Button variant="link" className="font-bold " asChild>
         <Link href="/">
           <div className="size-8 rounded-lg md:ml-3 bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
             <IconBrandAirtable />
           </div>
-         <span className="text-base font-semibold text-white ">
-                Lokerin.
-              </span>
+          <span className="text-base font-semibold text-white ">Lokerin.</span>
         </Link>
       </Button>
 
@@ -49,6 +47,6 @@ export const NavbarDesktop = () => {
           </Link>
         </Button>
       </div>
-</>
-  )
-}
+    </>
+  );
+};

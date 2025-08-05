@@ -94,7 +94,7 @@ export default function JobsPage() {
                 {total} jobs found
                 {debouncedSearch && (
                   <span className="text-muted-foreground ml-1">
-                    for "{debouncedSearch}"
+                    for &quot;{debouncedSearch}&quot;
                   </span>
                 )}
               </>
@@ -142,7 +142,7 @@ export default function JobsPage() {
               {total} jobs found
               {debouncedSearch && (
                 <span className="text-muted-foreground ml-1">
-                  for "{debouncedSearch}"
+                  for &quot;{debouncedSearch}&quot;
                 </span>
               )}
             </>
