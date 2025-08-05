@@ -12,7 +12,7 @@ import { ShinyText } from "@/components/ShinyText";
 export const Hero = () => {
   return (
     <section className="w-full flex items-center justify-center py-20 md:py-32 lg:py-40 overflow-hidden">
-      <div className="absolute -top-80 lg:top-0 md:inset-0  hidden dark:block -z-10 h-full w-full">
+      <div className="absolute top-0 inset-0  hidden md:block dark:block -z-10 h-full w-full">
         <DarkVeil />
       </div>
       <div className="container px-4 md:px-6 relative b  ">
