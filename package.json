@@ -10,10 +10,6 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/modifiers": "^9.0.0",
-    "@dnd-kit/sortable": "^10.0.0",
-    "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.2.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -60,7 +56,6 @@
     "react-hook-form": "^7.61.1",
     "react-image-crop": "^11.0.10",
     "react-intersection-observer": "^9.16.0",
-    "react-use-audio-player": "^4.0.2",
     "recharts": "2.15.4",
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
@@ -73,17 +68,14 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/howler": "^2.2.12",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.4.4",
-    "file-loader": "^6.2.0",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.6",
-    "typescript": "^5",
-    "url-loader": "^4.1.1"
+    "typescript": "^5"
   }
 }

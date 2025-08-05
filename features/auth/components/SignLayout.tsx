@@ -1,13 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { IconBrandAirtable } from "@tabler/icons-react";
-import { GalleryVerticalEnd } from "lucide-react";
+import { ChevronsLeft, GalleryVerticalEnd } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 const SignLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className="grid min-h-svh lg:grid-cols-2">
+    <main className="grid min-h-svh lg:grid-cols-2 relative">
+      <Button
+        className="lg:hidden absolute top-4 left-0"
+        variant={"link"}
+        asChild
+      >
+        <Link href={"/"}> 
+          <ChevronsLeft className="size-5" />
+          Go Back
+        </Link>
+      </Button>
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
           <Button variant={"link"} asChild>
@@ -15,7 +25,10 @@ const SignLayout = ({ children }: { children: React.ReactNode }) => {
               <div className="size-8 rounded-lg ml-3 bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
                 <IconBrandAirtable />
               </div>
-        <span className="text-base font-semibold text-white">      Lokerin.</span>
+              <span className="text-base font-semibold dark:text-white">
+                {" "}
+                Lokerin.
+              </span>
             </Link>
           </Button>
         </div>

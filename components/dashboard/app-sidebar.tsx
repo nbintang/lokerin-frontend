@@ -69,7 +69,7 @@ export function AppSidebar({
               >
                 <IconBrandAirtable className="text-white" />
               </div>
-              <span className="text-base font-semibold  ">Lokerin.</span>
+              <span className="text-base font-semibold ">Lokerin.</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

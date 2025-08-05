@@ -18,7 +18,7 @@ export default function FooterLinks() {
           <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
             <IconBrandAirtable />
           </div>
-          <span className="text-base font-semibold  ">Lokerin.</span>
+          <span className="text-base font-semibold dark:text-white ">Lokerin.</span>
         </div>
         <p className="text-sm text-muted-foreground">
           Lokerin is an AI-powered recruitment platform that connects talent

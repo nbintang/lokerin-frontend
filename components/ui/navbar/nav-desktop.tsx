@@ -14,7 +14,7 @@ export const NavbarDesktop = () => {
           <div className="size-8 rounded-lg md:ml-3 bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
             <IconBrandAirtable />
           </div>
-          <span className="text-base font-semibold text-white ">Lokerin.</span>
+          <span className="text-base font-semibold dark:text-white">Lokerin.</span>
         </Link>
       </Button>
 
