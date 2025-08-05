@@ -64,19 +64,20 @@ export default function RecommendedJobsPages() {
     }, 250);
   };
   useEffect(() => {
-    if(jobRecommendationData.recommendedJobs > 0){
-      fireWorks()
+    if (jobRecommendationData.recommendedJobs > 0) {
+      fireWorks();
     }
-  }, [ jobRecommendationData.recommendedJobs]);
-  if(jobRecommendationData.recommendedJobs === 0){
+  }, [jobRecommendationData.recommendedJobs]);
+  if (jobRecommendationData.recommendedJobs === 0) {
     return notFound();
   }
   return (
-    <div  className="space-y-6"  >
-       <Confetti
+    <div className="space-y-6">
+      <Confetti
         ref={confettiRef}
         manualstart
-        className="absolute left-0 top-0 z-0 size-full pointer-events-none"/> 
+        className="absolute left-0 top-0 z-0 size-full pointer-events-none"
+      />
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -101,37 +102,41 @@ export default function RecommendedJobsPages() {
         {jobRecommendationData.recommendations.map((job, index) => (
           <Card key={job.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2">
+                      <Badge className={cn("text-xs", getRankColor(index))}>
+                        #{index + 1}
+                      </Badge>
+                      <h3 className="text-xl font-semibold">{job.role.name}</h3>
+                    </div>
+                    <div className="flex flex-col items-end gap-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">Match:</span>
+                        <Badge variant="outline">{job.matchPercentage}%</Badge>
+                      </div>
+                      <Progress value={job.matchPercentage} className="w-20" />
+                    </div>
+                  </div>
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Badge className={cn("text-xs", getRankColor(index))}>
-                      #{index + 1}
-                    </Badge>
-                    <h3 className="text-xl font-semibold">{job.role.name}</h3>
-                  </div>
-                  <div className="flex items-center gap-4 text-muted-foreground text-sm  ">
+              
+
+                  <div className="flex items-start flex-wrap md:items-center gap-4 text-muted-foreground text-sm  ">
                     <Badge
                       variant={"secondary"}
-                      className="flex items-center gap-1"
+                      className="flex items-center max-w-xs gap-1"
                     >
-                      <Building2 className="h-4 w-4" />
-                      {job.company.name}
+                      <Building2 className="size-4 shrink-0" />
+                      <span className="truncate">{job.company.name}</span>
                     </Badge>
                     <Badge
                       variant={"secondary"}
-                      className="flex items-center text-muted-foreground gap-1"
+                      className="flex items-center max-w-xs   text-muted-foreground gap-1"
                     >
-                      <MapPin className="h-4 w-4" />
-                      {job.location}
+                      <MapPin className="size-4 shrink-0" />
+                      <span className="truncate">{job.location}</span>
                     </Badge>
                   </div>
-                </div>
-                <div className="text-right space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">Match:</span>
-                    <Badge variant={"outline"}>{job.matchPercentage}%</Badge>
-                  </div>
-                  <Progress value={job.matchPercentage} className="w-20" />
                 </div>
               </div>
             </CardHeader>

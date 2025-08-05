@@ -57,12 +57,13 @@ export function JobDetailSkeleton() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-6 flex flex-col-reverse md:flex-col">
             {/* Apply Card Skeleton */}
             <Card>
-              <CardContent className="pt-6">
-                <Skeleton className="h-12 w-full mb-4 rounded-md" />
-                <Skeleton className="h-12 w-full rounded-md" />
+              <CardContent className="">
+                <Skeleton className="h-4 w-1/4 mb-4 rounded-md" />
+                <Skeleton className="h-5 w-full mb-4 rounded-md" />
+                <Skeleton className="h-9 w-full rounded-md" />
               </CardContent>
             </Card>
 

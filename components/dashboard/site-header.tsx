@@ -18,6 +18,7 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4"
         />
         <DynamicBreadcrumb
+    
           path={pathname}
           excludeSegments={[
             "recruiter",

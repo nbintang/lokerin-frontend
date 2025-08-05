@@ -11,7 +11,7 @@ import {
 import { UsersResponse } from "@/shared-api/hooks/users/useUsers";
 import { RecruitersAdminResponse } from "@/shared-api/hooks/recruiters/useRecruiters";
 import { JobsResponse } from "@/shared-api/hooks/jobs/useJobs";
-import { JobApplicantResponse } from "@/shared-api/hooks/job-applicants/useApplicants";
+import { JobApplicantsResponse } from "@/shared-api/hooks/job-applicants/useApplicants";
 
 export function StatsCard({
   users,
@@ -21,7 +21,7 @@ export function StatsCard({
 }: {
   users: UsersResponse;
   recruiters: RecruitersAdminResponse;
-  applicants: JobApplicantResponse;
+  applicants: JobApplicantsResponse;
   jobs: JobsResponse;
 }) {
   return (

@@ -24,10 +24,15 @@ const getRefreshToken = async () => {
       }
     );
     const accessToken = response.data.accessToken;
-    Cookies.set("accessToken", accessToken);
+    Cookies.set("accessToken", accessToken, {
+      expires: 1, // 1 day
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });
     return accessToken;
   } catch (error) {
     console.log(error);
+    return null;
   }
 };
 
@@ -41,6 +46,8 @@ async function onRequest(
       if (newToken) {
         config.headers = config.headers || {};
         config.headers.Authorization = `Bearer ${newToken}`;
+      } else {
+        Cookies.remove("accessToken");
       }
     } else {
       config.headers = config.headers || {};
@@ -64,6 +71,8 @@ async function onResponseError(error: AxiosError) {
           originalRequest.headers = originalRequest.headers || {};
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return lokerinAPI(originalRequest);
+        } else {
+          Cookies.remove("accessToken");
         }
       }
     }

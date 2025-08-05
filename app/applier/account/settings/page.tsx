@@ -28,6 +28,7 @@ import useUploadImage from "@/shared-api/hooks/media/useUploadImage";
 import useUploadDocument from "@/shared-api/hooks/media/useUploadDocument";
 import { zodImageSchema } from "@/schemas/imageSchema";
 import { zodResumeSchema } from "@/schemas/resumeSchema";
+import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
 
 const accept: Record<string, string[]> = {
   "image/*": [".png", ".jpg", ".jpeg"],
@@ -120,15 +121,7 @@ export default function Settings() {
   };
 
   if (isLoading) {
-    return (
-      <Card>
-        <CardContent className="p-6 text-center">
-          <p className="text-muted-foreground">
-            Loading profile information...
-          </p>
-        </CardContent>
-      </Card>
-    );
+  return <ProfileSkeleton />;
   }
   if (error || !profile) {
     return (
@@ -168,7 +161,7 @@ export default function Settings() {
             >
               <Input {...getInputProps()} />
               <div className="absolute top-0 left-0 w-full h-full bg-black opacity-0 hover:opacity-40 transition-opacity duration-300 z-10 flex items-center justify-center text-white">
-                <CameraIcon className="w-6 h-6" />
+                <CameraIcon className="size-9" />
               </div>
               <AvatarImage
                 src={profile.avatarUrl ?? "/images/question-mark.jpg"}

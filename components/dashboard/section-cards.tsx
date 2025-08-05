@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  JobApplicantResponse
+  JobApplicantsResponse
 } from "@/shared-api/hooks/job-applicants/useApplicants";
 import { UseQueryResult } from "@tanstack/react-query";
 import { Skeleton } from "../ui/skeleton";
@@ -18,7 +18,7 @@ import { Skeleton } from "../ui/skeleton";
 export function SectionCards({
   query,
 }: {
-  query: UseQueryResult<JobApplicantResponse, Error>;
+  query: UseQueryResult<JobApplicantsResponse, Error>;
 }) {
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid-cols-1 gap-4  *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4">

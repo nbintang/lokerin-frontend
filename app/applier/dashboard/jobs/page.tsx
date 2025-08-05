@@ -31,6 +31,7 @@ import { Badge } from "@/components/ui/badge";
 import { useDebounce } from "use-debounce";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import { SectionCardSkeleton } from "@/components/skeletons/SectionCardSkeleton";
 
 const tips = [
   "Try AI Features!",
@@ -90,6 +91,7 @@ const [currentTip, setCurrentTip] = useState<string>("");
   if (shouldShowSkeleton) {
     return (
       <div className="flex flex-1 flex-col md:gap-4 gap-2 py-4 mx-3 md:mx-5 md:py-6">
+        <SectionCardSkeleton query={jobs} userTitle="Jobs" />
         <TableSkeleton />
       </div>
     );
@@ -111,8 +113,8 @@ const [currentTip, setCurrentTip] = useState<string>("");
     <div className="flex flex-1 flex-col md:gap-4 gap-2 py-4 mx-3 md:mx-5 md:py-6">
       {(jobs.isSuccess || (jobs.isLoading && !isInitialLoad)) && (
         <>
-          <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-            <Card className="@container/card">
+          <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+            <Card className="@container/card w-full">
               <CardHeader>
                 <CardDescription>Total Jobs Available</CardDescription>
                 <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-5xl">
@@ -159,6 +161,8 @@ const [currentTip, setCurrentTip] = useState<string>("");
                 <TooltipContent
                   side={isMobile ? "top" : "left"}
                   sideOffset={8}
+                  className=" bg-white text-black shadow-md"
+                  arrowClassName="fill-white bg-white"
                 >
                  {currentTip}
                 </TooltipContent>

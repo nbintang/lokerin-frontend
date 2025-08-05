@@ -52,14 +52,24 @@ export function AppSidebar({
 }) {
   const { data: userProfile, isLoading, isSuccess } = useProfile();
   const { state } = useSidebar();
+  const isExpanded = state === "expanded";
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="data-[slot=sidebar-menu-button]:!p-1.5">
-              <IconBrandAirtable className="!size-5" />
-              <span className="text-base font-semibold">Lokerin</span>
+              <div
+                className={cn(
+                  "flex items-center justify-center",
+                  isExpanded
+                    ? "size-8 rounded-lg  bg-gradient-to-br from-primary to-primary/70 "
+                    : "text-primary-foreground"
+                )}
+              >
+                <IconBrandAirtable className="text-white" />
+              </div>
+              <span className="text-base font-semibold  ">Lokerin.</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

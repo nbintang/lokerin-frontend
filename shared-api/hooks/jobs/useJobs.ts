@@ -34,12 +34,12 @@ export const useJobs = (
   });
 };
 
-export const useJobsInfinite = (params?: { page?: number; limit?: number }) =>
+export const useJobsInfinite = (params?: { page?: number; limit?: number, name?: string }) =>
   useInfiniteQuery<JobsResponse, Error>({
     queryKey: ["jobs", params],
     queryFn: async ({ pageParam = 1 }) => {
       const response = await lokerinAPI.get<JobsResponse>("/jobs/public", {
-        params: { page: pageParam, limit: params?.limit },
+        params: { page: pageParam, limit: params?.limit, name: params?.name },
       });
       console.log(response.data);
       return response.data;

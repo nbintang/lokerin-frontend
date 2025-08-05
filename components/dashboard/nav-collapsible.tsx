@@ -129,7 +129,7 @@ export function NavCollapsible({
                                       <subItem.icon
                                         className={cn(
                                           pathname === subItem.url &&
-                                            "text-black dark:text-white"
+                                            "text-primary md:text-primary-foreground"
                                         )}
                                       />
                                     )}
@@ -138,7 +138,11 @@ export function NavCollapsible({
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             </TooltipTrigger>
-                            <TooltipContent side="right">
+                            <TooltipContent
+                              side="right"
+                         className=" bg-white text-black shadow-md"
+                  arrowClassName="fill-white bg-white"
+                            >
                               {isThisOne
                                 ? "Applied!"
                                 : "Check your inbox for updates"}

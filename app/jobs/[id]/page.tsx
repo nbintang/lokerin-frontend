@@ -36,7 +36,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     );
   return (
     <div className="min-h-screen ">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto  py-8">
         {/* Back Button */}
         <div className="mb-6">
           <Link
@@ -88,7 +88,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                     <MapPin className="size-4 flex-shrink-0" />
                     <span className="truncate">{job.location}</span>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center flex-wrap gap-4">
                     <div className="flex items-center gap-1">
                       <Building2 className="size-4" />
                       <span>Full-time</span>
@@ -123,9 +123,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="gap-y-6 flex flex-col-reverse md:flex-col">
             {/* Apply Card */}
-            <Card>
+            <Card className="">
               <CardContent>
                 <div className="mb-4">
                   <h2 className=" text-lg font-semibold">Action</h2>

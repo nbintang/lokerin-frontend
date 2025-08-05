@@ -7,16 +7,9 @@ import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import ProgressLoaderProvider from "@/components/providers/ProgressProvider";
 import WarningDialog from "@/components/WarningDialog";
 import PublicLayout from "@/components/layouts/PublicLayout";
+import localFont from "next/font/local";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+ 
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,16 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`  antialiased`}
       >
         <ThemeProvider>
           <ReactQueryProvider>
             <ProgressLoaderProvider>
-           <PublicLayout>
-               {children}
-           </PublicLayout>
+              <PublicLayout>{children}</PublicLayout>
               <Toaster position="top-right" />
-              <WarningDialog/>
+              <WarningDialog />
             </ProgressLoaderProvider>
           </ReactQueryProvider>
         </ThemeProvider>

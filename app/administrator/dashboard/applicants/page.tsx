@@ -6,7 +6,7 @@ import {
   useTable,
   TableFilters,
 } from "@/components/dashboard/data-table";
-import { RecruiterSectionsCard } from "@/features/recruiter/components/RecruiterSectionsCard";
+import { SectionCardSkeleton } from "@/components/skeletons/SectionCardSkeleton";
 import {
   Applier,
   useApplicants,
@@ -26,7 +26,7 @@ export default function ApplicantsDashboardPage() {
 
   return (
     <div className="flex flex-1 flex-col mx-3 md:mx-5 gap-2 py-4  md:gap-4 md:py-6">
-      <RecruiterSectionsCard query={jobApplicant} />
+      <SectionCardSkeleton query={jobApplicant} />
       {jobApplicant.isLoading && <TableSkeleton />}
       {jobApplicant.isError && (
         <div className="flex items-center justify-center gap-2">

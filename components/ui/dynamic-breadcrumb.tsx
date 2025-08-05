@@ -78,7 +78,7 @@ const DynamicBreadcrumb = ({
   let pathSegments = path.split("/").filter(Boolean);
   if (pathSegments.length === 0) {
     pathSegments = ["home"];
-  } 
+  }
 
   if (excludeSegments.length > 0) {
     pathSegments = pathSegments.filter(
@@ -95,7 +95,7 @@ const DynamicBreadcrumb = ({
     (isMobile || enableEllipsisOnDesktop);
 
   return (
-    <Breadcrumb className={cn("flex", className)} {...props}>
+    <Breadcrumb className={cn("flex ", className)} {...props}>
       <BreadcrumbList>
         {pathSegments.map((segment, index) => {
           const isHome = segment === "home";
@@ -137,8 +137,8 @@ const DynamicBreadcrumb = ({
                     {isLastSegment ? (
                       <BreadcrumbPage
                         className={cn(
-                          "font-medium text-foreground truncate max-w-[150px] md:max-w-none",
-                          "text-sm"
+              "font-medium text-foreground text-sm truncate overflow-hidden whitespace-nowrap",
+    "max-w-[100px] sm:max-w-[150px] md:max-w-none"
                         )}
                       >
                         {formattedSegmentLabel}

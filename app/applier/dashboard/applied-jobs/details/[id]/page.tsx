@@ -1,5 +1,5 @@
 "use client";
-import ProfileSkeleton from "@/components/ProfileSkeleton";
+import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { use } from "react";

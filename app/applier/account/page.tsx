@@ -1,5 +1,5 @@
 "use client";
-import ProfileSkeleton from "@/components/ProfileSkeleton";
+import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

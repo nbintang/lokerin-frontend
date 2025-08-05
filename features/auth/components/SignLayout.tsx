@@ -15,7 +15,7 @@ const SignLayout = ({ children }: { children: React.ReactNode }) => {
               <div className="size-8 rounded-lg ml-3 bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
                 <IconBrandAirtable />
               </div>
-              Lokerin
+        <span className="text-base font-semibold text-white">      Lokerin.</span>
             </Link>
           </Button>
         </div>

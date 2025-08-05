@@ -9,7 +9,7 @@ export const useApplicants = (
   useQuery({
     queryKey: ["applicants"],
     queryFn: async () => {
-      const response = await lokerinAPI.get<JobApplicantResponse>(
+      const response = await lokerinAPI.get<JobApplicantsResponse>(
         `/job-applicants${isForAdmin ? "" : "/applicants"}`,
         { params: { page, limit } }
       );
@@ -18,7 +18,7 @@ export const useApplicants = (
     placeholderData: (prev) => prev,
   });
 
-export interface JobApplicantResponse {
+export interface JobApplicantsResponse {
   appliers: Applier[];
   page: number;
   limit: number;

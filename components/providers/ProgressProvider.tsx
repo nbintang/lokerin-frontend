@@ -15,7 +15,7 @@ const ProgressLoaderProvider = ({ children }: { children: React.ReactNode }) => 
   return (
     <ProgressProvider
       height="4px"
-      color={resolvedTheme === "dark" ? "#fff" : "#000"}
+      color={resolvedTheme === "dark" ? "#3730a3" : "#3b82f6"}
       options={{ showSpinner: false }}
       shallowRouting
     >
