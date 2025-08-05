@@ -22,7 +22,7 @@ export const NavMobile = ({
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="md:hidden absolute top-16 inset-x-0 bg-background/95 backdrop-blur-lg border-b"
+      className="md:hidden absolute top-16 inset-x-0 bg-background/90 backdrop-blur-lg border-b"
     >
       <div className="container px-4 md:px-6 flex flex-col gap-4">
         {navLinks.map((link) => (

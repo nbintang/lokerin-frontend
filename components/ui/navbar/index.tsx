@@ -25,7 +25,7 @@ const Navbar = () => {
   return (
     <header
       className={`sticky top-0 z-50 w-full flex items-center justify-center backdrop-blur-lg transition-all duration-300 ${
-        isScrolled ? "bg-background/80 shadow-sm" : "bg-transparent"
+        isScrolled || mobileMenuOpen ? "bg-background/80 shadow-sm" : "bg-transparent"
       }`}
     >
       <div className="container flex h-16 items-center justify-between">
