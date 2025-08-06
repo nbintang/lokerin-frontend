@@ -24,8 +24,10 @@ import Link from "next/link";
 import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
 import { useDeleteApplicant } from "@/shared-api/hooks/job-applicants/useDeleteJobApplicant";
 import useHandleWarningDialog from "@/hooks/useHandleWarningDialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const jobAppColumns: ColumnDef<Applier>[] = [
+
   {
     accessorKey: "user",
     header: "Applier Name",

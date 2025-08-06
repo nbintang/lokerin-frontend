@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { useUpdateApplicantStatus } from "@/shared-api/hooks/job-applicants/useUpdateApplicantStatus";
+import { useUpdateApplicantsStatus } from "@/shared-api/hooks/job-applicants/useUpdateApplicantsStatus";
 
 const applicantStatus: ApplicantResponse["status"][] = [
   "REJECTED",
@@ -23,31 +24,43 @@ const applicantStatus: ApplicantResponse["status"][] = [
 ];
 const statuSchema = z.object({ status: z.enum(applicantStatus) });
 export default function SelectStatusDialog() {
-  const { open, setOpen, status, id, jobId } = useHandleSelectStatusDialog(
-    useShallow((state) => ({
-      open: state.isOpen,
-      setOpen: state.setOpen,
-      status: state.applicant.status,
-      id: state.applicant.id,
-      jobId: state.applicant.jobId,
-    }))
-  );
-  const form = useForm({
+  const { open, setOpen, status, applicantId, jobId, applicantIds  } =
+    useHandleSelectStatusDialog(
+      useShallow((state) => ({
+        open: state.isOpen,
+        setOpen: state.setOpen,
+        status: state.applicant.status,
+        applicantId: state.applicant.id,
+        jobId: state.applicant.jobId,
+        applicantIds: state.applicant.ids,
+      }))
+    );
+  const form = useForm<z.infer<typeof statuSchema>>({
     resolver: zodResolver(statuSchema),
     defaultValues: { status },
   });
 
-  const { mutateAsync, isPending } = useUpdateApplicantStatus(id, jobId);
+  const { mutateAsync: updateStatus, isPending } = useUpdateApplicantStatus(
+    applicantId ?? "",
+    jobId ?? ""
+  );
+  const { mutateAsync: updateStatusBulk, isPending: isPendingBulk } =
+    useUpdateApplicantsStatus(jobId ?? "");
   const onSubmit = async ({ status }: z.infer<typeof statuSchema>) => {
     form.setValue("status", status);
-    const data = { status };
-    await mutateAsync(data);
+
+    if (Array.isArray(applicantIds) && applicantIds.length > 0) {
+      await updateStatusBulk({ status, applicantIds, });
+    } else {
+      await updateStatus({ status });
+    }
+
     setOpen({
       isOpen: false,
       applicant: {
         jobId,
         status,
-        id: id,
+        id: applicantId,
       },
     });
   };
@@ -60,7 +73,8 @@ export default function SelectStatusDialog() {
           applicant: {
             jobId,
             status: status,
-            id: id,
+            id: applicantId,
+            ids: applicantIds
           },
         })
       }
@@ -87,7 +101,8 @@ export default function SelectStatusDialog() {
               disabled={
                 statusOption === status ||
                 form.formState.isSubmitting ||
-                isPending
+                isPending ||
+                isPendingBulk
               }
             >
               {statusOption}

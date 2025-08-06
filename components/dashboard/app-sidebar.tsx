@@ -64,10 +64,10 @@ export function AppSidebar({
                   "flex items-center justify-center",
                   isExpanded
                     ? "size-8 rounded-lg  bg-gradient-to-br from-primary to-primary/70 "
-                    : "text-primary-foreground"
+                    : "text-primary "
                 )}
               >
-                <IconBrandAirtable className="text-white" />
+                <IconBrandAirtable   />
               </div>
               <span className="text-base font-semibold ">Lokerin.</span>
             </SidebarMenuButton>

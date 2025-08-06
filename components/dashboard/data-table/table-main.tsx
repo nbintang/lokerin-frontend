@@ -1,8 +1,6 @@
 "use client";
-import {
-  flexRender,
-  type Table as TableType
-} from "@tanstack/react-table";
+
+import { flexRender, type Table as TableType } from "@tanstack/react-table";
 
 import {
   Table,
@@ -13,46 +11,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Loader2 } from "lucide-react";
 
 interface DataTableProps<TData> {
   table: TableType<TData>;
-  isLoading?: boolean; // Tambahkan prop isLoading
 }
 
-export function TableMain<TData>({
-  table,
-  isLoading = false,
-}: DataTableProps<TData>) {
+export function TableMain<TData>({ table }: DataTableProps<TData>) {
   return (
     <>
-      <div className="w-full rounded-md overflow-hidden relative">
-        {/* Loading overlay */}
-        {isLoading && (
-          <div className="absolute inset-0 bg-background/70 backdrop-blur-sm z-20 flex items-center justify-center">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Loader2 className="animate-spin size-5" />
-              <span className="text-sm">Loading...</span>
-            </div>
-          </div>
-        )}
-        
-        <ScrollArea className="w-full ">
+      <div className="w-full rounded-md overflow-hidden">
+        <ScrollArea className="w-full">
           <div className="min-w-full overflow-x-auto">
             <Table className="w-full min-w-[800px]">
               <TableHeader className="bg-accent sticky top-0 z-10">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header, index) => (
+                    {headerGroup.headers.map((header) => (
                       <TableHead
                         key={header.id}
-                        className={`px-3 py-3 text-left font-medium ${
-                          index === 0 ? 'min-w-[200px]' :
-                          index === 1 ? 'min-w-[150px]' :
-                          index === 2 ? 'min-w-[100px]' :
-                          index === 3 ? 'min-w-[120px]' :
-                          'min-w-[80px]'
-                        }`}
+                        className={`px-3 py-3 text-left font-medium`}
                       >
                         {header.isPlaceholder
                           ? null
@@ -65,7 +42,7 @@ export function TableMain<TData>({
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody className={isLoading ? 'opacity-50' : ''}>
+              <TableBody>
                 {table.getRowModel()?.rows.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
@@ -77,7 +54,7 @@ export function TableMain<TData>({
                         <TableCell
                           key={cell.id}
                           className={`px-3 py-4 ${
-                            index === 0 ? 'font-medium' : '' // Name column bold
+                            index === 0 ? "font-medium" : "" // Name column bold
                           }`}
                         >
                           <div className="truncate max-w-[200px]">
@@ -96,14 +73,7 @@ export function TableMain<TData>({
                       colSpan={table.getAllColumns().length}
                       className="h-24 text-center text-muted-foreground"
                     >
-                      {isLoading ? (
-                        <div className="flex items-center justify-center gap-2">
-                          <Loader2 className="animate-spin size-4" />
-                          <span>Loading data...</span>
-                        </div>
-                      ) : (
-                        "No data found."
-                      )}
+                      No data found.
                     </TableCell>
                   </TableRow>
                 )}

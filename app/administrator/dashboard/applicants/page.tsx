@@ -6,7 +6,7 @@ import {
   useTable,
   TableFilters,
 } from "@/components/dashboard/data-table";
-import { SectionCardSkeleton } from "@/components/skeletons/SectionCardSkeleton";
+import { SectionCard } from "@/components/dashboard/section-card";
 import {
   Applier,
   useApplicants,
@@ -18,7 +18,12 @@ export default function ApplicantsDashboardPage() {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
-  const jobApplicant = useApplicants(page, limit, true);
+
+  const jobApplicant = useApplicants({
+    page,
+    limit,
+    isForAdmin: true,
+  });
   const { table } = useTable<Applier>({
     columns: jobAppColumns,
     data: jobApplicant.data?.appliers ?? [],
@@ -26,7 +31,6 @@ export default function ApplicantsDashboardPage() {
 
   return (
     <div className="flex flex-1 flex-col mx-3 md:mx-5 gap-2 py-4  md:gap-4 md:py-6">
-      <SectionCardSkeleton query={jobApplicant} />
       {jobApplicant.isLoading && <TableSkeleton />}
       {jobApplicant.isError && (
         <div className="flex items-center justify-center gap-2">
@@ -35,6 +39,10 @@ export default function ApplicantsDashboardPage() {
       )}
       {jobApplicant.isSuccess && jobApplicant.data && (
         <>
+          <SectionCard
+            total={jobApplicant.data?.total}
+            userTitle="Applicants"
+          />
           <div className="flex items-start gap-x-3 justify-start rounded-b-md  ">
             <TableFilters<Applier> table={table} />
           </div>

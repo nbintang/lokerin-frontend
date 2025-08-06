@@ -91,7 +91,7 @@ export default function JobsPage() {
               </span>
             ) : (
               <>
-                {total} jobs found
+                {total  || 0} jobs found
                 {debouncedSearch && (
                   <span className="text-muted-foreground ml-1">
                     for &quot;{debouncedSearch}&quot;

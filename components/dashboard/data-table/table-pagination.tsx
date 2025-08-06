@@ -1,4 +1,5 @@
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
+import { cn } from "@/lib/utils";
 import { Table } from "@tanstack/react-table";
 
 export const TablePagination = <TData,>({
@@ -12,10 +13,19 @@ export const TablePagination = <TData,>({
   table: Table<TData>;
   total: number;
 }) => {
- const rows = table.getRowModel().rows;
- console.log(rows);
+  const selectedRowCount = table.getFilteredSelectedRowModel().rows.length;
+  const visibleRowCountOnPage = table.getPaginationRowModel().rows.length;
+  const isSelecting = selectedRowCount > 0;
   return (
-    <div className="flex justify-center md:justify-end w-full flex-wrap-reverse items-center gap-4 mt-3 px-3">
+    <div
+      className={cn(
+        "flex justify-center  w-full flex-wrap-reverse items-center gap-4 mt-3 px-3",
+        !isSelecting ? "md:justify-end" : "md:justify-between"
+      )}
+    >
+      {isSelecting && (
+        <div className="text-sm text-muted-foreground">{`${selectedRowCount} of ${visibleRowCountOnPage} row(s) selected`}</div>
+      )}
       <PaginationWithLinks page={page} pageSize={limit} totalCount={total} />
     </div>
   );

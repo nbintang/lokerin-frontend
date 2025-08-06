@@ -16,7 +16,7 @@ export const useUsers = (
   >
 ) =>
   useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", params],
     queryFn: async () => {
       const response = await lokerinAPI.get<UsersResponse>(
         "/users",

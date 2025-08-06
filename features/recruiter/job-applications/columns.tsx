@@ -22,8 +22,37 @@ import { CircleAlertIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import useHandleSelectStatusDialog from "@/hooks/useHandleSelectStatusDialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useMutationState } from "@tanstack/react-query";
 
 export const jobAppColumns: ColumnDef<Applier>[] = [
+  {
+    accessorKey: "id",
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        className="cursor-pointer   border-muted-foreground"
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => {
+ 
+      return (
+              <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+      )
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "user",
     header: "Applier Name",
@@ -104,7 +133,7 @@ export const jobAppColumns: ColumnDef<Applier>[] = [
     cell: ({ row }) => {
       return (
         <Link
-          href={row.original.user.cvUrl}
+          href={row.original.user.cvUrl || ""}
           target="_blank"
           rel="noopener noreferrer"
         >

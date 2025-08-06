@@ -2,8 +2,9 @@ import { ApplicantResponse } from "@/shared-api/hooks/job-applicants/useApplican
 import { create } from "zustand";
 
 interface ApplicantDialog {
-  status: ApplicantResponse["status"];
-  id: string;
+  status?: ApplicantResponse["status"];
+  id?: string;
+  ids?: string[];
   jobId: string;
 }
 
@@ -21,7 +22,7 @@ interface HandleStatusDialog {
 
 const useHandleSelectStatusDialog = create<HandleStatusDialog>((set) => ({
   isOpen: false,
-  applicant: { status: "APPLIED", id: "", jobId: "" },
+  applicant: { status: "APPLIED", id: "", jobId: "", jobIds: [] },
   setOpen: ({
     isOpen,
     applicant,

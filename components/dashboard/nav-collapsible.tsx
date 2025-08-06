@@ -138,11 +138,7 @@ export function NavCollapsible({
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             </TooltipTrigger>
-                            <TooltipContent
-                              side="right"
-                         className=" bg-white text-black shadow-md"
-                  arrowClassName="fill-white bg-white"
-                            >
+                            <TooltipContent side="right">
                               {isThisOne
                                 ? "Applied!"
                                 : "Check your inbox for updates"}
