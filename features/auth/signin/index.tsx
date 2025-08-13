@@ -49,7 +49,7 @@ export default function SignInForm() {
   const router = useRouter();
   const progress = useProgress();
   const onSubmit = async (values: SignIn) =>
-    toast.promise(postSignin(values), {
+    await toast.promise(postSignin(values), {
       loading: "Signing in...",
       success: (res) => {
         Cookies.set("accessToken", res.data.accessToken);
@@ -80,7 +80,7 @@ export default function SignInForm() {
         form.reset();
       },
       richColors: true,
-    });
+    }).unwrap();
 
   return (
     <Form {...form}>
