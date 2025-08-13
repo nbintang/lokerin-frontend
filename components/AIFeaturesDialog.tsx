@@ -29,7 +29,7 @@ import {
   FileUploadList,
   FileUploadTrigger,
 } from "../components/ui/file-upload";
-import { CloudUpload, Loader2, X } from "lucide-react";
+import { CloudUpload, Info, Loader2, X } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { IconSparkles } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
@@ -53,6 +53,7 @@ const AIFeaturesDialog = () => {
       setOpen: state.setOpen,
     }))
   );
+  const [openClarrify, setOpenClarrify] = useState<boolean>(false);
 
   const [isClicking, setIsClicking] = useState<boolean>(false);
   const form = useForm<FormValues>({
@@ -74,7 +75,7 @@ const AIFeaturesDialog = () => {
       });
       form.reset();
       setIsClicking(false);
-      setOpen(false)
+      setOpen(false);
     } catch (error) {
       console.error(error);
       setIsClicking(false);
@@ -96,186 +97,213 @@ const AIFeaturesDialog = () => {
   );
 
   return (
-    <Dialog open={isOpen} onOpenChange={setOpen}>
-      <DialogContent
-        className="w-full max-w-6xl h-[50vh] flex flex-col"
-        onInteractOutside={(e) => {
-          if (isOperationInProgress) {
-            e.preventDefault();
-          }
-        }}
-        showCloseButton={isOperationInProgress ? false : true}
-        onEscapeKeyDown={(e) => {
-          if (isOperationInProgress) {
-            e.preventDefault();
-          }
-        }}
-      >
-        <DialogHeader>
-          <DialogTitle className="sr-only hidden" />
-          <div
-            className={cn(
-              "flex items-center justify-center md:justify-start md:text-left gap-2"
-            )}
-          >
-            <SparklesText>
-              <IconSparkles className="text-sky-400" />
-            </SparklesText>
-            <AuroraText colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}>
-              AI Recommendation
-            </AuroraText>
-          </div>
-          <DialogDescription>
-            Try to input your resume to get AI recommendation.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex-1 flex flex-col space-y-4 overflow-auto"
-          >
-            <FormField
-              control={form.control}
-              name="files"
-              render={({ field }) => (
-                <FormItem className="flex-1 flex flex-col">
-                  {(isPending || form.formState.isSubmitting) && !isClicking ? (
-                    <div className="grid place-items-center h-full w-full">
-                      <div className="flex flex-col items-center gap-4 animate-fade-in">
-                        <Loader2 className="animate-spin  text-sky-700 size-10" />
-                        <AuroraText
-                          colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
-                          className="text-muted-foreground text-base tracking-wide text-center"
-                        >
-                          Analyzing, please wait...
-                        </AuroraText>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <FormControl className="flex-1">
-                        <FileUpload
-                          value={field.value}
-                          onValueChange={field.onChange}
-                          accept="application/pdf"
-                          maxFiles={1}
-                          maxSize={5 * 1024 * 1024}
-                          onFileReject={(_, message) => {
-                            form.setError("files", {
-                              message,
-                            });
-                          }}
-                          className={cn(
-                            " w-full",
-                            form.formState.isValid || isOperationInProgress
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
-                          )}
-                          multiple
-                          disabled={
-                            form.formState.isValid || isOperationInProgress
-                          }
-                        >
-                          <FileUploadDropzone
-                            className={cn(
-                              "flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center",
-                              isPending ? "opacity-50 pointer-events-none" : ""
-                            )}
+    <>
+      <Dialog open={isOpen} onOpenChange={setOpen}>
+        <DialogContent
+          className="w-full max-w-6xl h-[50vh] flex flex-col"
+          onInteractOutside={(e) => {
+            if (isOperationInProgress) {
+              e.preventDefault();
+            }
+          }}
+          showCloseButton={isOperationInProgress ? false : true}
+          onEscapeKeyDown={(e) => {
+            if (isOperationInProgress) {
+              e.preventDefault();
+            }
+          }}
+        >
+          <DialogHeader>
+            <DialogTitle className="sr-only hidden" />
+            <div
+              className={cn(
+                "flex items-center justify-center md:justify-start md:text-left gap-2"
+              )}
+            >
+              <SparklesText>
+                <IconSparkles className="text-sky-400" />
+              </SparklesText>
+              <AuroraText colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}>
+                AI Recommendation
+              </AuroraText>
+            </div>
+            <DialogDescription className="flex justify-between">
+              <p>Try to input your resume to get AI recommendation.</p>
+              <Info
+                className="size-4 text-muted-foreground hover:text-muted-foreground/80 cursor-pointer"
+                onClick={() => setOpenClarrify(true)}
+              />
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex-1 flex flex-col space-y-4 overflow-auto"
+            >
+              <FormField
+                control={form.control}
+                name="files"
+                render={({ field }) => (
+                  <FormItem className="flex-1 flex flex-col">
+                    {(isPending || form.formState.isSubmitting) &&
+                    !isClicking ? (
+                      <div className="grid place-items-center h-full w-full">
+                        <div className="flex flex-col items-center gap-4 animate-fade-in">
+                          <Loader2 className="animate-spin  text-sky-700 size-10" />
+                          <AuroraText
+                            colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
+                            className="text-muted-foreground text-base tracking-wide text-center"
                           >
-                            <CloudUpload className="size-4" />
-                            Drag and drop or
-                            <FileUploadTrigger asChild>
-                              <AuroraText
-                                colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
-                                className="text-sm"
-                              >
-                                choose resume files
-                              </AuroraText>
-                            </FileUploadTrigger>
-                            to upload
-                          </FileUploadDropzone>
-                          <FileUploadList>
-                            {field.value.map((file, index) => (
-                              <FileUploadItem key={index} value={file}>
-                                <FileUploadItemPreview />
-                                <FileUploadItemMetadata />
-                                <FileUploadItemDelete asChild>
-                                  <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="size-7"
-                                  >
-                                    <X />
-                                    <span className="sr-only">Delete</span>
-                                  </Button>
-                                </FileUploadItemDelete>
-                              </FileUploadItem>
-                            ))}
-                          </FileUploadList>
-                        </FileUpload>
-                      </FormControl>
-                      {/* <FormDescription>
+                            Analyzing, please wait...
+                          </AuroraText>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <FormControl className="flex-1">
+                          <FileUpload
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            accept="application/pdf"
+                            maxFiles={1}
+                            maxSize={5 * 1024 * 1024}
+                            onFileReject={(_, message) => {
+                              form.setError("files", {
+                                message,
+                              });
+                            }}
+                            className={cn(
+                              " w-full",
+                              form.formState.isValid || isOperationInProgress
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            )}
+                            multiple
+                            disabled={
+                              form.formState.isValid || isOperationInProgress
+                            }
+                          >
+                            <FileUploadDropzone
+                              className={cn(
+                                "flex-1  text-muted-foreground flex flex-col sm:flex-row justify-center items-center border-dotted text-center",
+                                isPending
+                                  ? "opacity-50 pointer-events-none"
+                                  : ""
+                              )}
+                            >
+                              <CloudUpload className="size-4" />
+                              Drag and drop or
+                              <FileUploadTrigger asChild>
+                                <AuroraText
+                                  colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
+                                  className="text-sm"
+                                >
+                                  choose resume files
+                                </AuroraText>
+                              </FileUploadTrigger>
+                              to upload
+                            </FileUploadDropzone>
+                            <FileUploadList>
+                              {field.value.map((file, index) => (
+                                <FileUploadItem key={index} value={file}>
+                                  <FileUploadItemPreview />
+                                  <FileUploadItemMetadata />
+                                  <FileUploadItemDelete asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="size-7"
+                                    >
+                                      <X />
+                                      <span className="sr-only">Delete</span>
+                                    </Button>
+                                  </FileUploadItemDelete>
+                                </FileUploadItem>
+                              ))}
+                            </FileUploadList>
+                          </FileUpload>
+                        </FormControl>
+                        {/* <FormDescription>
                     Upload up to 2 images up to 5MB each.
                   </FormDescription> */}
-                      {form.formState.errors.files && !form.formState.isValid && <FormMessage />}
-                    </>
-                  )}
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              variant={"special"}
-              className="mt-2"
-              disabled={isOperationInProgress}
-            >
-              {form.formState.isSubmitting || (isPending && !isClicking) ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" /> Submitting...
-                </>
-              ) : (
-                <>
-                  <IconSparkles /> Find Reccomended Jobs
-                </>
-              )}
-            </Button>
-            <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-              <span className="bg-background text-muted-foreground relative z-10 px-2">
-                Or
-              </span>
-            </div>
-            <Button
-              variant="outline"
-              type="button"
-              onClick={handleClickOwnResume}
-              disabled={isOperationInProgress || form.formState.isValid}
-            >
-              {isClicking && !form.formState.isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin text-sky-400" />
-                  <AuroraText
-                    colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
-                    className="text-sm"
-                  >
-                    Analyzing
-                  </AuroraText>
-                </>
-              ) : (
-                <>
-                  <IconSparkles className="text-sky-400 size-4" />
-                  <AuroraText
-                    colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
-                    className="text-sm"
-                  >
-                    Try Use Resume From Your Profile
-                  </AuroraText>
-                </>
-              )}
-            </Button>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+                        {form.formState.errors.files &&
+                          !form.formState.isValid && <FormMessage />}
+                      </>
+                    )}
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                type="submit"
+                variant={"special"}
+                className="mt-2"
+                disabled={isOperationInProgress}
+              >
+                {form.formState.isSubmitting || (isPending && !isClicking) ? (
+                  <>
+                    <Loader2 className="mr-2 size-4 animate-spin" />{" "}
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <IconSparkles /> Find Reccomended Jobs
+                  </>
+                )}
+              </Button>
+              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                <span className="bg-background text-muted-foreground relative z-10 px-2">
+                  Or
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                type="button"
+                onClick={handleClickOwnResume}
+                disabled={isOperationInProgress || form.formState.isValid}
+              >
+                {isClicking && !form.formState.isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 size-4 animate-spin text-sky-400" />
+                    <AuroraText
+                      colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
+                      className="text-sm"
+                    >
+                      Analyzing
+                    </AuroraText>
+                  </>
+                ) : (
+                  <>
+                    <IconSparkles className="text-sky-400 size-4" />
+                    <AuroraText
+                      colors={["#38bdf8", "#4f46e5", "#0ea5e9"]}
+                      className="text-sm"
+                    >
+                      Try Use Resume From Your Profile
+                    </AuroraText>
+                  </>
+                )}
+              </Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={openClarrify} onOpenChange={setOpenClarrify}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Important Information</DialogTitle>
+          </DialogHeader>
+          <DialogDescription>
+            <p className="text-sm text-muted-foreground">
+              The AI recommendations are not 100% accurate and should be used as
+              a reference only. Accuracy may vary depending on the quality and
+              language of your resume. For the best results, please upload your
+              resume in PDF format and in English.
+            </p>
+          </DialogDescription>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
