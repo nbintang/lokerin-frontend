@@ -49,38 +49,40 @@ export default function SignInForm() {
   const router = useRouter();
   const progress = useProgress();
   const onSubmit = async (values: SignIn) =>
-    await toast.promise(postSignin(values), {
-      loading: "Signing in...",
-      success: (res) => {
-        Cookies.set("accessToken", res.data.accessToken);
-        const tokenInfo = jwtDecode(res.data.accessToken);
-        const role = tokenInfo.role;
-        progress.start();
-        if (role === "ADMINISTRATOR" || role === "RECRUITER") {
-          router.push(`/${role.toLowerCase()}/dashboard`);
-        } else router.push("/applier/dashboard");
-        return "Signed in successfully";
-      },
-      error: (err) => {
-        if (isAxiosError(err)) {
-          if (err.response?.status === 401) {
-            return "Invalid email or password";
-          } else if (err.response?.status === 500) {
-            return "Server error. Please try again later.";
-          } else if (err.response?.status === 400) {
-            return "Invalid request. Please check your input.";
-          } else {
-            return `Error: ${err.response?.data?.message || err.message}`;
+    await toast
+      .promise(postSignin(values), {
+        loading: "Signing in...",
+        success: (res) => {
+          Cookies.set("accessToken", res.data.accessToken);
+          const tokenInfo = jwtDecode(res.data.accessToken);
+          const role = tokenInfo.role;
+          progress.start();
+          if (role === "ADMINISTRATOR" || role === "RECRUITER") {
+            router.push(`/${role.toLowerCase()}/dashboard`);
+          } else router.push("/applier/dashboard");
+          return "Signed in successfully";
+        },
+        error: (err) => {
+          if (isAxiosError(err)) {
+            if (err.response?.status === 401) {
+              return "Invalid email or password";
+            } else if (err.response?.status === 500) {
+              return "Server error. Please try again later.";
+            } else if (err.response?.status === 400) {
+              return "Invalid request. Please check your input.";
+            } else {
+              return `Error: ${err.response?.data?.message || err.message}`;
+            }
           }
-        }
-        return "Something went wrong. Please try again.";
-      },
-      finally: () => {
-        progress.stop();
-        form.reset();
-      },
-      richColors: true,
-    }).unwrap();
+          return "Something went wrong. Please try again.";
+        },
+        finally: () => {
+          progress.stop();
+          form.reset();
+        },
+        richColors: true,
+      })
+      .unwrap();
 
   return (
     <Form {...form}>
@@ -138,10 +140,10 @@ export default function SignInForm() {
           {!form.formState.isSubmitting ? (
             "Sign in"
           ) : (
-            <span className="flex items-center gap-2">
+            <>
               Signing in
               <LoaderCircleIcon className="animate-spin" />
-            </span>
+            </>
           )}
         </Button>
       </form>

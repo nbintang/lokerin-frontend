@@ -160,14 +160,6 @@ export default function RecommendedJobsPages() {
           </Card>
         ))}
       </div>
-
-      {/* Action Buttons */}
-      <div className="flex gap-4 justify-center flex-wrap">
-        <Button variant="outline" disabled>
-          Upload New Resume (Coming so soon)
-        </Button>
-        <Button disabled>Save Recommendations (Coming so soon)</Button>
-      </div>
     </div>
   );
 }

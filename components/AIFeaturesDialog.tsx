@@ -42,7 +42,7 @@ import { SparklesText } from "../components/magicui/sparkles-text";
 const FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const formSchema = z.object({
   files: zodResumeSchema(FILE_SIZE),
-  minScore: z.number().min(0).max(1).default(0.43).optional(),
+  minScore: z.number().min(0).max(1).default(0.32).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -70,7 +70,7 @@ const AIFeaturesDialog = () => {
     try {
       await mutateAsync({
         resumeUrl: profile?.cvUrl,
-        minScore: 0.43,
+        minScore: 0.32,
       });
       form.reset();
       setOpen(true);

@@ -45,7 +45,7 @@ export const useRecommendJobs = (
       } else if (resumeUrl) {
         formData.append("resumeUrl", resumeUrl);
       }
-      formData.append("minScore", (minScore ?? 0.43).toString());
+      formData.append("minScore", (minScore ?? 0.60).toString());
       const res = await lokerinAPI.post<RecommendationsResponse>(
         "/jobs/recommend-jobs",
         formData
