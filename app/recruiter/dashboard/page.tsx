@@ -56,9 +56,13 @@ export default function RecruiterDashboardPage() {
     data: jobApplicant?.appliers ?? [],
   });
 
+
+
   const selectedRows = table
     .getSelectedRowModel()
     .rows.map((row) => row.original.id);
+
+    const isSelected = selectedRows.length > 0;
   useEffect(() => {
     if (!isOpen) {
       table.resetRowSelection();
@@ -80,7 +84,7 @@ export default function RecruiterDashboardPage() {
   if (isLoading || isSearching || isFetching) {
     return (
       <div className="flex flex-1 flex-col mx-3 md:mx-5 gap-2 py-4  md:gap-4 md:py-6">
-        <SectionCardSkeleton />
+           <SectionCard total={jobApplicant?.total ?? 0} />
         <div className="flex items-start gap-x-3 justify-start rounded-b-md  ">
           <TableFilters<Applier> table={table} />
           <div className="relative w-full max-w-md">
@@ -123,7 +127,7 @@ export default function RecruiterDashboardPage() {
                 className="w-full max-w-md"
               />
             </div>
-            <Button onClick={handleOpenDialog}>Update Status</Button>
+         {isSelected &&    <Button onClick={handleOpenDialog}>Update Status</Button>}
           </div>
 
           <TableMain<Applier> table={table} />

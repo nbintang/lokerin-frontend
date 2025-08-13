@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { useUpdateApplicantStatus } from "@/shared-api/hooks/job-applicants/useUpdateApplicantStatus";
 import { useUpdateApplicantsStatus } from "@/shared-api/hooks/job-applicants/useUpdateApplicantsStatus";
+import { useParams, useRouter } from "next/navigation";
 
 const applicantStatus: ApplicantResponse["status"][] = [
   "REJECTED",
@@ -24,35 +25,36 @@ const applicantStatus: ApplicantResponse["status"][] = [
 ];
 const statuSchema = z.object({ status: z.enum(applicantStatus) });
 export default function SelectStatusDialog() {
-  const { open, setOpen, status, applicantId, jobId, applicantIds  } =
+  const { open, setOpen, status, jobId, applicantIds } =
     useHandleSelectStatusDialog(
       useShallow((state) => ({
         open: state.isOpen,
         setOpen: state.setOpen,
         status: state.applicant.status,
-        applicantId: state.applicant.id,
         jobId: state.applicant.jobId,
         applicantIds: state.applicant.ids,
       }))
     );
+  const router = useRouter();
+  const { applicantId } = useParams();
   const form = useForm<z.infer<typeof statuSchema>>({
     resolver: zodResolver(statuSchema),
     defaultValues: { status },
   });
-
   const { mutateAsync: updateStatus, isPending } = useUpdateApplicantStatus(
-    applicantId ?? "",
+    applicantId?.toString() ?? "",
     jobId ?? ""
   );
   const { mutateAsync: updateStatusBulk, isPending: isPendingBulk } =
     useUpdateApplicantsStatus(jobId ?? "");
   const onSubmit = async ({ status }: z.infer<typeof statuSchema>) => {
     form.setValue("status", status);
-
+    // console.log(status);
     if (Array.isArray(applicantIds) && applicantIds.length > 0) {
-      await updateStatusBulk({ status, applicantIds, });
+      await updateStatusBulk({ status, applicantIds });
     } else {
       await updateStatus({ status });
+      router.push("/dashboard");
     }
 
     setOpen({
@@ -60,7 +62,7 @@ export default function SelectStatusDialog() {
       applicant: {
         jobId,
         status,
-        id: applicantId,
+        id: applicantId?.toString(),
       },
     });
   };
@@ -73,8 +75,8 @@ export default function SelectStatusDialog() {
           applicant: {
             jobId,
             status: status,
-            id: applicantId,
-            ids: applicantIds
+            id: applicantId?.toString(),
+            ids: applicantIds,
           },
         })
       }

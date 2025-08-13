@@ -21,6 +21,7 @@ import { useMutation } from "@tanstack/react-query";
 import { lokerinAPI } from "@/shared-api/config/api";
 import { isAxiosError } from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const resendEmailSchema = z.object({
   email: z.email({ message: "Invalid email" }),
@@ -42,7 +43,7 @@ export default function ResendEmailForm({
   const { startTimer, timer, isTimerStarted } = useTimerCountDown();
   const setOpenDialog = useHandleLoadingDialog((state) => state.setOpenDialog);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
-
+  const router = useRouter();
   const form = useForm<ResendEmail>({
     resolver: zodResolver(resendEmailSchema),
     defaultValues: {
@@ -50,7 +51,7 @@ export default function ResendEmailForm({
     },
   });
 
-  const { isSuccess, isError, mutate } = useMutation({
+  const { isSuccess, isError, mutate, error } = useMutation({
     mutationKey: ["resend-email"],
     mutationFn: resendEmail,
     onMutate: (res) => {
@@ -78,8 +79,15 @@ export default function ResendEmailForm({
         isSuccess: false,
       });
       if (isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status === 500) {
+          router.push("/auth/signin");
+          return;
+        }
         toast.error(error.response?.data.message ?? "Failed to resend email");
-      } else toast.error("An unexpected error occurred");
+      } else {
+        toast.error("An unexpected error occurred");
+      }
     },
   });
   const isDisabled = isTimerStarted || isVerifying || isSuccessVerifying;
@@ -151,7 +159,7 @@ export default function ResendEmailForm({
                   isTimerStarted && "animate-spin"
                 )}
               />
-             Please wait till the timer ends
+              Please wait till the timer ends
             </>
           ) : (
             <>

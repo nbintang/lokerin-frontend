@@ -30,6 +30,7 @@ export default function JobsPage() {
   const [search, setSearch] = useState<string>("");
   const [debouncedSearch, debouncedState] = useDebounce(search, 300);
   const [isSearching, setIsSearching] = useState(false);
+  const [prevDebouncedSearch, setPrevDebouncedSearch] = useState<string>("");
 
   const {
     data,
@@ -44,28 +45,37 @@ export default function JobsPage() {
     name: debouncedSearch,
   });
 
-  // when debounce settles, start "searching"
   useEffect(() => {
     if (debouncedState.isPending()) {
       setIsSearching(true);
     }
   }, [debouncedState]);
 
-  // clear searching flag once data arrives
   useEffect(() => {
-    if (data && !isLoading) {
+    if (debouncedSearch === "") {
+      setIsSearching(false);
+      setPrevDebouncedSearch("");
+      return;
+    }
+
+    if (debouncedSearch !== prevDebouncedSearch) {
+      setIsSearching(true);
+      setPrevDebouncedSearch(debouncedSearch);
+    }
+  }, [debouncedSearch, prevDebouncedSearch]);
+
+  useEffect(() => {
+    if (!isFetching && !isLoading && !debouncedState.isPending()) {
       setIsSearching(false);
     }
-  }, [data, isLoading]);
+  }, [isFetching, isLoading, debouncedState]);
 
-  // infinite-scroll trigger
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // handle error state
   if (isError) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -75,30 +85,21 @@ export default function JobsPage() {
       </div>
     );
   }
+
   const jobs = data?.pages.flatMap((page) => page.jobs) ?? [];
   const total = data?.pages[0]?.total ?? 0;
+  const showSkeleton =
+    isLoading || (isSearching && (debouncedState.isPending() || isFetching));
 
-  // show skeleton on initial load or during a search
-  if (isLoading || isSearching || isFetching) {
+  if (showSkeleton) {
     return (
       <>
-        <div className="mt-4 flex-wrap    flex  items-center gap-4 text-sm">
+        <div className="mt-4 flex-wrap flex items-center gap-4 text-sm">
           <span>
-            {isFetching && isSearching ? (
-              <span className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Searching...
-              </span>
-            ) : (
-              <>
-                {total  || 0} jobs found
-                {debouncedSearch && (
-                  <span className="text-muted-foreground ml-1">
-                    for &quot;{debouncedSearch}&quot;
-                  </span>
-                )}
-              </>
-            )}
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              {isSearching ? "Searching..." : "Loading..."}
+            </span>
           </span>
           <Separator
             orientation="vertical"
@@ -112,14 +113,14 @@ export default function JobsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            {isFetching && (
+            {isSearching && (
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
               </div>
             )}
           </div>
         </div>
-        <div className="grid gap-6 container  py-8">
+        <div className="grid gap-6 container py-8">
           {Array.from({ length: 10 }, (_, idx) => (
             <JobCardSkeleton key={idx} />
           ))}
@@ -130,22 +131,13 @@ export default function JobsPage() {
 
   return (
     <>
-      <div className="mt-4 mb-8  flex-wrap  flex  items-center gap-4 text-sm">
+      <div className="mt-4 mb-8 flex-wrap flex items-center gap-4 text-sm">
         <span>
-          {isFetching && isSearching ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Searching...
+          {total} jobs found
+          {debouncedSearch && (
+            <span className="text-muted-foreground ml-1">
+              for &quot;{debouncedSearch}&quot;
             </span>
-          ) : (
-            <>
-              {total} jobs found
-              {debouncedSearch && (
-                <span className="text-muted-foreground ml-1">
-                  for &quot;{debouncedSearch}&quot;
-                </span>
-              )}
-            </>
           )}
         </span>
         <Separator
@@ -160,13 +152,14 @@ export default function JobsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {isFetching && (
+          {isSearching && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
               <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
             </div>
           )}
         </div>
       </div>
+
       {/* Job Cards */}
       <div className="grid gap-6">
         {jobs.map((job, idx) => (
@@ -227,7 +220,7 @@ export default function JobsPage() {
             <CardFooter className="pt-4 border-t flex items-center justify-between">
               <Link
                 href={`/jobs/${job.id}`}
-                className="flex items-center gap-1 font-medium"
+                className="flex items-center gap-1 font-medium hover:underline hover:text-foreground transition-colors underline-offset-4 "
               >
                 View Details
                 <ChevronRight className="h-4 w-4" />
@@ -240,7 +233,7 @@ export default function JobsPage() {
         ))}
       </div>
 
-      {/* Load more / end message */}
+      {/* PERBAIKAN: Load more / end message dengan kondisi yang tepat */}
       {hasNextPage && (
         <div className="mt-8 text-center">
           {isFetchingNextPage ? (

@@ -83,7 +83,7 @@ export default function Jobs() {
   if (isLoading || isSearching || isFetching) {
     return (
       <div className="flex flex-1 flex-col md:gap-4 gap-2 py-4 mx-3 md:mx-5 md:py-6">
-        <SectionCardSkeleton />
+        <SectionCard userTitle="Jobs" total={jobs?.total ?? 0} />
         <TooltipProvider delayDuration={0}>
           <div className="flex items-start flex-wrap gap-3 justify-between mb-2 sm:mb-0 rounded-b-md">
             <div className="flex items-center gap-x-3">
@@ -100,7 +100,7 @@ export default function Jobs() {
                     <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                   </div>
                 )}
-              </div>  
+              </div>
             </div>
             <Tooltip open={aiTipOpen} onOpenChange={setAiTipOpen}>
               <TooltipTrigger

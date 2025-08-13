@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { IconBrandWhatsapp } from "@tabler/icons-react";
 
 const helpCategories = [
   {
@@ -152,7 +153,7 @@ const contactOptions = [
   {
     title: "Live Chat",
     description: "Get instant help from our support team",
-    icon: MessageCircle,
+    icon: IconBrandWhatsapp,
     availability: "Available 24/7",
     action: "Start Chat",
   },
@@ -178,120 +179,12 @@ export default function GetHelpPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b bg-muted/30">
-        <div className="container mx-auto px-4 py-8">
-          <div className="   text-center">
-            <h1 className="text-4xl font-bold tracking-tight mb-4">
-              How can we help you?
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8">
-              Find answers to common questions and get the support you need
-            </p>
-
-            {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-              <Input
-                placeholder="Search for help articles, guides, and more..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 text-lg"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+   
 
       <div className="container mx-auto px-4 py-12">
         <div className="">
-          {/* Help Categories */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-semibold mb-8">Browse by Category</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {helpCategories.map((category) => (
-                <Card
-                  key={category.id}
-                  className="hover:shadow-md transition-shadow"
-                >
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <category.icon className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">
-                          {category.title}
-                        </CardTitle>
-                        <CardDescription>
-                          {category.description}
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {category.articles.map((article, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between group cursor-pointer hover:bg-muted/50 p-2 rounded-md -m-2"
-                        >
-                          <div className="flex-1">
-                            <h4 className="font-medium group-hover:text-primary transition-colors">
-                              {article.title}
-                            </h4>
-                            <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
-                              <span>{article.views} views</span>
-                              <span>•</span>
-                              <span>{article.time}</span>
-                            </div>
-                          </div>
-                          <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                        </div>
-                      ))}
-                    </div>
-                    <Button variant="ghost" className="w-full mt-4">
-                      View all {category.title.toLowerCase()} articles
-                      <ExternalLink className="h-4 w-4 ml-2" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-
-          {/* Popular Articles */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-semibold mb-8">Popular Articles</h2>
-            <Card>
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  {popularArticles.map((article, index) => (
-                    <div key={index}>
-                      <div className="flex items-center justify-between group cursor-pointer hover:bg-muted/50 p-3 rounded-md -m-3">
-                        <div className="flex-1">
-                          <h3 className="font-medium group-hover:text-primary transition-colors">
-                            {article.title}
-                          </h3>
-                          <div className="flex items-center gap-3 mt-2">
-                            <Badge variant="secondary" className="text-xs">
-                              {article.category}
-                            </Badge>
-                            <span className="text-sm text-muted-foreground">
-                              {article.views} views
-                            </span>
-                          </div>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      </div>
-                      {index < popularArticles.length - 1 && (
-                        <Separator className="mt-4" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </section>
+    
+ 
 
           {/* Contact Support */}
           <section className="mb-16">

@@ -15,12 +15,11 @@ export const userSchema = z
       .max(50)
       .trim(),
     email: z.email().min(3, "Email must be at least 3 characters").max(50),
-    phone: z.coerce
-      .number()
-      .min(3, "Phone must be at least 3 characters")
-      .refine((value) => value.toString().length === 10, {
-        message: "Phone must be 10 digits",
-      }),
+    phone: z
+      .string()
+      .min(3, "Phone number must be at least 3 characters")
+      .max(20, "Phone number must be at most 20 characters")
+      .regex(/^\d+$/, "Phone number must contain only numbers"),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters")
