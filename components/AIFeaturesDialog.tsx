@@ -73,7 +73,8 @@ const AIFeaturesDialog = () => {
         minScore: 0.32,
       });
       form.reset();
-      setOpen(true);
+      setIsClicking(false);
+      setOpen(false)
     } catch (error) {
       console.error(error);
       setIsClicking(false);
